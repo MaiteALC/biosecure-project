@@ -19,7 +19,7 @@ public class  Client {
         }
         
         if (!validateEmail(email)) {
-            throw new IllegalArgumentException("Please enter a valid corporate email");
+            throw new IllegalArgumentException("Please enter valid corporate email");
         }
 
         this.corporateName = corporateName;
@@ -28,19 +28,6 @@ public class  Client {
         this.adress = adress;
         this.email = email;
     } 
-    
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-
-        int result = 1;
-
-        result = prime * result + ((corporateName == null) ? 0 : corporateName.hashCode());
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((cnpj == null) ? 0 : cnpj.hashCode());
-
-        return result;
-    }
     
     @Override
     public boolean equals(Object obj) {
@@ -62,9 +49,7 @@ public class  Client {
 
     @Override
     public String toString() {
-        String str = "Corporate Name: " + corporateName + "\nCNPJ: " + cnpj.getFormattedNumber() + "\nID: " + id + "\nAdress: " + adress + "\nEmail: " + email;
-
-        return str;
+        return "Client [corporate name: " + corporateName + ", CNPJ: " + cnpj.getFormattedNumber() + ", ID: " + id + ", adress: " + adress + ", email: " + email + "]";
     }
 
     private boolean validateEmail(String email) {
@@ -100,4 +85,12 @@ public class  Client {
     public String getEmail() {
         return email;
     } 
+
+    public void setEmail(String newEmail) {
+        if (!validateEmail(newEmail)) {
+            throw new IllegalArgumentException("Please enter valid corporate email");
+        }
+
+        this.email = newEmail;
+    }
 }
