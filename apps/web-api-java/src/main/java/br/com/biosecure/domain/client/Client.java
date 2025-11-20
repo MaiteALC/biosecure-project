@@ -3,19 +3,16 @@ package br.com.biosecure.domain.client;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import br.com.biosecure.domain.client.Adress;
-import br.com.biosecure.domain.client.Cnpj;
-import br.com.biosecure.domain.client.InvalidClientAttributeException;
 
 public class  Client {
     private String corporateName;
-    private UUID id;
-    private Cnpj cnpj;
-    private Adress adress;
+    private final UUID id;
+    private final Cnpj cnpj;
+    private Address address;
     private String email;
     
-    Client(String corporateName, UUID id, Cnpj cnpj, Adress adress, String email) {
-        if (corporateName == null || corporateName.trim().isBlank()) {
+    public Client(String corporateName, Cnpj cnpj, Address address, String email) {
+        if (corporateName.isBlank()) {
             throw new InvalidClientAttributeException("corporate name");
         }
         
@@ -26,7 +23,7 @@ public class  Client {
         this.corporateName = corporateName;
         this.cnpj = cnpj;
         this.id = UUID.randomUUID();
-        this.adress = adress;
+        this.address = address;
         this.email = email;
     } 
     
@@ -40,21 +37,17 @@ public class  Client {
         }
     
         Client other = (Client) obj;
-        
-        if (!id.equals(other.id) || !cnpj.equals(other.cnpj)) {
-            return false;
-        }
-        
-        return true;
+
+        return id.equals(other.id) && cnpj.equals(other.cnpj);
     }
 
     @Override
     public String toString() {
-        return "Client [corporate name: " + corporateName + ", CNPJ: " + cnpj.getFormattedNumber() + ", ID: " + id + ", adress: " + adress + ", email: " + email + "]";
+        return "Client [corporate name: " + corporateName + ", CNPJ: " + cnpj.getFormattedNumber() + ", ID: " + id + ", address: " + address + ", email: " + email + "]";
     }
 
     private boolean validateEmail(String email) {
-        if (email == null || email.equals("")) {
+        if (email.isBlank()) {
             return false;
         }
 
@@ -79,19 +72,30 @@ public class  Client {
         return cnpj;
     }
 
-    public Adress getAdress() {
-        return adress;
+    public Address getAddress() {
+        return address;
     }
 
     public String getEmail() {
         return email;
-    } 
+    }
 
+    public void setCorporateName(String newName) {
+        if (newName.isBlank()) {
+            throw new InvalidClientAttributeException("corporate name");
+        }
+
+        this.corporateName = newName;
+    }
     public void setEmail(String newEmail) {
         if (!validateEmail(newEmail)) {
-            throw new IllegalArgumentException("Please enter valid corporate email");
+            throw new InvalidClientAttributeException("email");
         }
 
         this.email = newEmail;
+    }
+
+    public void setAddress(Address newAddress) {
+        this.address = newAddress;
     }
 }

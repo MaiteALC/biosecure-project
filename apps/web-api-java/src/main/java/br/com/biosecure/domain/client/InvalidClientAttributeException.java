@@ -4,7 +4,8 @@ public class InvalidClientAttributeException extends IllegalArgumentException {
     private final String invalidAttribute;
 
     public InvalidClientAttributeException(String attribute) {
-        super("The field '" + attribute + "' musn't be empty");
+        super("The field '" + attribute + "' is invalid");
+
         this.invalidAttribute = attribute;
     }
 

@@ -6,9 +6,9 @@ public class Cnpj {
 
     public static final int SIZE = 14;
     
-    public Cnpj(String number) {
+    public Cnpj(String number) throws IllegalArgumentException {
         if (!isValid(number)) {
-            throw new InvalidCnpjException("The entered CNPJ isn't valid");
+            throw new IllegalArgumentException();
         }
 
         this.number = clearFormat(number);
@@ -22,13 +22,13 @@ public class Cnpj {
     private boolean isValid(String number) {
         // TODO Since July 2026 the CNPJ format going to be modified. Remember to change the logic of this method.
 
-        String unformated = clearFormat(number);
+        String unformatted = clearFormat(number);
 
-        if (unformated.equals("") || unformated == null || unformated.length() != SIZE) {
+        if (unformatted.isBlank() || unformatted.length() != SIZE) {
             return false;
         }
 
-        if (!Character.isDigit(unformated.charAt(13)) || !Character.isDigit(unformated.charAt(12))) {
+        if (!Character.isDigit(unformatted.charAt(13)) || !Character.isDigit(unformatted.charAt(12))) {
             return false;
         }
         
@@ -42,7 +42,7 @@ public class Cnpj {
         int digit = 0;
 
         for (int i = 0; i < SIZE; i++) {
-            cnpjInts[i] =  unformated.charAt(i) - '0'; // Fast way to convert char to int (using the numeric values of characters in ASCII table)
+            cnpjInts[i] =  unformatted.charAt(i) - '0'; // Fast way to convert char to int (using the numeric values of characters in ASCII table)
         }
 
         // Validation of first verifier digit
@@ -66,12 +66,8 @@ public class Cnpj {
 
         rest = result % 11;
         digit = (rest < 2) ? 0 : (11 - rest);
-        
-        if (cnpjInts[13] != digit) {
-            return false;
-        }
-        
-        return true;
+
+        return cnpjInts[13] == digit;
     }
 
     @Override
@@ -85,11 +81,7 @@ public class Cnpj {
 
         Cnpj other = (Cnpj) obj;
 
-        if (!number.equals(other.number)) {
-            return false;
-        }
-
-        return true;
+        return number.equals(other.number);
     }
 
     public String getNumber() {
