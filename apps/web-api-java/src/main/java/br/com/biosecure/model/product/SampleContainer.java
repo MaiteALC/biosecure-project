@@ -1,4 +1,4 @@
-package br.com.biosecure.domain.product;
+package br.com.biosecure.model.product;
 
 import java.time.LocalDate;
 
@@ -48,7 +48,7 @@ public abstract class SampleContainer extends  Product {
     }
 
     public enum ClosingMethod {
-        SCREW_CAP_SIMPLE(false),
+        SCREW_CAP_SIMPLE(true),
         SCREW_WITH_FILTER(false),
         SCREW_CAP_ORING(true),
         SNAP_CAP(true),
@@ -56,7 +56,8 @@ public abstract class SampleContainer extends  Product {
         COTTON_STOPPER(false),
         CELLULOSE_STOPPER(false),
         ZIP_LOCK(true),
-        HEAT_SEALABLE(true);
+        HEAT_SEALABLE(true),
+        SNAP_LID(false);
 
         private final boolean hermetic;
 
