@@ -1,4 +1,4 @@
-package br.com.biosecure.domain.client;
+package br.com.biosecure.model.client;
 
 public class InvalidClientAttributeException extends IllegalArgumentException {
     private final String invalidAttribute;

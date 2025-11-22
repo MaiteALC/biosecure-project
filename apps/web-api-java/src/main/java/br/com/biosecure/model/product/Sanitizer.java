@@ -1,4 +1,4 @@
-package br.com.biosecure.domain.product;
+package br.com.biosecure.model.product;
 
 import java.time.LocalDate;
 

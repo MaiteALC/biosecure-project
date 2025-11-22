@@ -1,4 +1,4 @@
-package br.com.biosecure.domain.client;
+package br.com.biosecure.model.client;
 
 import java.util.UUID;
 import java.util.regex.Matcher;

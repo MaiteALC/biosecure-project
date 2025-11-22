@@ -1,4 +1,4 @@
-package br.com.biosecure.domain.client;
+package br.com.biosecure.model.client;
 
 public class InvalidAddressException extends IllegalArgumentException {
     private final String field;

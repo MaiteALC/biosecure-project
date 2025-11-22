@@ -1,4 +1,4 @@
-package br.com.biosecure.domain.product;
+package br.com.biosecure.model.product;
 
 public class InvalidProductAttributeException extends IllegalArgumentException {
     private final String invalidAttribute;

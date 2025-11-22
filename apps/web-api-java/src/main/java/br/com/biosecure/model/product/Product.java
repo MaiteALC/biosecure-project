@@ -1,4 +1,4 @@
-package br.com.biosecure.domain.product;
+package br.com.biosecure.model.product;
 
 import java.time.LocalDate;
 
@@ -49,7 +49,8 @@ public abstract class Product {
         L,
         KG,
         G,
-        UN, 
+        UN,
+        MM,
         PAIR
     }
 

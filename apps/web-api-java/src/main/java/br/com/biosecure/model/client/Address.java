@@ -1,4 +1,4 @@
-package br.com.biosecure.domain.client;
+package br.com.biosecure.model.client;
 
 public record Address(String state, String city, String neighborhood, String street, int number, String postalCode) {
     public Address {

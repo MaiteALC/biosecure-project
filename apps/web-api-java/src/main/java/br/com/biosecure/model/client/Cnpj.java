@@ -1,4 +1,4 @@
-package br.com.biosecure.domain.client;
+package br.com.biosecure.model.client;
 
 public class Cnpj {
     private final String number; 
