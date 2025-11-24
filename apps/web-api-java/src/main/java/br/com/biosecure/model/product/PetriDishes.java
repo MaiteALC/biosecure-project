@@ -10,7 +10,7 @@ public class PetriDishes extends SampleContainer {
     private final double heightMm;
 
     public PetriDishes(String name, double price, String manufacturer, SterilizationMethod sterilizationMethod, String batchNumber, LocalDate expirationDate, PackagingType packagingType, int qtdPerPackage, ClosingMethod closingMethod, Material materialType, int divisionsNumber, boolean hasGrid, boolean isVentilated, double diameterMm, double heightMm) {
-        super(name, price, manufacturer, sterilizationMethod, batchNumber, expirationDate, packagingType, MeasureUnity.ML, qtdPerPackage, closingMethod, materialType, calculateNominalCapacity(diameterMm, heightMm));
+        super(name, price, manufacturer, sterilizationMethod, batchNumber, expirationDate, packagingType, MeasureUnit.ML, qtdPerPackage, closingMethod, materialType, calculateNominalCapacity(diameterMm, heightMm));
 
         if (divisionsNumber < 1 || divisionsNumber > 4) {
             throw new InvalidProductAttributeException("divisions number");

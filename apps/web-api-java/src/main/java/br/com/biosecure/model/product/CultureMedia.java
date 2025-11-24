@@ -11,8 +11,8 @@ public class CultureMedia extends Product {
     private final boolean readyToUse;
     private final boolean protectOfLight;
 
-    public CultureMedia(String name, double price, PhysicalForm form, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, MeasureUnity measureUnity, int qtdPerPackage, CultureMediaFinality finality, boolean isReadyToUse, StorageConditions storageConditions, boolean protectOfLight) {
-        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, measureUnity, qtdPerPackage);
+    public CultureMedia(String name, double price, PhysicalForm form, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, MeasureUnit measureUnit, int qtdPerPackage, CultureMediaFinality finality, boolean isReadyToUse, StorageConditions storageConditions, boolean protectOfLight) {
+        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, measureUnit, qtdPerPackage);
 
         this.finality = finality;
         this.readyToUse = isReadyToUse;

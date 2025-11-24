@@ -9,8 +9,8 @@ public abstract class SampleContainer extends  Product {
     private final Material material;
     private final double capacity;
 
-    public SampleContainer(String name, double price, String manufacturer, SterilizationMethod sterilizationMethod, String batchNumber, LocalDate expirationDate, PackagingType packagingType, MeasureUnity measureUnity, int qtdPerPackage, ClosingMethod closingMethod, Material materialType, double capacity) {
-        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, measureUnity, qtdPerPackage);
+    public SampleContainer(String name, double price, String manufacturer, SterilizationMethod sterilizationMethod, String batchNumber, LocalDate expirationDate, PackagingType packagingType, MeasureUnit measureUnit, int qtdPerPackage, ClosingMethod closingMethod, Material materialType, double capacity) {
+        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, measureUnit, qtdPerPackage);
 
         if (capacity < 1) {
             throw new InvalidProductAttributeException("capacity");

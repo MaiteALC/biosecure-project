@@ -12,22 +12,22 @@ public class SKU {
 
         String value = name.length() >= 3 ? name.substring(0, 4) : name;
 
-        value += "-" + product.getPackagingType().getPackagingTypeCode();
+        value += "-" + product.getPackagingType().getCode(); // Returns 1 or 2 letters
 
         value += String.valueOf(product.getQtdPerPackage());
 
-        value += product.getMeasureUnity() + "-";
+        value += product.getMeasureUnit() + "-";
 
         if (product instanceof Sanitizer sanitizer) {
-            String actIng = sanitizer.getActiveIngredient();
+            value += sanitizer.getPhysicalForm().getCode(); // Always returns 2 letters
 
-            value += actIng.length() >= 3 ? actIng.substring(0, 4) : actIng;
+            value += sanitizer.isFlammable() ? "FL" : "NF";
         }
 
         if (product instanceof CultureMedia cultureMedia) {
             value += cultureMedia.isProtectOfLight() ? "F" : "N";
 
-            value += String.valueOf(cultureMedia.getStorageConditions().getCode());
+            value += cultureMedia.getStorageConditions().getCode(); // Always returns 3 letters
         }
 
         if (product instanceof SampleContainer sampleContainer) {

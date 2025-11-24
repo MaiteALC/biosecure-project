@@ -10,10 +10,10 @@ public abstract class Product {
     private final String batchNumber;
     private final LocalDate expirationDate;
     private final PackagingType packagingType;
-    private final MeasureUnity measureUnity;
+    private final MeasureUnit measureUnit;
     private final double qtdPerPackage;
 
-    public Product(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, MeasureUnity measureUnity, int qtdPerPackage) {
+    public Product(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, MeasureUnit measureUnit, int qtdPerPackage) {
         validateString(name, "name");
         validateString(manufacturer, "manufacturer");
         validateString(batchNumber, "batch number");
@@ -40,11 +40,11 @@ public abstract class Product {
         this.batchNumber = batchNumber;
         this.expirationDate = expirationDate;
         this.packagingType = packagingType;
-        this.measureUnity = measureUnity;
+        this.measureUnit = measureUnit;
         this.qtdPerPackage = qtdPerPackage;
     }
 
-    public enum MeasureUnity {
+    public enum MeasureUnit {
         ML,
         L,
         KG,
@@ -56,9 +56,9 @@ public abstract class Product {
     }
 
     public enum PackagingType {
-        BOX("B"),
+        BOX("BX"),
         PACKAGE("P"),
-        BOTTLE("T"),
+        BOTTLE("BT"),
         GALLON("G"),
         INDIVIDUAL("I");
 
@@ -68,7 +68,7 @@ public abstract class Product {
             this.code = code;
         }
 
-        public String getPackagingTypeCode() {
+        public String getCode() {
             return code;
         }
     }
@@ -103,8 +103,8 @@ public abstract class Product {
         return packagingType;
     }
 
-    public MeasureUnity getMeasureUnity() {
-        return measureUnity;
+    public MeasureUnit getMeasureUnit() {
+        return measureUnit;
     }
 
     public double getQtdPerPackage() {

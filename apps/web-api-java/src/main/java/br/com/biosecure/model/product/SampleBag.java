@@ -11,8 +11,8 @@ public class SampleBag extends SampleContainer {
     private final int widthMm;
     private final int heigthMm;
 
-    public SampleBag(String name, double price, String manufacturer, SterilizationMethod sterilizationMethod, String batchNumber, LocalDate expirationDate, PackagingType packagingType, MeasureUnity measureUnity, int qtdPerPackage, ClosingMethod closingMethod, Material materialType, FilterType filter, boolean hasIdentificationTag, boolean isStandUp, double thicknessMm, double capacity, int widthMm, int heigthMm) {
-        super(name, price, manufacturer, sterilizationMethod, batchNumber, expirationDate, packagingType, measureUnity, qtdPerPackage, closingMethod, materialType, capacity);
+    public SampleBag(String name, double price, String manufacturer, SterilizationMethod sterilizationMethod, String batchNumber, LocalDate expirationDate, PackagingType packagingType, MeasureUnit measureUnit, int qtdPerPackage, ClosingMethod closingMethod, Material materialType, FilterType filter, boolean hasIdentificationTag, boolean isStandUp, double thicknessMm, double capacity, int widthMm, int heigthMm) {
+        super(name, price, manufacturer, sterilizationMethod, batchNumber, expirationDate, packagingType, measureUnit, qtdPerPackage, closingMethod, materialType, capacity);
 
         validateBioSecuritySafety(materialType);
 
