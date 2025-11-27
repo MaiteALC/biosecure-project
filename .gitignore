@@ -1,0 +1,12 @@
+.env
+
+anotacoes-projeto/
+
+*.iml
+*.iws
+.idea/
+
+target/
+
+.DS_Store
+Thumbs.db
