@@ -6,30 +6,45 @@ public class Cnpj {
 
     public static final int SIZE = 14;
     
-    public Cnpj(String number) throws IllegalArgumentException {
-        if (!isValid(number)) {
-            throw new IllegalArgumentException();
-        }
+    public Cnpj(String number) {
+        String cleanNumber = clearFormat(number);
 
-        this.number = clearFormat(number);
-        this.formattedNumber = number;
+        validateVerifierDigits(cleanNumber);
+
+        this.number = cleanNumber;
+        this.formattedNumber = formatCnpj(cleanNumber);
     }
 
     private String clearFormat(String formatted) {
-        return formatted.trim().replace("/", "").replace("-", "").replace(".", "");
+        return formatted.replaceAll("\\D", "");
+    }
+
+    private String formatCnpj(String nonFormatted) {
+        if (nonFormatted.length() != SIZE) {
+            throw new InvalidCnpjException("Invalid size (" + nonFormatted.length() + ")");
+        }
+
+        StringBuilder sb = new StringBuilder(nonFormatted);
+    
+        sb.insert(2, ".")
+        .insert(6, ".")
+        .insert(10, "/")
+        .insert(15, "-");
+        
+        return sb.toString();
     }
     
-    private boolean isValid(String number) {
+    private void validateVerifierDigits(String number) {
         // TODO Since July 2026 the CNPJ format going to be modified. Remember to change the logic of this method.
 
         String unformatted = clearFormat(number);
 
         if (unformatted.isBlank() || unformatted.length() != SIZE) {
-            return false;
+            throw new InvalidCnpjException("Invalid size (" + number.length() + ")");
         }
 
         if (!Character.isDigit(unformatted.charAt(13)) || !Character.isDigit(unformatted.charAt(12))) {
-            return false;
+            throw new InvalidCnpjException("The two last digits must be numbers");
         }
         
         int[] firstWeights = {5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
@@ -54,7 +69,7 @@ public class Cnpj {
         digit = (rest < 2) ? 0 : (11 - rest);
         
         if (cnpjInts[12] != digit) {
-            return false;
+            throw new InvalidCnpjException("The first verifier digit is invalid");
         }
 
         // Validation of second verifier digit
@@ -67,7 +82,9 @@ public class Cnpj {
         rest = result % 11;
         digit = (rest < 2) ? 0 : (11 - rest);
 
-        return cnpjInts[13] == digit;
+        if (cnpjInts[13] != digit) {
+            throw new InvalidCnpjException("The second verifier digit is invalid");
+        }
     }
 
     @Override
