@@ -9,12 +9,12 @@ public class SKU {
 
     private String generateFor(Product product) {
         String name = product.getName();
-
         String value = name.length() >= 3 ? name.substring(0, 4) : name;
 
-        value += "-" + product.getPackagingType().getCode(); // Returns 1 or 2 letters
+        value += "-" + product.getPackagingType().getCode(); // Always returns 1 or 2 letters
 
-        value += String.valueOf(product.getQtdPerPackage());
+        double quantity = product.getQuantityPerPackage(); 
+        value += quantity >= 1000 ? (quantity / 1000) + "k" : quantity;
 
         value += product.getMeasureUnit() + "-";
 
@@ -46,11 +46,29 @@ public class SKU {
             if (sampleContainer instanceof PetriDishes petriDishes) {
                 value += petriDishes.getDiameter() + "X";
 
-                value += String.valueOf(petriDishes.getHeight());
+                value += petriDishes.getHeight();
             }
         }
 
-        // TODO finish the implementation of this method (based on another attributes of product subclasses)
+        if (product instanceof PersonalProtectiveEquipment ppe) {
+            value += ppe.getSize().getCode(); // Always returns 1 or 2 letters
+            
+            if (ppe instanceof Glove glove) {
+                value += glove.hasLongBarrel() ? "L" : "S";
+
+                value += glove.getThicknessMils();
+            }
+
+            if (ppe instanceof FaceProtection faceProtection) {
+                value += faceProtection.getProtectionType().getCode(); // Always returns 2 letters
+            }
+
+            if (ppe instanceof LabCoat labCoat) {
+                value += labCoat.getFabricType().toString().charAt(0);
+
+                value += labCoat.getGrammage();
+            }
+        }
 
         return value.toUpperCase();
     }
