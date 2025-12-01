@@ -13,8 +13,9 @@ public class CultureMedia extends Product {
     private final double qtdPerUnit;
     private final QuantificationUnit quantificationUnit;
 
-    public CultureMedia(String name, double price, PhysicalUnit physicalUnit, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, MeasureUnit measureUnit, int qtdPerPackage, CultureMediaFinality finality, StorageConditions storageConditions, boolean protectOfLight, double quantityPerUnit, QuantificationUnit quantificationUnit, double preparationGramsPerLiter, double finalPhLevel) {
-        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, measureUnit, qtdPerPackage);
+    public CultureMedia(String name, double price, PhysicalUnit physicalUnit, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, MeasureUnit measureUnit, int quantityPerPackage, CultureMediaFinality finality, StorageConditions storageConditions, boolean protectOfLight, double quantityPerUnit, QuantificationUnit quantificationUnit, double preparationGramsPerLiter, double finalPhLevel) {
+        
+        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, measureUnit, quantityPerPackage);
 
         if (finalPhLevel < 0 || finalPhLevel > 14) {
             throw new InvalidProductAttributeException("final pH level");
@@ -61,7 +62,7 @@ public class CultureMedia extends Product {
 
     public enum CultureMediaFinality {
         SELECTIVE("Don't kills some microorganisms (the selects/desirable) and kills the others"),
-        DIFFERENTIAL("Used to differentiate the microorganisms in the sample (via ph indicators or dyes, e.g"),
+        DIFFERENTIAL("Used to differentiate the microorganisms in the sample (using ph indicators or dyes, e.g"),
         TRANSPORT("Used to conservative the sample, not to stimulate microorganisms grows"),
         ENRICHMENT("Stimulates the growth of desired microorganisms that use to be in less quantity"),
         CHROMOGENIC("Uses chromogens to give color to microorganisms that contain certain enzymes"),
@@ -123,6 +124,10 @@ public class CultureMedia extends Product {
 
         public String getCode() {
             return code;
+        }
+
+        public boolean requiresColdChain() {
+            return this == REFRIGERATED || this == FROZEN || this == ULTRA_FREEZER;
         }
     }
 

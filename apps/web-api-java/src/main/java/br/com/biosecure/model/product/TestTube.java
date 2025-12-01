@@ -11,8 +11,9 @@ public class TestTube extends SampleContainer {
     private final double diameterMm;
     private final double heightMm;
 
-    public TestTube(String name, double price, String manufacturer, SterilizationMethod sterilizationMethod, String batchNumber, LocalDate expirationDate, PackagingType packagingType, int qtdPerPackage, ClosingMethod closingMethod, Material materialType, int maxRCF, BottomType bottomType, boolean isGraduated, CapColor capColor, double diameterMm, double heightMm) {
-        super(name, price, manufacturer, sterilizationMethod, batchNumber, expirationDate, packagingType, MeasureUnit.UN, qtdPerPackage, closingMethod, materialType, calculateNominalCapacity(diameterMm, heightMm));
+    public TestTube(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, int qtdPerPackage, SterilizationMethod sterilizationMethod, ClosingMethod closingMethod, Material materialType, int maxRCF, BottomType bottomType, boolean isGraduated, CapColor capColor, double diameterMm, double heightMm) {
+       
+        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, MeasureUnit.UN, qtdPerPackage, sterilizationMethod,closingMethod, materialType, calculateNominalCapacity(diameterMm, heightMm));
 
         validateBioSecuritySafety(materialType, bottomType, maxRCF);
 
