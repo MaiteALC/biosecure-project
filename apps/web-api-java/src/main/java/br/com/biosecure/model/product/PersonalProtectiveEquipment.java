@@ -11,6 +11,8 @@ public abstract class PersonalProtectiveEquipment extends Product {
         
         super(name, price, manufacturer, batchNumber, expirationDate, packagingType, measureUnit, quantityPerPackage);
 
+        validateString(certificateOfApproval, "certificate of approval");
+
         this.size = size;
         this.certificateOfApproval = certificateOfApproval;
         this.isDisposable = isDisposable;

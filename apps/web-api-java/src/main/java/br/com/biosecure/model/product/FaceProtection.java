@@ -12,6 +12,8 @@ public class FaceProtection extends PersonalProtectiveEquipment {
 
         super(name, price, manufacturer, batchNumber, expirationDate, packagingType, measureUnit, quantityPerPackage, size, certificateOfApproval, isDisposable);
 
+        validateString(standardRating, "standard rating");
+
         this.type = type;
         this.standardRating = standardRating;
         this.hasValve = type != ProtectionType.MASK_RESPIRATOR ? false : true;
