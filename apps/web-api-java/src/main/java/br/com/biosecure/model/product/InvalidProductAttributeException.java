@@ -4,7 +4,8 @@ public class InvalidProductAttributeException extends IllegalArgumentException {
     private final String invalidAttribute;
 
     public InvalidProductAttributeException(String attribute) {
-        super("The field '" + attribute + "' is empty/invalid!");
+        super("The field '" + attribute + "' is empty or invalid!");
+        
         this.invalidAttribute = attribute;
     }
 
