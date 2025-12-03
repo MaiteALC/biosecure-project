@@ -61,7 +61,6 @@ public class Sanitizer extends Product {
         SODIUM_HYPOCHLORITE,
         QUATERNARY_AMMONIUM,
         PERACETIC_ACID,
-        ENZYMATIC_DETERGENT,
         CHLORHEXIDINE
     }
 
@@ -89,7 +88,8 @@ public class Sanitizer extends Product {
         PERCENTAGE("%"),
         PARTS_PER_MILION("ppm"),
         GAY_LUSSAC("°GL"),
-        MILIGRAMS_PER_LITER("mg/L");
+        MILIGRAMS_PER_LITER("mg/L"),
+        MILILITERS_PER_LITER("mL/L");   
 
         private final String symbol;
 
@@ -128,14 +128,6 @@ public class Sanitizer extends Product {
                     "Sodium hypochlorite must be alkaline pH level (>8). Acid pH makes toxic gas.", invalids
             );
         }
-
-        if (chemicalBase == ChemicalBase.ENZYMATIC_DETERGENT && (phLevel < 5 || phLevel > 9)) {
-            invalids.add("Ph level");
-
-            throw new BioSecurityException(
-                    "Enzymatic detergents requires neutral pH to work correctly.", invalids
-            );
-        }
     }
 
     public ChemicalBase getActiveIngredient() {
@@ -162,8 +154,8 @@ public class Sanitizer extends Product {
         return concentration;
     }
 
-    public double convertConcentration(ConcentrationUnit fromUnit) {
-        if (this.concentrationUnit == fromUnit) {
+    public double convertConcentration(ConcentrationUnit targetUnit) {
+        if (this.concentrationUnit == targetUnit) {
             return concentration;
         }
 
@@ -171,7 +163,7 @@ public class Sanitizer extends Product {
 
         final int PERC_TO_PPM = 10000;
 
-        switch (fromUnit) {
+        switch (targetUnit) {
             case ConcentrationUnit.MILIGRAMS_PER_LITER:
                 if (objConcentrationUnit == ConcentrationUnit.PERCENTAGE || objConcentrationUnit == ConcentrationUnit.GAY_LUSSAC) {
                     return this.concentration * PERC_TO_PPM * this.densityGramsPerMiliLiter;
@@ -179,6 +171,10 @@ public class Sanitizer extends Product {
         
                 else if (objConcentrationUnit == ConcentrationUnit.PARTS_PER_MILION) {
                     return this.concentration * this.densityGramsPerMiliLiter;
+                }
+
+                else if (objConcentrationUnit == ConcentrationUnit.MILILITERS_PER_LITER) {
+                    return this.concentration * this.densityGramsPerMiliLiter * 1000;
                 }
 
                 break;
@@ -190,6 +186,10 @@ public class Sanitizer extends Product {
 
                 else if (objConcentrationUnit == ConcentrationUnit.MILIGRAMS_PER_LITER) {
                     return this.concentration / this.densityGramsPerMiliLiter;
+                }
+
+                else if (objConcentrationUnit == ConcentrationUnit.MILILITERS_PER_LITER) {
+                    return this.concentration * 1000;
                 }
                 
                 break;
@@ -205,6 +205,10 @@ public class Sanitizer extends Product {
 
                 else if (objConcentrationUnit == ConcentrationUnit.GAY_LUSSAC) {
                     return this.concentration; // Direct conversion °GL -> %
+                }
+
+                else if (objConcentrationUnit == ConcentrationUnit.MILILITERS_PER_LITER) {
+                    return this.concentration / 10;
                 }
                 
                 break;
@@ -223,10 +227,25 @@ public class Sanitizer extends Product {
                 }
 
                 break;
+
+            case ConcentrationUnit.MILILITERS_PER_LITER:
+                if (objConcentrationUnit == ConcentrationUnit.MILIGRAMS_PER_LITER) {
+                    return (this.concentration / this.densityGramsPerMiliLiter) / 1000;
+                }
+
+                else if (objConcentrationUnit == ConcentrationUnit.PERCENTAGE || objConcentrationUnit == ConcentrationUnit.GAY_LUSSAC) {
+                    return this.concentration * 10;
+                }
+
+                else if (objConcentrationUnit == ConcentrationUnit.PARTS_PER_MILION) {
+                    return this.concentration / 1000;
+                }
+                
+                break;
         }
         
         throw new IllegalArgumentException(
-            "Unsupported conversion: " + this.concentrationUnit + " to " + fromUnit
+            "Unsupported conversion: " + this.concentrationUnit + " --> " + targetUnit
         );
     }
 
