@@ -18,21 +18,24 @@ public abstract class Product {
         validateString(manufacturer, "manufacturer");
         validateString(batchNumber, "batch number");
 
-        if (quantityPerPackage < 1.0) {
+        if (quantityPerPackage < 1.0 || quantityPerPackage > 99999) {
             throw new InvalidProductAttributeException("quantity per package");
         }
 
-        if (price < 1.0) {
+        if (price < 1.0 || price > 999999.99) {
             throw new InvalidProductAttributeException("price");
         }
 
-        if (LocalDate.now().isAfter(expirationDate)) {
+        LocalDate todayDate = LocalDate.now();
+
+        if (todayDate.equals(expirationDate) || 
+        todayDate.isAfter(expirationDate.minusDays(5)) || 
+        expirationDate.isAfter(todayDate.plusYears(15)) ) {       
             throw new InvalidProductAttributeException("expiration date");
         }
 
-        if (packagingType == PackagingType.INDIVIDUAL && 
-            (measureUnit != MeasureUnit.UN && measureUnit != MeasureUnit.PAIR)) {
-                throw new InvalidProductAttributeException("packaging type and measure unit has incoherent");
+        if (packagingType == PackagingType.INDIVIDUAL && (measureUnit != MeasureUnit.UN && measureUnit != MeasureUnit.PAIR)) {
+            throw new InvalidProductAttributeException("measure unit");
         }
 
         this.name = name;
