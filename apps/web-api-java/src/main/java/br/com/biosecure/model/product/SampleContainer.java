@@ -7,13 +7,13 @@ public abstract class SampleContainer extends  Product {
     private final ClosingMethod closingMethod;
     private final SterilizationMethod sterilizationMethod;
     private final Material material;
-    private final double capacity;
+    private final double capacityMiliLiters;
 
-    public SampleContainer(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, MeasureUnit measureUnit, int quantityPerPackage, SterilizationMethod sterilizationMethod, ClosingMethod closingMethod, Material materialType, double capacity) {
+    public SampleContainer(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, double quantityPerPackage, SterilizationMethod sterilizationMethod, ClosingMethod closingMethod, Material materialType, double capacityMiliLiters) {
         
-        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, measureUnit, quantityPerPackage);
+        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, MeasureUnit.UN, quantityPerPackage);
 
-        if (capacity <= 0) {
+        if (capacityMiliLiters <= 0 || capacityMiliLiters > 99999) {
             throw new InvalidProductAttributeException("capacity");
         }
 
@@ -22,7 +22,7 @@ public abstract class SampleContainer extends  Product {
         this.sterilizationMethod = sterilizationMethod;
         this.closingMethod = closingMethod;
         this.material = materialType;
-        this.capacity = capacity;
+        this.capacityMiliLiters = capacityMiliLiters;
     }
 
     private void validateBioSafetyRules(Material material, SterilizationMethod sterilization) {
@@ -33,7 +33,7 @@ public abstract class SampleContainer extends  Product {
             invalids.add("Sterilization method");
 
             throw new BioSecurityException(
-                    "Material and sterilization method (autoclave) has incoherent", invalids
+                "Material and sterilization method (autoclave) has incoherent", invalids
             );
         }
     }
@@ -109,7 +109,7 @@ public abstract class SampleContainer extends  Product {
         return this.sterilizationMethod != SterilizationMethod.NO_STERILE;
     }
 
-    public double getCapacity() {
-        return capacity;
+    public double getCapacityMiliLiters() {
+        return capacityMiliLiters;
     }
 }

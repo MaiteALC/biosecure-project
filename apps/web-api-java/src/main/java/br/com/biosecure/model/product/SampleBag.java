@@ -11,9 +11,9 @@ public class SampleBag extends SampleContainer {
     private final int widthMm;
     private final int heigthMm;
 
-    public SampleBag(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, MeasureUnit measureUnit, int qtdPerPackage, SterilizationMethod sterilizationMethod, ClosingMethod closingMethod, Material materialType, FilterType filter, boolean hasIdentificationTag, boolean isStandUp, double thicknessMm, double capacity, int widthMm, int heigthMm) {
+    public SampleBag(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, int qtdPerPackage, SterilizationMethod sterilizationMethod, ClosingMethod closingMethod, Material materialType, FilterType filter, boolean hasIdentificationTag, boolean isStandUp, double thicknessMm, double capacityMiliLiters, int widthMm, int heigthMm) {
         
-        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, measureUnit, qtdPerPackage, sterilizationMethod, closingMethod, materialType, capacity);
+        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, qtdPerPackage, sterilizationMethod, closingMethod, materialType, capacityMiliLiters);
 
         validateBioSecuritySafety(materialType);
 
@@ -38,8 +38,7 @@ public class SampleBag extends SampleContainer {
             invalids.add("Material");
 
             throw new BioSecurityException(
-                    "Sample bags must be of flexible material (PE, PP). " +
-                            getMaterial().getCommercialName() + " is rigid.", invalids
+                "Sample bags must be of flexible material (PE, PP). " + getMaterial().getCommercialName() + " is rigid.", invalids
             );
         }
     }
