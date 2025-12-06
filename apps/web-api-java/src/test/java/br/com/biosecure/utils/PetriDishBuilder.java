@@ -21,11 +21,11 @@ public class PetriDishBuilder {
     private Material material = Material.PS;
 
     // Specific attributes of Petri Dish
-    private int divNum;
-    private boolean grid;
-    private boolean ventilated;
-    private double diameterMm;
-    private double heightMm;
+    private int divNum = 2;
+    private boolean grid = false;
+    private boolean ventilated = true;
+    private double diameterMm = 90;
+    private double heightMm = 15;
 
     public PetriDishBuilder withClosingMethod(ClosingMethod closingMethod) {
         this.closingMethod = closingMethod;

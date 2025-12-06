@@ -22,12 +22,12 @@ public class TestTubeBuilder {
     private Material material = Material.PS;
 
     // Specific attributes of Test Tubes
-    private int maxRCF;
-    private BottomType bottomType;
-    private boolean graduated;
-    private CapColor capColor;
-    private double diameterMm;
-    private double heightMm;
+    private int maxRCF = 7000;
+    private BottomType bottomType = BottomType.ROUND;
+    private boolean graduated = true;
+    private CapColor capColor = CapColor.WHITE;
+    private double diameterMm = 12;
+    private double heightMm = 75;
 
     public TestTubeBuilder withClosingMethod(ClosingMethod closingMethod) {
         this.closingMethod = closingMethod;
