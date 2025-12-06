@@ -13,7 +13,7 @@ public class SampleContainerBuilder {
     private String batchNumber = "Batch-1A";
     private LocalDate expirationDate = LocalDate.of(2027, 3, 25);
     private PackagingType packagingType = PackagingType.BOX;
-    private double quantityPerPackage = 30.0;
+    private int quantityPerPackage = 30;
 
     // Specific attributes of Sample Container
     private ClosingMethod closingMethod = ClosingMethod.CELLULOSE_STOPPER;
@@ -22,7 +22,7 @@ public class SampleContainerBuilder {
     private double capacity = 1;
 
     private static class SampleContainerDummy extends SampleContainer {
-        public SampleContainerDummy(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, double quantityPerPackage, SterilizationMethod sterilizationMethod, ClosingMethod closingMethod, Material materialType, double capacityML) {
+        public SampleContainerDummy(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, int quantityPerPackage, SterilizationMethod sterilizationMethod, ClosingMethod closingMethod, Material materialType, double capacityML) {
         
             super(name, price, manufacturer, batchNumber, expirationDate, packagingType, quantityPerPackage, sterilizationMethod, closingMethod, materialType, capacityML);
         }

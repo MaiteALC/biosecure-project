@@ -8,12 +8,12 @@ public class SampleBag extends SampleContainer {
     private final boolean identificationTag;
     private final boolean standUp;
     private final double thicknessMm;
-    private final int widthMm;
-    private final int heigthMm;
+    private final double widthMm;
+    private final double heigthMm;
 
-    public SampleBag(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, int qtdPerPackage, SterilizationMethod sterilizationMethod, ClosingMethod closingMethod, Material materialType, FilterType filter, boolean hasIdentificationTag, boolean isStandUp, double thicknessMm, double capacityMiliLiters, int widthMm, int heigthMm) {
+    public SampleBag(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, int quantityPerPackage, SterilizationMethod sterilizationMethod, ClosingMethod closingMethod, Material materialType, FilterType filter, boolean hasIdentificationTag, boolean isStandUp, double thicknessMm, double capacityMiliLiters, double widthMm, double heigthMm) {
         
-        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, qtdPerPackage, sterilizationMethod, closingMethod, materialType, capacityMiliLiters);
+        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, quantityPerPackage, sterilizationMethod, closingMethod, materialType, capacityMiliLiters);
 
         validateBioSecuritySafety(materialType);
 
@@ -59,11 +59,11 @@ public class SampleBag extends SampleContainer {
         return thicknessMm;
     }
 
-    public int getHeightMm() {
+    public double getHeightMm() {
         return heigthMm;
     }
 
-    public int getWidthMm() {
+    public double getWidthMm() {
         return widthMm;
     }
 }
