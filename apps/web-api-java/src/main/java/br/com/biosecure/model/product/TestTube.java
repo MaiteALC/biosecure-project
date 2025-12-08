@@ -17,6 +17,10 @@ public class TestTube extends SampleContainer {
        
         super(name, price, manufacturer, batchNumber, expirationDate, packagingType, quantityPerPackage, sterilizationMethod,closingMethod, materialType, calculateNominalCapacity(diameterMm, heightMm));
 
+        if (diameterMm < 1 || diameterMm > 999 || heightMm < 1 || heightMm > 999) {
+            throw new InvalidProductAttributeException("physical dimensions");
+        }
+
         validateBioSecuritySafety(materialType, bottomType, maxRCF);
 
         this.maxRCF = maxRCF;

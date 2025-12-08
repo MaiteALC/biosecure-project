@@ -18,6 +18,10 @@ public class PetriDish extends SampleContainer {
         if (divisionsNumber < 1 || divisionsNumber > 4) {
             throw new InvalidProductAttributeException("divisions number");
         }
+        
+        if (diameterMm < 1 || diameterMm > 999 || heightMm < 1 || heightMm > 999) {
+            throw new InvalidProductAttributeException("physical dimensions");
+        }
 
         this.divNum = divisionsNumber;
         this.grid = hasGrid;
