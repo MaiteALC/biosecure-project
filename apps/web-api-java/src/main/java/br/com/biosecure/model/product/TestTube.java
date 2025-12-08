@@ -67,7 +67,7 @@ public class TestTube extends SampleContainer {
             invalids.add("Material");
 
             throw new BioSecurityException(
-                    "Glass tubes rarely supports RCF greater than 5000g. Verify the specifications.", invalids
+                "Glass tubes rarely supports RCF greater than 5000g. Verify the specifications.", invalids
             );
         }
 
@@ -75,7 +75,7 @@ public class TestTube extends SampleContainer {
             invalids.add("Bottom type");
 
             throw new BioSecurityException(
-                    "Flat bottoms concentrate the tension. RCF greater than 10.000g is uncommon for flat bottoms. Verify the specifications", invalids
+                "Flat bottoms concentrate the tension. RCF greater than 10.000g is uncommon for flat bottoms. Verify the specifications", invalids
             );
         }
     }
@@ -111,14 +111,14 @@ public class TestTube extends SampleContainer {
      * </p>
      *
      * @param diameter Total diameter in milimeters (mm).
-     * Must be betweeen 1 and 9999.
+     * Must be betweeen 1 and 999.
      * @param height   Total height in milimeters (mm).
-     * Must be between 1 and 9999.
+     * Must be between 1 and 999.
      * @return The calculated capacity in mililiters (mL).
-     * @throws InvalidProductAttributeException If dimension is out of allowed limits (<1 or >9999).
+     * @throws InvalidProductAttributeException If dimension is out of allowed limits (<1 or >999).
      */    
     public static double calculateNominalCapacity(double diameter, double height) {
-        if (diameter < 1 || height < 1 || diameter > 9999 || height > 9999) {
+        if (diameter < 1 || height < 1 || diameter > 999 || height > 999) {
             throw new InvalidProductAttributeException("physical dimensions");
         }
 
