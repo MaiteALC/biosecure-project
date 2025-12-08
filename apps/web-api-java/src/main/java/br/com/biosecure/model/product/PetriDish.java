@@ -50,10 +50,37 @@ public class PetriDish extends SampleContainer {
         return heightMm;
     }
 
-    public static double calculateSurfaceAreaPerDiv(double diameter, int divNum) {
-        double radius = diameter / 2.0;
+    /**
+     * Calculates the surface area of a petri dish per division in quadratic milimeters.
+     * <p>
+     * The calculation is made using the formula for circle area: {@code A = π * r²} divided by divisions number,
+     * considering that 100% of surface is usefull.
+     * The result is rounded to 2 decimal places.
+     * </p>
+     * 
+     * @param diameter Total diameter in milimeters (mm).
+     * Must be betweeen 1 and 999.
+     * @param divNum Number of divisions inside the petri dish.
+     * Must be between 1 and 4.
+     * @return The calculated surface area per division in mm².
+     * @throws InvalidProductAttributeException if the diameter or divNum is shorter than 1, if divNum greater than 4 or diameter greater than 999.
+     */
+    public static double calculateSurfaceAreaPerDiv(double diameter, int divisionsNum) {
+        if (diameter < 1 || diameter > 999) {
+            throw new InvalidProductAttributeException("diameter");
+        }
+        
+        if (divisionsNum < 1 || divisionsNum > 4) {
+            throw new InvalidProductAttributeException("divisions number");
+        }
 
-        return (Math.PI * Math.pow(radius, 2)) / divNum;
+        BigDecimal surfeaceArea = BigDecimal.valueOf((Math.PI * Math.pow(diameter / 2.0, 2)) / (double) divisionsNum).setScale(2, RoundingMode.HALF_UP); 
+
+        return surfeaceArea.doubleValue();
+    }
+
+    public double getSurfaceAreaPerDivison() {
+        return calculateSurfaceAreaPerDiv(this.diameterMm, this.divNum);
     }
 
     /**
@@ -69,20 +96,20 @@ public class PetriDish extends SampleContainer {
      * </p>
      *
      * @param diameter Total diameter in milimeters (mm).
-     * Must be betweeen 1 and 9999.
+     * Must be betweeen 1 and 999.
      * @param height   Total height in milimeters (mm).
-     * Must be between 1 and 9999.
+     * Must be between 1 and 999.
      * @return The calculated capacity in mililiters (mL).
-     * @throws InvalidProductAttributeException If dimension is out of allowed limits (<1 or >9999).
+     * @throws InvalidProductAttributeException If dimension is out of allowed limits (is <1 or >999).
      */
     public static double calculateNominalCapacity(double diameter, double height) {
-        if (diameter < 1 || height < 1 || diameter > 9999 || height > 9999) {
+        if (diameter < 1 || height < 1 || diameter > 999 || height > 999) {
             throw new InvalidProductAttributeException("physical dimensions");
         }
 
-        BigDecimal usefulHeight = BigDecimal.valueOf(height / 2.0).setScale(2, RoundingMode.DOWN);
+        double usefulHeight = height / 2.0;
 
-        double volumeCubicMm = Math.PI * Math.pow(diameter / 2.0, 2) * usefulHeight.doubleValue();
+        double volumeCubicMm = Math.PI * Math.pow(diameter / 2.0, 2) * usefulHeight;
 
         BigDecimal volumeML =  BigDecimal.valueOf(volumeCubicMm / 1000).setScale(2, RoundingMode.HALF_UP); 
 
