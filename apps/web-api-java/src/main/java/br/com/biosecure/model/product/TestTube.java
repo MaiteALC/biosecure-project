@@ -21,7 +21,7 @@ public class TestTube extends SampleContainer {
             throw new InvalidProductAttributeException("physical dimensions");
         }
 
-        validateBioSecuritySafety(materialType, bottomType, maxRCF);
+        validateBioSafetRules(materialType, bottomType, maxRCF);
 
         this.maxRCF = maxRCF;
         this.bottomType = bottomType;
@@ -58,10 +58,10 @@ public class TestTube extends SampleContainer {
         }
     }
 
-    private void validateBioSecuritySafety(Material material, BottomType bottomType, int maxRCF) {
+    private void validateBioSafetRules(Material material, BottomType bottomType, int maxRCF) {
         ArrayList<String> invalids = new ArrayList<>();
 
-        invalids.add("maximum RCF");
+        invalids.add("Maximum RCF");
 
         if (material == Material.BOROSILICATE_GLASS && maxRCF > 5000) {
             invalids.add("Material");
