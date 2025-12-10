@@ -144,6 +144,6 @@ public abstract class Product {
 
         Product obj = (Product) o;
 
-        return sku.equals(obj.sku) && manufacturer.equals(obj.manufacturer) && name.equals(obj.name);
+        return this.getSku().equals(obj.getSku()) && manufacturer.equals(obj.manufacturer) && name.equals(obj.name);
     }
 }
