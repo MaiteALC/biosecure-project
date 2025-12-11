@@ -3,7 +3,7 @@ package br.com.biosecure.utils;
 import br.com.biosecure.model.product.Glove;
 import br.com.biosecure.model.product.Glove.GloveMaterial;
 
-public class GloveBuilder extends PersonalProtectiveEquipmentBuilder {
+public class GloveBuilder extends BasePpeBuilder<GloveBuilder, Glove> {
     // Specific attributes of Glove
     private boolean powderFree = true;
     private boolean longBarrel = true;

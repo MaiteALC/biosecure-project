@@ -3,7 +3,7 @@ package br.com.biosecure.utils;
 import br.com.biosecure.model.product.SampleBag.*;
 import br.com.biosecure.model.product.SampleBag;
 
-public class SampleBagBuilder extends SampleContainerBuilder<SampleBagBuilder, SampleBag> {
+public class SampleBagBuilder extends BaseSampleContainerBuilder<SampleBagBuilder, SampleBag> {
     // Specific attributes of Sample Bag
     private FilterType filter = FilterType.FULL_PAGE;
     private boolean identificationTag = true;

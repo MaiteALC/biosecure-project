@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 import br.com.biosecure.model.product.Product.MeasureUnit;
 import br.com.biosecure.model.product.SampleContainer.*;
-import br.com.biosecure.utils.TestSampleContainerBuilder;
+import br.com.biosecure.utils.SampleContainerBuilder;
 
 public class SampleContainerTest {
     
     @Test
     public void shouldCreateValidSampleContainer() {
-        SampleContainer aSampleContainer = TestSampleContainerBuilder.aSampleContainer()
+        SampleContainer aSampleContainer = SampleContainerBuilder.aSampleContainer()
             .withCapacityMiliLiters(20)
             .withSterilizationMethod(SterilizationMethod.E_BEAM)
             .withClosingMethod(ClosingMethod.HEAT_SEALABLE)
@@ -25,7 +25,7 @@ public class SampleContainerTest {
         assertNotNull(aSampleContainer);
         assertEquals(MeasureUnit.UN, aSampleContainer.getMeasureUnit());
 
-         SampleContainer anotherSampleContainer = TestSampleContainerBuilder.aSampleContainer()
+         SampleContainer anotherSampleContainer = SampleContainerBuilder.aSampleContainer()
             .withCapacityMiliLiters(12)
             .withSterilizationMethod(SterilizationMethod.AUTOCLAVE)
             .withClosingMethod(ClosingMethod.SCREW_CAP_ORING)
@@ -38,11 +38,11 @@ public class SampleContainerTest {
     @Test
     public void shouldThrowException_WhenCapacityIsInvalid() {
         InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> {
-            TestSampleContainerBuilder.aSampleContainer().withCapacityMiliLiters(0).build();
+            SampleContainerBuilder.aSampleContainer().withCapacityMiliLiters(0).build();
         });
         
         InvalidProductAttributeException exception2 = assertThrows(InvalidProductAttributeException.class, () -> {
-            TestSampleContainerBuilder.aSampleContainer().withCapacityMiliLiters(100000).build();
+            SampleContainerBuilder.aSampleContainer().withCapacityMiliLiters(100000).build();
         });
 
         assertEquals("capacity", exception.getInvalidAttribute());
@@ -52,14 +52,14 @@ public class SampleContainerTest {
     @Test
     public void shouldThrowException_WhenMaterialAndSterilizationMethodIsIncoherent() {
         BioSecurityException exception = assertThrows(BioSecurityException.class, () -> {
-            TestSampleContainerBuilder.aSampleContainer()
+            SampleContainerBuilder.aSampleContainer()
                 .withMaterial(Material.PE)
                 .withSterilizationMethod(SterilizationMethod.AUTOCLAVE)
                 .build();
         });
         
         BioSecurityException exception2 = assertThrows(BioSecurityException.class, () -> {
-            TestSampleContainerBuilder.aSampleContainer()
+            SampleContainerBuilder.aSampleContainer()
                 .withMaterial(Material.PS)
                 .withSterilizationMethod(SterilizationMethod.AUTOCLAVE)
                 .build();

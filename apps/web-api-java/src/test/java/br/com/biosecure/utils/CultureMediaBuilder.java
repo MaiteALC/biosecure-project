@@ -4,7 +4,7 @@ import java.util.OptionalDouble;
 import br.com.biosecure.model.product.CultureMedia;
 import br.com.biosecure.model.product.CultureMedia.*;
 
-public class CultureMediaBuilder extends ProductBuilder<CultureMediaBuilder, CultureMedia> {
+public class CultureMediaBuilder extends BaseProductBuilder<CultureMediaBuilder, CultureMedia> {
     // Specific attributes of Culture Media
     private CultureMediaFinality finality = CultureMediaFinality.SELECTIVE;
     private PhysicalUnit physicalUnit = PhysicalUnit.PREPARED_LIQUID_PLATE;

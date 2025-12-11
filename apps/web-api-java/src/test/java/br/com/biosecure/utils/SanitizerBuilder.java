@@ -1,11 +1,9 @@
 package br.com.biosecure.utils;
 
-import br.com.biosecure.model.product.Sanitizer.ChemicalBase;
-import br.com.biosecure.model.product.Sanitizer.ConcentrationUnit;
-import br.com.biosecure.model.product.Sanitizer.PhysicalForm;
+import br.com.biosecure.model.product.Sanitizer.*;
 import br.com.biosecure.model.product.Sanitizer;
 
-public class SanitizerBuilder extends ProductBuilder<SanitizerBuilder, Sanitizer> {
+public class SanitizerBuilder extends BaseProductBuilder<SanitizerBuilder, Sanitizer> {
     // Specifics attributes of Sanitizer
     private ChemicalBase activeIngredient = ChemicalBase.QUATERNARY_AMMONIUM;
     private PhysicalForm form = PhysicalForm.LIQUID;
@@ -19,7 +17,7 @@ public class SanitizerBuilder extends ProductBuilder<SanitizerBuilder, Sanitizer
     private double density = 1;
 
     public SanitizerBuilder withActiveIngredient(ChemicalBase chemicalBase) {
-        this.activeIngredient = chemicalBase;
+        this.activeIngredient = chemicalBase; 
          
         return this;
     }

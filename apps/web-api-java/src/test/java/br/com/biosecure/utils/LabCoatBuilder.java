@@ -3,7 +3,7 @@ package br.com.biosecure.utils;
 import br.com.biosecure.model.product.LabCoat;
 import br.com.biosecure.model.product.LabCoat.*;
 
-public class LabCoatBuilder extends PersonalProtectiveEquipmentBuilder {
+public class LabCoatBuilder extends BasePpeBuilder<LabCoatBuilder, LabCoat> {
     // Specific attributes of Lab Coat
     private FabricType fabricType = FabricType.COTTON_100;
     private int grammage = 40;

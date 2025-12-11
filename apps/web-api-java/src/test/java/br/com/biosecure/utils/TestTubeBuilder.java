@@ -3,7 +3,7 @@ package br.com.biosecure.utils;
 import br.com.biosecure.model.product.TestTube;
 import br.com.biosecure.model.product.TestTube.*;
 
-public class TestTubeBuilder extends SampleContainerBuilder<TestTubeBuilder, TestTube> {
+public class TestTubeBuilder extends BaseSampleContainerBuilder<TestTubeBuilder, TestTube> {
     // Specific attributes of Test Tubes
     private int maxRCF = 7000;
     private BottomType bottomType = BottomType.ROUND;

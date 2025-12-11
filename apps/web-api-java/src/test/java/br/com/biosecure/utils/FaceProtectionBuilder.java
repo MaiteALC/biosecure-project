@@ -3,7 +3,7 @@ package br.com.biosecure.utils;
 import br.com.biosecure.model.product.FaceProtection;
 import br.com.biosecure.model.product.FaceProtection.ProtectionType;
 
-public class FaceProtectionBuilder extends PersonalProtectiveEquipmentBuilder {
+public class FaceProtectionBuilder extends BasePpeBuilder<FaceProtectionBuilder, FaceProtection> {
     // Specific attributes of Face Protection
     private ProtectionType type = ProtectionType.MASK_RESPIRATOR;
     private String standardRating = "N95";

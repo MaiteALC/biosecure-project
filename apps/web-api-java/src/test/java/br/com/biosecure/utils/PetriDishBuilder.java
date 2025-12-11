@@ -2,7 +2,7 @@ package br.com.biosecure.utils;
 
 import br.com.biosecure.model.product.PetriDish;
 
-public class PetriDishBuilder extends SampleContainerBuilder<PetriDishBuilder, PetriDish> {
+public class PetriDishBuilder extends BaseSampleContainerBuilder<PetriDishBuilder, PetriDish> {
     // Specific attributes of Petri Dish
     private int divNum = 2;
     private boolean grid = false;

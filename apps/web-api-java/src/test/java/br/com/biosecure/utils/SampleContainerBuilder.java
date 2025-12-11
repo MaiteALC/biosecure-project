@@ -1,36 +1,28 @@
 package br.com.biosecure.utils;
 
+import java.time.LocalDate;
 import br.com.biosecure.model.product.SampleContainer;
-import br.com.biosecure.model.product.SampleContainer.*;
 
-abstract class SampleContainerBuilder<T extends SampleContainerBuilder<T, P>, P extends SampleContainer> extends ProductBuilder<T, P> {
-    // Specific attributes of Sample Container
-    protected ClosingMethod closingMethod = ClosingMethod.CELLULOSE_STOPPER;
-    protected SterilizationMethod sterilizationMethod = SterilizationMethod.ETHYLENE_OXIDE;
-    protected Material material = Material.BOROSILICATE_GLASS;
-    protected double capacityMiliLiters = 1;
-
-    public T withClosingMethod(ClosingMethod closingMethod) {
-        this.closingMethod = closingMethod;
-
-        return self();
+public class SampleContainerBuilder extends BaseSampleContainerBuilder<SampleContainerBuilder, SampleContainer> {
+    
+    private static class SampleContainerDummy extends SampleContainer {
+        public SampleContainerDummy(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, int quantityPerPackage, SterilizationMethod sterilizationMethod, ClosingMethod closingMethod, Material materialType, double capacityML) {
+        
+            super(name, price, manufacturer, batchNumber, expirationDate, packagingType, quantityPerPackage, sterilizationMethod, closingMethod, materialType, capacityML);
+        }
     }
 
-    public T withSterilizationMethod(SterilizationMethod sterilizationMethod) {
-        this.sterilizationMethod = sterilizationMethod;
-
-        return self();
+    @Override
+    protected SampleContainerBuilder self() {
+        return this;
     }
 
-    public T withMaterial(Material material) {
-        this.material = material;
-
-        return self();
+    public static SampleContainerBuilder aSampleContainer() {
+        return new SampleContainerBuilder();
     }
 
-    public T withCapacityMiliLiters(double capacity) {
-        this.capacityMiliLiters = capacity;
-
-        return self();
+    @Override
+    public SampleContainer build() {
+        return new SampleContainerDummy(name, price, manufacturer, batchNumber, expirationDate, packagingType, (int) quantityPerPackage, sterilizationMethod, closingMethod, material, capacityMiliLiters);
     }
 }
