@@ -53,10 +53,10 @@ public class SKU {
                 throw new SkuGenerationException(
                     "Product with unknow type of 'Sample Container'. Generation of SKU code is unavailable for this subclass.", sampleContainer
                 );
-            }
+            } 
         }
 
-        else if (product instanceof PersonalProtectiveEquipment ppe) {
+        else if (product instanceof PPE ppe) {
             code += ppe.getSize().getCode(); // Always returns 1 or 2 letters
             
             if (ppe instanceof Glove glove) {

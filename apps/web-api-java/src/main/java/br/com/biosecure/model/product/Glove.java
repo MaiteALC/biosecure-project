@@ -2,7 +2,7 @@ package br.com.biosecure.model.product;
 
 import java.time.LocalDate;
 
-public class Glove extends PersonalProtectiveEquipment {
+public class Glove extends PPE {
     private final boolean powderFree;
     private final boolean longBarrel;
     private final GloveMaterial material;

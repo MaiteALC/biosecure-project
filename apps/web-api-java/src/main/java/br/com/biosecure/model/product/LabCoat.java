@@ -2,7 +2,7 @@ package br.com.biosecure.model.product;
 
 import java.time.LocalDate;
 
-public class LabCoat extends PersonalProtectiveEquipment {
+public class LabCoat extends PPE {
     private final FabricType fabricType;
     private final int grammage;
     private final CuffStyle cuffStyle;

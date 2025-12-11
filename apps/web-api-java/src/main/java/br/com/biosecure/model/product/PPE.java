@@ -2,12 +2,12 @@ package br.com.biosecure.model.product;
 
 import java.time.LocalDate;
 
-public abstract class PersonalProtectiveEquipment extends Product {
+public abstract class PPE extends Product {
     private final Size size;
     private final String certificateOfApproval;
     private final boolean isDisposable;
 
-    public PersonalProtectiveEquipment(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, int quantityPerPackage, Size size, String certificateOfApproval, boolean isDisposable) {
+    public PPE(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, int quantityPerPackage, Size size, String certificateOfApproval, boolean isDisposable) {
         
         super(name, price, manufacturer, batchNumber, expirationDate, packagingType, MeasureUnit.UN, (double) quantityPerPackage);
 

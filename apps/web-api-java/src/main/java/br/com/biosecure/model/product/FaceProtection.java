@@ -2,7 +2,7 @@ package br.com.biosecure.model.product;
 
 import java.time.LocalDate;
 
-public class FaceProtection extends PersonalProtectiveEquipment {
+public class FaceProtection extends PPE {
     private final ProtectionType type;
     private final String standardRating;
     private final boolean hasValve;
