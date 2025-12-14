@@ -1,6 +1,9 @@
 package br.com.biosecure.model.product;
 
 import java.time.LocalDate;
+import br.com.biosecure.utils.NotificationContext;
+import br.com.biosecure.utils.NumberUtils;
+import br.com.biosecure.utils.StringUtils;
 
 public abstract class Product {
     private final String name;
@@ -13,29 +16,30 @@ public abstract class Product {
     private final MeasureUnit measureUnit;
     private final double quantityPerPackage;
 
+    protected static final int MIN_NAMES_LENGTH = 2;
+    protected static final int MAX_NAMES_LENGTH = 70;
+
+    protected static final double MAX_PRICE = 99999.99;
+    protected static final double MAX_QUANTITY = 99999;
+
     public Product(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, MeasureUnit measureUnit, double quantityPerPackage) {
-        validateString(name, "name");
-        validateString(manufacturer, "manufacturer");
-        validateString(batchNumber, "batch number");
+        
+        NotificationContext productNotification = new NotificationContext();
+        
+        StringUtils.validateString(name, MIN_NAMES_LENGTH, "name", MAX_NAMES_LENGTH, productNotification);
+        StringUtils.validateString(manufacturer, MIN_NAMES_LENGTH, "manufacturer", MAX_NAMES_LENGTH, productNotification);
+        StringUtils.validateString(batchNumber, "batch number", productNotification);
 
-        if (quantityPerPackage < 1.0 || quantityPerPackage > 99999) {
-            throw new InvalidProductAttributeException("quantity per package");
-        }
-
-        if (price < 1.0 || price > 999999.99) {
-            throw new InvalidProductAttributeException("price");
-        }
-
-        LocalDate todayDate = LocalDate.now();
-
-        if (todayDate.equals(expirationDate) || 
-        todayDate.isAfter(expirationDate.minusDays(5)) || 
-        expirationDate.isAfter(todayDate.plusYears(15)) ) {       
-            throw new InvalidProductAttributeException("expiration date");
-        }
-
+        NumberUtils.validateNumericalAttribute(price, 0.01, "price", MAX_PRICE, productNotification);
+        NumberUtils.validateNumericalAttribute(quantityPerPackage, 1, "quantity per package", MAX_QUANTITY, productNotification);
+        NumberUtils.validateExpirationDate(expirationDate, "expiration date", productNotification);
+        
         if (packagingType == PackagingType.INDIVIDUAL && (measureUnit != MeasureUnit.UN && measureUnit != MeasureUnit.PAIR)) {
-            throw new InvalidProductAttributeException("measure unit");
+            productNotification.addError("measure unit", "The measure unit and packaging type are incoherent.");;
+        }
+        
+        if (productNotification.hasErrors()) {
+            throw new InvalidProductAttributeException(productNotification.getErrors());
         }
 
         this.name = name;
@@ -74,12 +78,6 @@ public abstract class Product {
 
         public String getCode() {
             return code;
-        }
-    }
-
-    protected void validateString(String value, String attributeName) {
-        if (value == null || value.isBlank()) {
-            throw new InvalidProductAttributeException(attributeName);
         }
     }
 
@@ -125,8 +123,12 @@ public abstract class Product {
     }
 
     public void setPrice(double newPrice) {
-        if (newPrice < 1.0) {
-            throw new InvalidProductAttributeException("price");
+        NotificationContext productNotification = new NotificationContext();
+
+        NumberUtils.validateNumericalAttribute(price, 0.01, "price", MAX_PRICE, productNotification);
+
+        if (productNotification.hasErrors()) {
+            throw new InvalidProductAttributeException(productNotification.getErrors());
         }
 
         this.price = newPrice;

@@ -1,11 +1,13 @@
 package br.com.biosecure.model.product;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 import br.com.biosecure.model.product.Product.MeasureUnit;
 import br.com.biosecure.model.product.Product.PackagingType;
@@ -37,21 +39,24 @@ public class ProductTest {
 
     @Test
     public void shouldThrowException_WhenStringAttributeIsInvalid() {
+        String expectedMessage = "Invalid product attributes:\n\t - name (The string is null.)\n\t - manufacturer (The string is empty.)\n\t - batch number (The string is empty.)\n";
+
         InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> {
-            ProductBuilder.aProduct().withName(null).build();
-        });
-        
-        InvalidProductAttributeException exception2 = assertThrows(InvalidProductAttributeException.class, () -> {
-            ProductBuilder.aProduct().withManufacturer("").build();
-        });
-        
-        InvalidProductAttributeException exception3 = assertThrows(InvalidProductAttributeException.class, () -> {
-            ProductBuilder.aProduct().withBatchNumber("     ").build();
+            ProductBuilder.aProduct().withName(null)
+                .withManufacturer("")
+                .withBatchNumber("     ") 
+                .build();    
         });
 
-        assertEquals("name", exception.getInvalidAttribute());
-        assertEquals("manufacturer", exception2.getInvalidAttribute());
-        assertEquals("batch number", exception3.getInvalidAttribute());
+        ArrayList<String> invalids = new ArrayList<>();
+        invalids.add("name");
+        invalids.add("manufacturer");
+        invalids.add("batch number");
+
+        assertEquals("[name, manufacturer, batch number]", exception.getInvalidAttribute());
+        assertIterableEquals(invalids, exception.getInvalidAttributesArray());
+
+        assertEquals(expectedMessage, exception.getMessage());
     }
 
     @Test
