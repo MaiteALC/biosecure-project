@@ -39,7 +39,7 @@ public class ProductTest {
 
     @Test
     public void shouldThrowException_WhenStringAttributeIsInvalid() {
-        String expectedMessage = "Invalid product attributes:\n\t - name (The string is null.)\n\t - manufacturer (The string is empty.)\n\t - batch number (The string is empty.)\n";
+        String expectedMessage = "Invalid product attributes:\n\t - name | The string is null.\n\t - manufacturer | The string is empty.\n\t - batch number | The string is empty.\n";
 
         InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> {
             ProductBuilder.aProduct().withName(null)

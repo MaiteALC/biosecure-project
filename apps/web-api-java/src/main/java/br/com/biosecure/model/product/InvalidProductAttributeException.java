@@ -22,7 +22,7 @@ public class InvalidProductAttributeException extends InvalidAttributeException 
         ArrayList<String> errorsStr = new ArrayList<>();
         
         for (ValidationException currentError : errors) {
-            errorsStr.add(currentError.getInvalidProperty() + " (" + currentError.getMessage() + ")");
+            errorsStr.add(currentError.getInvalidProperty() + " | " + currentError.getMessage());
         }
 
         String message = "Invalid product attributes:\n";
