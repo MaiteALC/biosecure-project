@@ -1,6 +1,8 @@
 package br.com.biosecure.model.product;
 
 import java.time.LocalDate;
+import br.com.biosecure.utils.NotificationContext;
+import br.com.biosecure.utils.NumberUtils;
 
 public class Glove extends PPE {
     private final boolean powderFree;
@@ -11,7 +13,15 @@ public class Glove extends PPE {
 
     public Glove(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, int quantityPerPackage, Size size, String certificateOfApproval, boolean isDisposable, boolean isPowderFree, boolean hasLongBarrel, GloveMaterial material, boolean isTextured, double thicknessMils) {
         
-        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, quantityPerPackage, size, certificateOfApproval, isDisposable);
+        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, quantityPerPackage, size, certificateOfApproval, material == GloveMaterial.LATEX || material == GloveMaterial.VINYL ? true : isDisposable);
+
+        NotificationContext notification = new NotificationContext();
+
+        NumberUtils.validateNumericalAttribute(thicknessMils, 3, "thickness (mils)", 10, notification);
+
+        if (notification.hasErrors()) {
+            throw new InvalidProductAttributeException(notification.getErrors());
+        }
 
         this.powderFree = isPowderFree;
         this.longBarrel = hasLongBarrel;

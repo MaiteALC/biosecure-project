@@ -9,7 +9,7 @@ public class GloveBuilder extends BasePpeBuilder<GloveBuilder, Glove> {
     private boolean longBarrel = true;
     private GloveMaterial material = GloveMaterial.NITRILE;
     private boolean isTextured = false;
-    private double thicknessMils = 1.5;
+    private double thicknessMils = 4;
 
     public GloveBuilder withPowderFree(boolean powderFree) {
         this.powderFree = powderFree;
