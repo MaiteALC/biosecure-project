@@ -31,10 +31,20 @@ public class Glove extends PPE {
     }
 
     public enum GloveMaterial {
-        LATEX,
-        NITRILE, // The gold standard for labs
-        VINYL,
-        NEOPRENE;
+        LATEX("LA"),
+        NITRILE("NT"), // The gold standard for labs
+        VINYL("VI"),
+        NEOPRENE("NP");
+
+        String code;
+
+        GloveMaterial(String code) {
+            this.code = code;
+        }
+
+        public String getCode() {
+            return code;
+        }
     }
 
     public boolean isPowderFree() {

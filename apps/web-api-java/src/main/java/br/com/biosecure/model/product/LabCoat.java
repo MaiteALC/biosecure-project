@@ -29,17 +29,19 @@ public class LabCoat extends PPE {
     }
 
     public enum FabricType {
-        COTTON_100("Cotton", false),
-        POLYESTER("Polyester", false),
-        POLYPROPYLEN("SPP", true),
-        MIX_COTTON_POLYESTER("Cotton and polyester", false);
+        COTTON_100("Cotton", false, "CT"),
+        POLYESTER("Polyester", false, "PE"),
+        POLYPROPYLEN("SPP", true, "PP"),
+        MIX_COTTON_POLYESTER("Cotton and polyester", false, "CP");
 
         private String commercialName;
         private boolean disposable;
+        private String code;
 
-        FabricType(String commercialName, boolean disposable) {
+        FabricType(String commercialName, boolean disposable, String code) {
             this.commercialName = commercialName;
             this.disposable = disposable;
+            this.code = code;
         }
 
         public String getCommercialName() {
@@ -48,6 +50,10 @@ public class LabCoat extends PPE {
 
         public boolean isDisposableFabric() {
             return disposable;
+        }
+
+        public String getCode() {
+            return code;
         }
     }
 
