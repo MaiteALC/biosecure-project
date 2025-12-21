@@ -40,18 +40,21 @@ public abstract class SampleContainer extends  Product {
     }
 
     public enum Material {
-        PP("Polypropylene", true),
-        PS("Polystyrene", false),
-        PE("Polyethylene", false),
-        PC("Polycarbonate", true),
-        BOROSILICATE_GLASS("Borosilicate Glass", true);
+        PP("Polypropylene", true, "PP"),
+        PS("Polystyrene", false, "PS"),
+        PE("Polyethylene", false, "PE"),
+        PC("Polycarbonate", true, "PC"),
+        BOROSILICATE_GLASS("Borosilicate Glass", true, "BG"),
+        GLASS("Common glass", false, "GL");
 
-        private final String commercialName;
-        private final boolean supportsAutoclave;
+        private String commercialName;
+        private boolean supportsAutoclave;
+        private String code;
 
-        Material(String commercialName, boolean supportsAutoclave) {
+        Material(String commercialName, boolean supportsAutoclave, String code) {
             this.commercialName = commercialName;
             this.supportsAutoclave = supportsAutoclave;
+            this.code = code;
         }
 
         public String getCommercialName() {
@@ -60,6 +63,10 @@ public abstract class SampleContainer extends  Product {
 
         public boolean isSupportsAutoclave() {
             return supportsAutoclave;
+        }
+
+        public String getCode() {
+            return code;
         }
     }
 
