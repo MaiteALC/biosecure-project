@@ -128,8 +128,13 @@ public class TestTube extends SampleContainer {
      * @throws InvalidProductAttributeException If dimension is out of allowed limits (<1 or >999).
      */    
     public static double calculateNominalCapacity(double diameter, double height) {
-        if (diameter < 1 || height < 1 || diameter > 999 || height > 999) {
-            throw new InvalidProductAttributeException("physical dimensions");
+        NotificationContext notification = new NotificationContext();
+
+        NumberUtils.validateNumericalAttribute(diameter, 1, "diameter (mm)", 999, notification);
+        NumberUtils.validateNumericalAttribute(height, 1, "height (mm)", 999, notification);
+
+        if (notification.hasErrors()) {
+            throw new InvalidProductAttributeException(notification.getErrors());
         }
 
         double volumeCubicMm = Math.PI * Math.pow(diameter / 2.0, 2) * height;
