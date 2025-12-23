@@ -42,7 +42,7 @@ public class GloveTest {
         assertEquals("thickness (mils)", exception.getInvalidAttribute());
         assertEquals(exception.getInvalidAttribute(), exception2.getInvalidAttribute());
 
-        assertTrue(exception.getMessage().contains("Invalid product attributes:\n\t - thickness (mils) |"));
+        assertTrue(exception.getMessage().contains("These attributes are invalids:\n\t - thickness (mils) |"));
     }
 
     @Test

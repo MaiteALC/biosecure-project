@@ -44,6 +44,6 @@ public class LabCoatTest {
 
         assertEquals("grammage (g/cm²)", exception.getInvalidAttribute());
 
-        assertTrue(exception.getMessage().contains("Invalid product attributes:\n\t - grammage (g/cm²) |"));
+        assertTrue(exception.getMessage().contains("These attributes are invalids:\n\t - grammage (g/cm²) |"));
     }
 }

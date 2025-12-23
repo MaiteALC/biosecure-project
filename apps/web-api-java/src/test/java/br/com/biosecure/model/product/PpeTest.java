@@ -40,6 +40,6 @@ public class PpeTest {
         });
 
         assertEquals("certificate of approval", exception.getInvalidAttribute());
-        assertTrue(exception.getMessage().contains("Invalid product attributes:\n\t - certificate of approval"));
+        assertTrue(exception.getMessage().contains("These attributes are invalids:\n\t - certificate of approval"));
     }
 }

@@ -1,28 +1,21 @@
 package br.com.biosecure.utils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class InvalidAttributeException extends IllegalArgumentException {
     protected String invalidAttribute;
     protected ArrayList<String> invalidAttributesArray = new ArrayList<>();
 
-    public InvalidAttributeException(String attributeName, String message) {
+    protected InvalidAttributeException(String attributeName, String message) {
         super(message);
 
         this.invalidAttribute = attributeName;
     }
-    
-    public InvalidAttributeException(List<String> attributes, String message) {
-        super(message);
 
-        this.invalidAttributesArray.addAll(attributes);
-    }
-
-    public InvalidAttributeException(ArrayList<ValidationException> validationExceptions, String message) {
-        super(message);
+    protected InvalidAttributeException(ArrayList<ValidationException> exceptionsArray) {
+        super(createCustomMessaege(exceptionsArray));
         
-        for (ValidationException exception : validationExceptions) {
+        for (ValidationException exception : exceptionsArray) {
             this.invalidAttributesArray.add(exception.getInvalidProperty());   
         }
     }
@@ -47,5 +40,21 @@ public class InvalidAttributeException extends IllegalArgumentException {
         }
 
         return invalidAttributesArray;
+    }
+
+    private static String createCustomMessaege(ArrayList<ValidationException> errors) {
+        StringBuilder message = new StringBuilder("These attributes are invalids:\n");
+
+        for (ValidationException currentError : errors) {
+            message.append("\t - ");
+            message.append(currentError.getInvalidProperty());
+
+            message.append(" | "); 
+            
+            message.append(currentError.getMessage());
+            message.append('\n');
+        }
+
+        return message.toString();
     }
 }

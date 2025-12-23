@@ -47,7 +47,7 @@ public class FaceProtectionTest {
         });
 
         assertEquals("standard rating", exception.getInvalidAttribute());
-        assertTrue(exception.getMessage().contains("Invalid product attributes:\n\t - standard rating"));
+        assertTrue(exception.getMessage().contains("These attributes are invalids:\n\t - standard rating"));
     }
 
     @Test

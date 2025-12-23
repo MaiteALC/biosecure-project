@@ -127,7 +127,7 @@ public class PetriDishTest {
             PetriDish.calculateSurfaceAreaPerDiv(1000, 1);
         });
 
-        assertEquals("diameter", diameterException.getInvalidAttribute());
+        assertEquals("diameter (mm)", diameterException.getInvalidAttribute());
         assertEquals(diameterException.getInvalidAttribute(), diameterException2.getInvalidAttribute());
     }
 }

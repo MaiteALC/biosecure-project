@@ -56,7 +56,7 @@ public class SampleBagTest {
 
     @Test
     public void shouldThrowException_WhenPhysicalDimensionsIsInvalid() {
-        String expectedMsg = "Invalid product attributes:\n\t - heigth (mm) | The number is greater than allowed\n\t - width (mm) | The number is greater than allowed\n\t - thickness (mm) | The number is greater than allowed\n\t - capacity (mL) | The number is greater than allowed\n";
+        String expectedMsg = "These attributes are invalids:\n\t - heigth (mm) | The number is greater than allowed\n\t - width (mm) | The number is greater than allowed\n\t - thickness (mm) | The number is greater than allowed\n\t - capacity (mL) | The number is greater than allowed\n";
 
         String expectedInvalidAttributeString = "[heigth (mm), width (mm), thickness (mm), capacity (mL)]";
 
