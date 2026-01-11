@@ -4,9 +4,18 @@ public class Cnpj {
     private final String number; 
     private final String formattedNumber;
 
-    public static final int SIZE = 14;
-    
+    private static final int SIZE_UNFORMATTED = 14;
+    private static final int SIZE_FORMATTED = 18;
+
     public Cnpj(String number) {
+        if (number == null || number.isBlank()) {
+            throw new InvalidCnpjException("CNPJ number is null or blank");
+        }
+
+        if (number.length() != SIZE_FORMATTED && number.length() != SIZE_UNFORMATTED) {
+            throw new InvalidCnpjException("CNPJ with invalid size (" + number.length() + ")");
+        }
+
         String cleanNumber = clearFormat(number);
 
         validateVerifierDigits(cleanNumber);
@@ -20,8 +29,8 @@ public class Cnpj {
     }
 
     private String formatCnpj(String nonFormatted) {
-        if (nonFormatted.length() != SIZE) {
-            throw new InvalidCnpjException("Invalid size (" + nonFormatted.length() + ")");
+        if (nonFormatted.length() != SIZE_UNFORMATTED) {
+            throw new InvalidCnpjException("Invalid size for non formatted CNPJ (" + nonFormatted.length() + ")");
         }
 
         StringBuilder sb = new StringBuilder(nonFormatted);
@@ -39,10 +48,6 @@ public class Cnpj {
 
         String unformatted = clearFormat(number);
 
-        if (unformatted.isBlank() || unformatted.length() != SIZE) {
-            throw new InvalidCnpjException("Invalid size (" + number.length() + ")");
-        }
-
         if (!Character.isDigit(unformatted.charAt(13)) || !Character.isDigit(unformatted.charAt(12))) {
             throw new InvalidCnpjException("The two last digits must be numbers");
         }
@@ -56,7 +61,7 @@ public class Cnpj {
         int digit;
         int result = 0;
 
-        for (int i = 0; i < SIZE; i++) {
+        for (int i = 0; i < SIZE_UNFORMATTED; i++) {
             cnpjInts[i] =  unformatted.charAt(i) - '0'; // Fast way to convert char to int (using the numeric values of characters in ASCII table)
         }
 
@@ -69,13 +74,13 @@ public class Cnpj {
         digit = (rest < 2) ? 0 : (11 - rest);
         
         if (cnpjInts[12] != digit) {
-            throw new InvalidCnpjException("The first verifier digit is invalid");
+            throw new InvalidCnpjException("Invalid verifier digits");
         }
 
         // Validation of second verifier digit
         result = 0;
 
-        for (int i = 0; i < 13; i++) {
+        for (int i = 0; i < SIZE_UNFORMATTED - 1; i++) {
            result += secondWeights[i] * cnpjInts[i];
         }
 
@@ -83,7 +88,7 @@ public class Cnpj {
         digit = (rest < 2) ? 0 : (11 - rest);
 
         if (cnpjInts[13] != digit) {
-            throw new InvalidCnpjException("The second verifier digit is invalid");
+            throw new InvalidCnpjException("Invalid verifier digits");
         }
     }
 
