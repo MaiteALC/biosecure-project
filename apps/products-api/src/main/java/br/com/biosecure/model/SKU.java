@@ -74,7 +74,7 @@ public class SKU {
 
         currentCode.insert(currentCode.lastIndexOf("-"), aSanitizer.getMeasureUnit());
 
-        currentCode.append(aSanitizer.getActiveIngredient().getCode());
+        currentCode.append(aSanitizer.getMainChemicalFamily().getCode());
         currentCode.append('-');
 
         currentCode.append(aSanitizer.getPhysicalForm().getCode());

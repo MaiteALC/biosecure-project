@@ -3,6 +3,7 @@ package br.com.biosecure.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.List;
 import java.util.OptionalDouble;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Nested;
@@ -22,7 +23,6 @@ import br.com.biosecure.model.Product.PackagingType;
 import br.com.biosecure.model.SampleBag.FilterType;
 import br.com.biosecure.model.SampleContainer.Material;
 import br.com.biosecure.model.SampleContainer.SterilizationMethod;
-import br.com.biosecure.model.Sanitizer.ChemicalBase;
 import br.com.biosecure.model.Sanitizer.PhysicalForm;
 import br.com.biosecure.model.TestTube.BottomType;
 
@@ -51,7 +51,10 @@ public class SkuTest {
             .withQuantityPerPackage(5)
             .withMeasureUnit(MeasureUnit.L)
             .withPackagingType(PackagingType.GALLON)
-            .withActiveIngredient(ChemicalBase.QUATERNARY_AMMONIUM)
+            .withActiveIngredient(List.of(
+                    new Ingredient("Alkyl Dimethyl Benzyl Ammonium Chloride", "68424-85-1", Ingredient.ChemicalFamily.QUATERNARY_AMMONIUM, 50, Ingredient.IngredientType.ACTIVE_INGREDIENT),
+                    new Ingredient("Didecyl Dimethyl Ammonium Chloride", "7173-51-5", Ingredient.ChemicalFamily.QUATERNARY_AMMONIUM, 50, Ingredient.IngredientType.ACTIVE_INGREDIENT)
+            ))
             .withFlammable(false)
             .withForm(PhysicalForm.LIQUID)
             .build();
@@ -62,12 +65,13 @@ public class SkuTest {
             .withQuantityPerPackage(1)
             .withMeasureUnit(MeasureUnit.L)
             .withPackagingType(PackagingType.BOTTLE)
-            .withActiveIngredient(ChemicalBase.ALCOHOL_ISOPROPYL)
+            .withActiveIngredient(List.of(IngredientBuilder.anActiveIngredient().build())) // Alcohol isopropyl is the default build of IngredientBuilder
             .withFlammable(true)
             .withForm(PhysicalForm.LIQUID)
+            .withMainChemicalFamily(Ingredient.ChemicalFamily.ALCOHOL)
             .build();
 
-        assertEquals("SAN-BT1L-AI-LQFL", sanitizerAlcohol.getSku().getSkuCode());
+        assertEquals("SAN-BT1L-AL-LQFL", sanitizerAlcohol.getSku().getSkuCode());
     }
     
     @Test
