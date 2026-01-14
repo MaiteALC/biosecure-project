@@ -8,6 +8,9 @@ public record Address(String state, String city, String neighborhood, String str
     public Address {
         NotificationContext notification = new NotificationContext();
 
+        final int MIN_LENGTH = 2;
+        final int MAX_LENGTH = 96;
+
         NumberUtils.validateNumericalAttribute(number, 1, "number", 99999, notification);
 
         StringUtils.validateString(state, MIN_LENGTH, "state name", MAX_LENGTH, false, notification);
@@ -23,6 +26,13 @@ public record Address(String state, String city, String neighborhood, String str
 
     @Override
     public String toString() {
-        return "Address [state: " + state + ", city: " + city + ", neighborhood: " + neighborhood + ", street: " + street + ", number: " + number + ", postalCode: " + postalCode + "]";
+        return new StringBuilder("Address = ")
+                .append("[state=").append(state)
+                .append(", city=").append(city)
+                .append(", neighborhood=").append(neighborhood)
+                .append(", street=").append(street)
+                .append(", number=").append(number)
+                .append(", postalCode=").append(postalCode)
+                .append(']').toString();
     }
 }
