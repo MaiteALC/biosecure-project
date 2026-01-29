@@ -3,9 +3,12 @@ package br.com.biosecure.model;
 import br.com.biosecure.utils.NumberUtils;
 import br.com.biosecure.utils.StringUtils;
 import br.com.biosecure.utils.NotificationContext;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Getter
 public class Ingredient {
     private final String name;
     private final String casNumber;
@@ -34,6 +37,8 @@ public class Ingredient {
         this.type = type;
     }
 
+    @Getter
+    @AllArgsConstructor
     public enum ChemicalFamily {
         QUATERNARY_AMMONIUM("QA"),
         CHLORINE_RELEASING_AGENT("CR"),
@@ -45,14 +50,6 @@ public class Ingredient {
         BIGUANIDE("BG");
 
         private final String code;
-
-        ChemicalFamily(String code) {
-            this.code = code;
-        }
-
-        public String getCode() {
-            return code;
-        }
     }
 
     public enum IngredientType {
@@ -62,26 +59,6 @@ public class Ingredient {
         STABILIZER,
         DYE,
         FRAGRANCE
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getCasNumber() {
-        return casNumber;
-    }
-
-    public ChemicalFamily getChemicalFamily() {
-        return chemicalFamily;
-    }
-
-    public double getConcentrationPercentual() {
-        return concentrationPercentual;
-    }
-
-    public IngredientType getType() {
-        return type;
     }
 
     public static boolean isValidCasNumber(String number) {
