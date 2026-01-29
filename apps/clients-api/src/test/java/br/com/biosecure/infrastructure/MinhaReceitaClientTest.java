@@ -1,8 +1,7 @@
-package br.com.biosecure.model;
+package br.com.biosecure.infrastructure;
 
-import br.com.biosecure.infrastructure.ExternalApiUnreachableException;
-import br.com.biosecure.infrastructure.MinhaReceitaClient;
-import br.com.biosecure.infrastructure.MinhaReceitaResponse;
+import br.com.biosecure.model.Cnpj;
+import br.com.biosecure.model.InvalidCnpjException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
