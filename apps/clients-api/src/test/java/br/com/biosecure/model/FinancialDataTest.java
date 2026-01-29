@@ -1,15 +1,13 @@
 package br.com.biosecure.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
 import br.com.biosecure.builders.FinancialDataBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
+
 import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FinancialDataTest {
 
@@ -54,18 +52,14 @@ public class FinancialDataTest {
 
     @Test
     public void shouldThrowException_WhenPaymentAndCreditValuesAreInvalid() {
-        InvalidFinancialDataException socialCapitalException = assertThrows(InvalidFinancialDataException.class, () -> {
-            FinancialDataBuilder.aFinancialData()
-                    .withShareCapital(BigDecimal.valueOf(-1))
-                    .build();
-        });
+        InvalidFinancialDataException socialCapitalException = assertThrows(InvalidFinancialDataException.class, () -> FinancialDataBuilder.aFinancialData()
+                .withShareCapital(BigDecimal.valueOf(-1))
+                .build());
 
-        InvalidFinancialDataException creditException = assertThrows(InvalidFinancialDataException.class, () -> {
-            FinancialDataBuilder.aFinancialData()
-                    .withShareCapital(BigDecimal.valueOf(10_000_000))
-                    .withTotalCredit(BigDecimal.valueOf(100_000_000))
-                    .build();
-        });
+        InvalidFinancialDataException creditException = assertThrows(InvalidFinancialDataException.class, () -> FinancialDataBuilder.aFinancialData()
+                .withShareCapital(BigDecimal.valueOf(10_000_000))
+                .withTotalCredit(BigDecimal.valueOf(100_000_000))
+                .build());
 
         assertEquals("These attributes are invalids:\n\t - social capital | The number is less than allowed\n", socialCapitalException.getMessage());
 
@@ -73,13 +67,8 @@ public class FinancialDataTest {
     }
 
     @ParameterizedTest
-    @NullAndEmptySource
-    @ValueSource(strings = {"    ",  "sdchwig", "2372747576747", "1111-1/00", "71201/00", "0119-9/02", "2122-3/03"})
-    public void shouldThrowException_WhenCnaeIsInvalid(String cnae) {
-        assertThrows(InvalidFinancialDataException.class, () -> {
-            FinancialDataBuilder.aFinancialData()
-                    .withCnae(new Cnae(cnae))
-                    .build();
-        });
+    @ValueSource(strings = {"9602-5/01", "47.81-4/00", "73.19002", "4399-101", "45307/03"})
+    public void shouldThrowException_WhenCnaeNumberIsUnallowed(String cnaeNum) {
+        assertThrows(InvalidFinancialDataException.class, () -> FinancialDataBuilder.aFinancialData().withCnae(new Cnae(cnaeNum, "test description")).build());
     }
 }
