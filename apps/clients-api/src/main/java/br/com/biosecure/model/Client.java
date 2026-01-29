@@ -1,10 +1,14 @@
 package br.com.biosecure.model;
 
-import java.time.LocalDateTime;
-import java.util.UUID;
 import br.com.biosecure.utils.NotificationContext;
 import br.com.biosecure.utils.StringUtils;
+import br.com.biosecure.utils.ErrorAggregator;
+import lombok.Getter;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.UUID;
 
+@Getter
 public class  Client {
     private String corporateName;
     private final UUID id;
@@ -18,18 +22,7 @@ public class  Client {
     private static final int MAX_NAME_LENGTH = 55;
     
     public Client(String corporateName, Cnpj cnpj, Address address, String email, FinancialData financialData) {
-        NotificationContext notificationContext = new NotificationContext();
-
-        StringUtils.validateString(corporateName, MIN_NAME_LENGTH, "name", MAX_NAME_LENGTH, true, notificationContext);
-
-        StringUtils.validateCorporateEmail(email, notificationContext);
-
-        if (financialData == null)
-            notificationContext.addError("financial data", "financial data mustn't be null");
-
-        if (notificationContext.hasErrors()) {
-            throw new InvalidClientAttributeException(notificationContext.getErrors());
-        }
+        validateInstantiationRules(corporateName, email, cnpj,  address, financialData);
 
         this.corporateName = corporateName;
         this.cnpj = cnpj;
@@ -38,6 +31,27 @@ public class  Client {
         this.email = email;
         this.financialData = financialData;
         this.registrationDate = LocalDateTime.now();
+    }
+
+    private static void validateInstantiationRules(String corporateName, String email, Cnpj cnpj, Address address, FinancialData financialData) {
+        NotificationContext notificationContext = new NotificationContext();
+
+        StringUtils.validateString(corporateName, MIN_NAME_LENGTH, "name", MAX_NAME_LENGTH, true, notificationContext);
+
+        StringUtils.validateCorporateEmail(email, notificationContext);
+
+        ErrorAggregator.aggregateValidationExceptions(
+                List.of(
+                        ErrorAggregator.verifyNull(financialData, "financial data"),
+                        ErrorAggregator.verifyNull(cnpj, "CNPJ"),
+                        ErrorAggregator.verifyNull(address, "address")
+                ),
+                notificationContext
+        );
+
+        if (notificationContext.hasErrors()) {
+            throw new InvalidClientAttributeException(notificationContext.getErrors());
+        }
     }
     
     @Override
@@ -65,34 +79,6 @@ public class  Client {
                 .append(", ").append(address.toString())
                 .append(", ").append(financialData.toString())
                 .append(']').toString();
-    }
-
-    public String getCorporateName() {
-        return corporateName;
-    }
-
-    public UUID getId() {
-        return id;
-    }
-
-    public Cnpj getCnpj() {
-        return cnpj;
-    }
-
-    public Address getAddress() {
-        return address;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public FinancialData getFinancialData() {
-        return financialData;
-    }
-
-    public LocalDateTime getRegistrationDate() {
-        return registrationDate;
     }
 
     public void setCorporateName(String newName) {
