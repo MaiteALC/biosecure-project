@@ -46,7 +46,7 @@ public class SKU {
             currentCode.append(formatDoubleAsStr(glove.getThicknessMils()));                
             currentCode.append(glove.getMaterial().getCode()); // Always returns 2 letters
             currentCode.append('-');
-            currentCode.append(glove.hasLongBarrel() ? "L" : "S");
+            currentCode.append(glove.isLongBarrel() ? "L" : "S");
             }
 
             case FaceProtection faceProtection -> {
@@ -90,14 +90,14 @@ public class SKU {
                 currentCode.append(formatDoubleAsStr(sampleBag.getCapacityMilliLiters()));
                 currentCode.append("-");
 
-                currentCode.append(sampleBag.hasIdentificationTag() ? "ID" : "AN");
+                currentCode.append(sampleBag.isIdentificationTag() ? "ID" : "AN");
                 currentCode.append(sampleBag.isStandUp() ? "U" : "D");
             }
 
             case TestTube testTube -> {
                 currentCode.insert(0, "TUB"); 
 
-                currentCode.append(testTube.getMaterial().getCode());
+                currentCode.append(testTube.getMaterialType().getCode());
 
                 currentCode.append(formatDoubleAsStr(testTube.getHeightMm()));
                 currentCode.append('x');
@@ -112,13 +112,13 @@ public class SKU {
             case PetriDish petriDish -> {
                 currentCode.insert(0, "PTD");
 
-                currentCode.append(formatDoubleAsStr(petriDish.getDiameter()));
+                currentCode.append(formatDoubleAsStr(petriDish.getDiameterMm()));
                 currentCode.append('x');
-                currentCode.append(formatDoubleAsStr(petriDish.getHeight()));
+                currentCode.append(formatDoubleAsStr(petriDish.getHeightMm()));
 
                 currentCode.append('-');
 
-                currentCode.append(petriDish.getMaterial().getCode());
+                currentCode.append(petriDish.getMaterialType().getCode());
             }
 
             case null, default -> throw new SkuGenerationException("Product with unknow type of 'Sample Container'. Generation of SKU code is unavailable for this subclass.", aContainer);
@@ -129,7 +129,7 @@ public class SKU {
         currentCode.insert(0, "CTM");
 
         currentCode.append(formatDoubleAsStr(aCultureMedia.getQuantityPerUnit()));
-        currentCode.append(aCultureMedia.getQuantityUnit());
+        currentCode.append(aCultureMedia.getQuantificationUnit());
         
         currentCode.append('-');
         

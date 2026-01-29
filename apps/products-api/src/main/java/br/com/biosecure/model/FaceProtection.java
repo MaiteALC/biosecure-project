@@ -1,33 +1,78 @@
 package br.com.biosecure.model;
 
-import java.time.LocalDate;
-import br.com.biosecure.utils.NotificationContext;
 import br.com.biosecure.utils.StringUtils;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 public class FaceProtection extends PPE {
-    private final ProtectionType type;
+    private final ProtectionType protectionType;
     private final String standardRating;
     private final boolean hasValve;
-    private final boolean isAntiFog;
+    private final boolean antiFog;
 
-    public FaceProtection(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, int quantityPerPackage, Size size, String certificateOfApproval, boolean isDisposable, ProtectionType protectionType, String standardRating, boolean isAntiFog, boolean hasValve) {
+    protected FaceProtection(FaceProtectionBuilder builder) {
+        super(builder);
 
-        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, quantityPerPackage, size, certificateOfApproval, isDisposable);
-
-        NotificationContext notificationContext = new NotificationContext();
-
-        StringUtils.validateString(standardRating, 2, "standard rating", 12, true, notificationContext);
-
-        if (notificationContext.hasErrors()) {
-            throw new InvalidProductAttributeException(notificationContext.getErrors());
-        }
-
-        this.type = protectionType;
-        this.standardRating = standardRating;
-        this.hasValve = type == ProtectionType.MASK_RESPIRATOR ? hasValve : false;
-        this.isAntiFog = isAntiFog;
+        this.protectionType = builder.protectionType;
+        this.standardRating = builder.standardRating;
+        this.hasValve = builder.protectionType == ProtectionType.MASK_RESPIRATOR && builder.hasValve;
+        this.antiFog = builder.antiFog;
     }
 
+    public static FaceProtectionBuilder builder() {
+        return new FaceProtectionBuilder();
+    }
+
+    public static final class FaceProtectionBuilder extends PpeBuilder<FaceProtection, FaceProtectionBuilder> {
+        private ProtectionType protectionType;
+        private String standardRating;
+        private boolean hasValve;
+        private boolean antiFog;
+
+        @Override
+        protected FaceProtectionBuilder self() {
+            return this;
+        }
+
+        public FaceProtectionBuilder protectionType(ProtectionType protectionType) {
+            this.protectionType = protectionType;
+            return this;
+        }
+
+        public FaceProtectionBuilder standardRating(String standardRating) {
+            this.standardRating = standardRating;
+            return this;
+        }
+
+        public FaceProtectionBuilder hasValve(boolean hasValve) {
+            this.hasValve = hasValve;
+            return this;
+        }
+
+        public FaceProtectionBuilder antiFog(boolean antiFog) {
+            this.antiFog = antiFog;
+            return this;
+        }
+
+        @Override
+        public FaceProtection build() {
+            if (protectionType == null) {
+                productNotification.addError("protection type", "protection type mustn't be null");
+            }
+
+            StringUtils.validateString(standardRating, 2, "standard rating", 12, true, super.productNotification);
+
+            if (super.productNotification.hasErrors()) {
+                throw new InvalidProductAttributeException(super.productNotification.getErrors());
+            }
+
+            return new FaceProtection(this);
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
     public enum ProtectionType {
         MASK_RESPIRATOR("MR"),
         SAFETY_GLASSES("SG"), 
@@ -35,29 +80,5 @@ public class FaceProtection extends PPE {
         FACE_SHIELD("FS");
 
         private final String code;
-
-        ProtectionType(String code) {
-            this.code = code;
-        }
-
-        public String getCode() {
-            return code;
-        }
-    }
-
-    public ProtectionType getProtectionType() {
-        return type;
-    }
-
-    public String getStandardRating() {
-        return standardRating;
-    }
-
-    public boolean hasValve() {
-        return hasValve;
-    }
-
-    public boolean isAntiFog() {
-        return isAntiFog;
     }
 }

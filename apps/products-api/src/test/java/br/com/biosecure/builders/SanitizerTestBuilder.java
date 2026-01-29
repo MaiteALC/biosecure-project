@@ -6,7 +6,7 @@ import br.com.biosecure.model.Sanitizer.*;
 import br.com.biosecure.model.Sanitizer;
 import java.util.List;
 
-public class SanitizerBuilder extends BaseProductBuilder<SanitizerBuilder, Sanitizer> {
+public class SanitizerTestBuilder extends BaseProductTestBuilder<SanitizerTestBuilder, Sanitizer> {
     // Specifics attributes of Sanitizer
     private List<Ingredient> ingredients = List.of(
             new Ingredient("Alkyl Dimethyl Benzyl Ammonium Chloride", "68424-85-1", ChemicalFamily.QUATERNARY_AMMONIUM, 50, Ingredient.IngredientType.ACTIVE_INGREDIENT),
@@ -21,71 +21,80 @@ public class SanitizerBuilder extends BaseProductBuilder<SanitizerBuilder, Sanit
     private double density = 1;
     private ChemicalFamily mainChemicalFamily = ChemicalFamily.QUATERNARY_AMMONIUM;
 
-    public SanitizerBuilder withActiveIngredient(List<Ingredient> ingredients) {
+    public SanitizerTestBuilder withActiveIngredient(List<Ingredient> ingredients) {
         this.ingredients = ingredients;
-         
         return this;
     }
 
-    public SanitizerBuilder withForm(PhysicalForm form) {
+    public SanitizerTestBuilder withForm(PhysicalForm form) {
         this.form = form;
-
         return this;
     }
 
-    public SanitizerBuilder withPhLevel(double phLevel) {
+    public SanitizerTestBuilder withPhLevel(double phLevel) {
         this.phLevel = phLevel;
-
         return this;
     }
 
-    public SanitizerBuilder withFlammable(boolean flammable) {
+    public SanitizerTestBuilder withFlammable(boolean flammable) {
         this.flammable = flammable;
-
         return this;
     }
 
-    public SanitizerBuilder withRequiresDilution(boolean requiresDilution) {
+    public SanitizerTestBuilder withRequiresDilution(boolean requiresDilution) {
         this.requiresDilution = requiresDilution;
-
         return this;
     }
 
-    public SanitizerBuilder withDensity(double density) {
+    public SanitizerTestBuilder withDensity(double density) {
         this.density = density;
-
         return this;
     }
 
-    public SanitizerBuilder withRegistryNumber(String registryNumber) {
+    public SanitizerTestBuilder withRegistryNumber(String registryNumber) {
         this.registryNumber = registryNumber;
-
         return this;
     }
 
-    public  SanitizerBuilder withUseIndications(String useIndications) {
+    public SanitizerTestBuilder withUseIndications(String useIndications) {
         this.useIndications = useIndications;
-
         return this;
     }
 
-    public SanitizerBuilder withMainChemicalFamily(ChemicalFamily mainChemicalFamily) {
+    public SanitizerTestBuilder withMainChemicalFamily(ChemicalFamily mainChemicalFamily) {
         this.mainChemicalFamily = mainChemicalFamily;
-
         return this;
     }
 
-    public static SanitizerBuilder aSanitizer() {
-        return new SanitizerBuilder();
+    public static SanitizerTestBuilder aSanitizer() {
+        return new SanitizerTestBuilder();
     }
 
     @Override
-    protected SanitizerBuilder self() {
+    protected SanitizerTestBuilder self() {
         return this;
     }
 
     @Override
     public Sanitizer build() {
-        return new Sanitizer(name, price, ingredients, form, manufacturer, batchNumber, expirationDate, packagingType, measureUnit, quantityPerPackage, registryNumber, useIndications, phLevel, requiresDilution, density, flammable, mainChemicalFamily);
+        return Sanitizer.builder()
+                .composition(ingredients)
+                .physicalForm(form)
+                .registryNumber(registryNumber)
+                .useIndications(useIndications)
+                .phLevel(phLevel)
+                .requiresDilution(requiresDilution)
+                .densityGramsPerMilliLiter(density)
+                .flammable(flammable)
+                .mainChemicalFamily(mainChemicalFamily)
+                .name(name)
+                .price(price)
+                .manufacturer(manufacturer)
+                .batchNumber(batchNumber)
+                .expirationDate(expirationDate)
+                .packagingType(packagingType)
+                .measureUnit(measureUnit)
+                .quantityPerPackage(quantityPerPackage)
+                .build();
     }
 }

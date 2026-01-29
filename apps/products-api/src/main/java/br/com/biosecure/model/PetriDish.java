@@ -1,58 +1,89 @@
 package br.com.biosecure.model;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDate;
 import br.com.biosecure.utils.NotificationContext;
 import br.com.biosecure.utils.NumberUtils;
+import lombok.Getter;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+@Getter
 public class PetriDish extends SampleContainer {
-    private final int divNum;
+    private final int divisionsNumber;
     private final boolean grid;
     private final boolean ventilated;
     private final double diameterMm;
     private final double heightMm;
+    private final double capacityMilliLiters;
 
-    public PetriDish(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, int quantityPerPackage, SterilizationMethod sterilizationMethod, ClosingMethod closingMethod, Material materialType, int divisionsNumber, boolean hasGrid, boolean isVentilated, double diameterMm, double heightMm) {
-        
-        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, quantityPerPackage, sterilizationMethod, closingMethod, materialType);
+    public PetriDish(PetriDishBuilder builder) {
+        super(builder);
 
-        NotificationContext notification = new NotificationContext();
+        this.divisionsNumber = builder.divisionsNumber;
+        this.grid = builder.grid;
+        this.ventilated = builder.ventilated;
+        this.diameterMm = builder.diameterMm;
+        this.heightMm = builder.heightMm;
+        this.capacityMilliLiters = calculateNominalCapacity(builder.diameterMm, builder.heightMm);
+    }
 
-        NumberUtils.validateNumericalAttribute(heightMm, 1, "height (mm)", 999, notification);
-        NumberUtils.validateNumericalAttribute(diameterMm, 1, "width (mm)", 999, notification);
+    public static PetriDishBuilder builder() {
+        return new PetriDishBuilder();
+    }
 
-        NumberUtils.validateNumericalAttribute(divisionsNumber, 1, "divisions number", 4, notification);
+    public static final class PetriDishBuilder extends SampleContainerBuilder<PetriDish, PetriDishBuilder> {
+        private int divisionsNumber;
+        private boolean grid;
+        private boolean ventilated;
+        private double diameterMm;
+        private double heightMm;
 
-        if (notification.hasErrors()) {
-            throw new InvalidProductAttributeException(notification.getErrors());
+        @Override
+        protected PetriDishBuilder self() {
+            return this;
         }
 
-        this.divNum = divisionsNumber;
-        this.grid = hasGrid;
-        this.ventilated = isVentilated;
-        this.diameterMm = diameterMm;
-        this.heightMm = heightMm;
-    }
+        public PetriDishBuilder divisionsNumber(int divisionsNumber) {
+            this.divisionsNumber = divisionsNumber;
+            return this;
+        }
 
-    public int getDivisionsNumber() {
-        return divNum;
-    }
+        public PetriDishBuilder grid(boolean grid) {
+            this.grid = grid;
+            return this;
+        }
 
-    public boolean isGrid() {
-        return grid;
-    }
+        public PetriDishBuilder ventilated(boolean ventilated) {
+            this.ventilated = ventilated;
+            return this;
+        }
 
-    public boolean isVentilated() {
-        return ventilated;
-    }
+        public PetriDishBuilder diameterMm(double diameterMm) {
+            this.diameterMm = diameterMm;
+            return this;
+        }
 
-    public double getDiameter() {
-        return diameterMm;
-    }
+        public PetriDishBuilder heightMm(double heightMm) {
+            this.heightMm = heightMm;
+            return this;
+        }
 
-    public double getHeight() {
-        return heightMm;
+        @Override
+        public PetriDish build() {
+            //SampleContainer.validateContainerBioSafetyRules(materialType, getSterilizationMethod());
+
+            NumberUtils.validateNumericalAttribute(heightMm, 1, "height (mm)", 999, productNotification);
+
+            NumberUtils.validateNumericalAttribute(diameterMm, 1, "width (mm)", 999, productNotification);
+
+            NumberUtils.validateNumericalAttribute(divisionsNumber, 1, "divisions number", 4, productNotification);
+
+            if (productNotification.hasErrors()) {
+                throw new InvalidProductAttributeException(productNotification.getErrors());
+            }
+
+            return new PetriDish(this);
+        }
     }
 
     /**
@@ -87,7 +118,7 @@ public class PetriDish extends SampleContainer {
     }
 
     public double getSurfaceAreaPerDivision() {
-        return calculateSurfaceAreaPerDiv(this.diameterMm, this.divNum);
+        return calculateSurfaceAreaPerDiv(this.diameterMm, this.divisionsNumber);
     }
 
     /**
@@ -126,9 +157,5 @@ public class PetriDish extends SampleContainer {
         BigDecimal volumeML =  BigDecimal.valueOf(volumeCubicMm / 1000).setScale(2, RoundingMode.HALF_UP); 
 
         return  volumeML.doubleValue();
-    }
-
-    public double getCapacityMilliLiters() {
-        return calculateNominalCapacity(this.diameterMm, this.heightMm);
     }
 }

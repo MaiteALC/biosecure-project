@@ -1,60 +1,93 @@
 package br.com.biosecure.model;
 
-import java.time.LocalDate;
-import br.com.biosecure.utils.NotificationContext;
 import br.com.biosecure.utils.NumberUtils;
+import br.com.biosecure.utils.ErrorAggregator;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import java.util.List;
 
+@Getter
 public class LabCoat extends PPE {
     private final FabricType fabricType;
     private final int grammage;
     private final CuffStyle cuffStyle;
     private final CollarType collarType;
 
-    public LabCoat(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, int quantityPerPackage, Size size, String certificateOfApproval, FabricType fabricType, int grammage, CuffStyle cuffStyle, CollarType collarType) {
-       
-        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, quantityPerPackage, size, certificateOfApproval, fabricType.isDisposableFabric());
+    private LabCoat(LabCoatBuilder builder) {
+        super(builder);
 
-        NotificationContext notification = new NotificationContext();
-
-        NumberUtils.validateNumericalAttribute(grammage, 20, "grammage (g/cm²)", 350, notification);
-
-        if (notification.hasErrors()) {
-            throw new InvalidProductAttributeException(notification.getErrors());
-        }
-
-        this.fabricType = fabricType;
-        this.grammage = grammage;
-        this.cuffStyle = cuffStyle;
-        this.collarType = collarType;
+        this.fabricType = builder.fabricType;
+        this.grammage = builder.grammage;
+        this.cuffStyle = builder.cuffStyle;
+        this.collarType = builder.collarType;
     }
 
+    public static LabCoatBuilder builder() {
+        return new LabCoatBuilder();
+    }
+
+    public static final class LabCoatBuilder extends PpeBuilder<LabCoat, LabCoatBuilder> {
+        private FabricType fabricType;
+        private int grammage;
+        private CuffStyle cuffStyle;
+        private CollarType collarType;
+
+        @Override
+        protected LabCoatBuilder self() {
+            return this;
+        }
+
+        public  LabCoatBuilder fabricType(FabricType fabricType) {
+            this.fabricType = fabricType;
+            return this;
+        }
+
+        public  LabCoatBuilder grammage(int grammage) {
+            this.grammage = grammage;
+            return this;
+        }
+
+        public  LabCoatBuilder cuffStyle(CuffStyle cuffStyle) {
+            this.cuffStyle = cuffStyle;
+            return this;
+        }
+
+        public  LabCoatBuilder collarType(CollarType collarType) {
+            this.collarType = collarType;
+            return this;
+        }
+
+        @Override
+        public LabCoat build() {
+            NumberUtils.validateNumericalAttribute(grammage, 20, "grammage (g/cm²)", 350, productNotification);
+
+            ErrorAggregator.aggregateValidationExceptions(
+                    List.of(
+                            ErrorAggregator.verifyNull(fabricType, "fabric type"),
+                            ErrorAggregator.verifyNull(cuffStyle, "cuff style"),
+                            ErrorAggregator.verifyNull(collarType, "collar type")
+                    ),
+                    productNotification
+            );
+
+            if (productNotification.hasErrors()) {
+                throw new InvalidProductAttributeException(productNotification.getErrors());
+            }
+
+            return new LabCoat(this);
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
     public enum FabricType {
-        COTTON_100("Cotton", false, "CT"),
-        POLYESTER("Polyester", false, "PO"),
-        POLYPROPYLENE("SPP", true, "PP"),
-        MIX_COTTON_POLYESTER("Cotton and polyester", false, "CP");
+        COTTON_100("Cotton", "CT"),
+        POLYESTER("Polyester", "PO"),
+        POLYPROPYLENE("SPP", "PP"),
+        MIX_COTTON_POLYESTER("Cotton and polyester", "CP");
 
         private final String commercialName;
-        private final boolean disposable;
         private final String code;
-
-        FabricType(String commercialName, boolean disposable, String code) {
-            this.commercialName = commercialName;
-            this.disposable = disposable;
-            this.code = code;
-        }
-
-        public String getCommercialName() {
-            return commercialName;
-        }
-
-        public boolean isDisposableFabric() {
-            return disposable;
-        }
-
-        public String getCode() {
-            return code;
-        }
     }
 
     public enum CuffStyle {
@@ -66,21 +99,5 @@ public class LabCoat extends PPE {
     public enum CollarType {
         V_NECK,
         HIGH_NECK
-    }
-
-    public FabricType getFabricType() {
-        return fabricType;
-    }
-
-    public int getGrammage() {
-        return grammage;
-    }
-
-    public CuffStyle getCuffStyle() {
-        return cuffStyle;
-    }
-
-    public CollarType getCollarType() {
-        return collarType;
     }
 }

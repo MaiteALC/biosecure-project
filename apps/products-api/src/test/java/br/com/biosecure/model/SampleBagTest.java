@@ -7,19 +7,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 import br.com.biosecure.model.SampleBag.FilterType;
 import br.com.biosecure.model.SampleContainer.*;
-import br.com.biosecure.builders.SampleBagBuilder;
+import br.com.biosecure.builders.SampleBagTestBuilder;
 
 public class SampleBagTest {
     
     @Test
     public void shouldBuildValidSampleBag() {
-        SampleBag aBag = SampleBagBuilder.aSampleBag()
+        SampleBag aBag = SampleBagTestBuilder.aSampleBag()
             .withFilter(FilterType.NONE)
             .withIdentificationTag(true)
             .withMaterial(Material.PE)
             .build();
 
-        SampleBag anotherBag = SampleBagBuilder.aSampleBag()
+        SampleBag anotherBag = SampleBagTestBuilder.aSampleBag()
             .withMaterial(Material.PP)
             .withClosingMethod(ClosingMethod.WIRE_TAB)
             .withIdentificationTag(false)
@@ -36,15 +36,15 @@ public class SampleBagTest {
         final String beginningOfMessage = "SECURITY WARNING: Sample bags must be of flexible material (PE, PP).";
 
         BioSecurityException exception = assertThrows(BioSecurityException.class, () -> {
-            SampleBagBuilder.aSampleBag().withMaterial(Material.BOROSILICATE_GLASS).build();
+            SampleBagTestBuilder.aSampleBag().withMaterial(Material.BOROSILICATE_GLASS).build();
         });
         
         BioSecurityException exception2 = assertThrows(BioSecurityException.class, () -> {
-            SampleBagBuilder.aSampleBag().withMaterial(Material.PC).build();
+            SampleBagTestBuilder.aSampleBag().withMaterial(Material.PC).build();
         });
         
         BioSecurityException exception3 = assertThrows(BioSecurityException.class, () -> {
-            SampleBagBuilder.aSampleBag().withMaterial(Material.PS).build();
+            SampleBagTestBuilder.aSampleBag().withMaterial(Material.PS).build();
         });
 
         assertEquals(beginningOfMessage + " Borosilicate Glass is rigid.", exception.getMessage());
@@ -61,7 +61,7 @@ public class SampleBagTest {
         String expectedInvalidAttributeString = "[height (mm), width (mm), thickness (mm), capacity (mL)]";
 
         InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> {
-            SampleBagBuilder.aSampleBag()
+            SampleBagTestBuilder.aSampleBag()
                 .withCapacityMilliLiters(10000)
                 .withHeightMm(1000)
                 .withWidthMm(1000)
@@ -73,7 +73,7 @@ public class SampleBagTest {
         assertEquals(expectedInvalidAttributeString, exception.getInvalidAttribute());
         
         InvalidProductAttributeException exception2 = assertThrows(InvalidProductAttributeException.class, () -> {
-            SampleBagBuilder.aSampleBag()
+            SampleBagTestBuilder.aSampleBag()
                 .withCapacityMilliLiters(0)
                 .withHeightMm(0)
                 .withWidthMm(0)

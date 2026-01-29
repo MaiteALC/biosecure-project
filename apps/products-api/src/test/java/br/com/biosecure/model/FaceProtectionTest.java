@@ -1,31 +1,27 @@
 package br.com.biosecure.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import br.com.biosecure.builders.FaceProtectionBuilder;
+import br.com.biosecure.builders.FaceProtectionTestBuilder;
+import br.com.biosecure.model.FaceProtection.ProtectionType;
+import br.com.biosecure.model.PPE.Size;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
-import br.com.biosecure.model.FaceProtection.ProtectionType;
-import br.com.biosecure.model.PPE.Size;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FaceProtectionTest {
     
     @Test
     public void shouldBuildValidFaceProtection() {
-        FaceProtection aFaceProtection = FaceProtectionBuilder.aFaceProtection()
+        FaceProtection aFaceProtection = FaceProtectionTestBuilder.aFaceProtection()
             .withAntiFog(false)
             .withStandardRating("N95")
             .withType(ProtectionType.MASK_RESPIRATOR)
             .withSize(Size.UNIVERSAL)
             .build();
 
-        FaceProtection anotherFaceProtection = FaceProtectionBuilder.aFaceProtection()
+        FaceProtection anotherFaceProtection = FaceProtectionTestBuilder.aFaceProtection()
             .withAntiFog(true)
             .withSize(Size.UNIVERSAL)
             .withType(ProtectionType.SAFETY_GLASSES)
@@ -42,7 +38,7 @@ public class FaceProtectionTest {
     @ValueSource(strings = {"   ", "N", "N1234567890123"})
     public void shouldThrowException_WhenStandardRatingIsInvalid(String invalidInput) {
         InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> {
-            FaceProtectionBuilder.aFaceProtection().withStandardRating(invalidInput).build();
+            FaceProtectionTestBuilder.aFaceProtection().withStandardRating(invalidInput).build();
         });
 
         assertEquals("standard rating", exception.getInvalidAttribute());
@@ -51,24 +47,24 @@ public class FaceProtectionTest {
 
     @Test
     public void shouldInferValveAttributeCorrectly() {
-        FaceProtection maskProtection = FaceProtectionBuilder.aFaceProtection()
+        FaceProtection maskProtection = FaceProtectionTestBuilder.aFaceProtection()
             .withType(ProtectionType.MASK_RESPIRATOR)
             .withValve(true)
             .build();
 
-        FaceProtection gogglesProtection = FaceProtectionBuilder.aFaceProtection()
+        FaceProtection gogglesProtection = FaceProtectionTestBuilder.aFaceProtection()
             .withType(ProtectionType.GOGGLES)
             .withValve(true) // should reject the "true" and set the attribute with "false" to ensure coherence
             .build();
 
-        FaceProtection faceShieldProtection = FaceProtectionBuilder.aFaceProtection()
+        FaceProtection faceShieldProtection = FaceProtectionTestBuilder.aFaceProtection()
             .withType(ProtectionType.FACE_SHIELD)
             .withValve(false)
             .build();
 
-        assertTrue(maskProtection.hasValve());
+        assertTrue(maskProtection.isHasValve());
         
-        assertFalse(gogglesProtection.hasValve());
-        assertFalse(faceShieldProtection.hasValve());
+        assertFalse(gogglesProtection.isHasValve());
+        assertFalse(faceShieldProtection.isHasValve());
     }
 }

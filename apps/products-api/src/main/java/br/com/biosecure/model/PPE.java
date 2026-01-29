@@ -1,31 +1,66 @@
 package br.com.biosecure.model;
 
-import java.time.LocalDate;
-import br.com.biosecure.utils.NotificationContext;
 import br.com.biosecure.utils.StringUtils;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 public abstract class PPE extends Product {
     private final Size size;
     private final String certificateOfApproval;
-    private final boolean isDisposable;
+    private final boolean disposable;
 
-    public PPE(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, int quantityPerPackage, Size size, String certificateOfApproval, boolean isDisposable) {
-        
-        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, MeasureUnit.U, quantityPerPackage);
+    protected PPE(PpeBuilder<?, ?> builder) {
+        super(builder);
 
-        NotificationContext notificationContext = new NotificationContext();
-
-        StringUtils.validateString(certificateOfApproval, 5, "certificate of approval", 10, true, notificationContext);
-
-        if (notificationContext.hasErrors()) {
-            throw new InvalidProductAttributeException(notificationContext.getErrors());
-        }
-
-        this.size = size;
-        this.certificateOfApproval = certificateOfApproval;
-        this.isDisposable = isDisposable;
+        this.size = builder.size;
+        this.certificateOfApproval = builder.certificateOfApproval;
+        this.disposable = builder.disposable;
     }
 
+    public static abstract class PpeBuilder<P extends PPE, B extends PpeBuilder<P, B>> extends ProductBuilder<P, B> {
+        { super.measureUnit = MeasureUnit.U; }
+
+        protected Size size;
+        protected String certificateOfApproval;
+        protected boolean disposable;
+
+        @Override
+        protected abstract B self();
+
+        @Override
+        public abstract P build();
+
+        @Override
+        @Deprecated
+        public B measureUnit(MeasureUnit measureUnit) {
+            throw  new UnsupportedOperationException("Measure unit for all PPEs is standardized as 'unit' internally");
+        }
+
+        public B size(Size size) {
+            if (size == null) {
+                productNotification.addError("size", "size mustn't be null");
+            }
+
+            this.size = size;
+            return self();
+        }
+
+        public B certificateOfApproval(String certificateOfApproval) {
+            StringUtils.validateString(certificateOfApproval, 5, "certificate of approval", 10, true, super.productNotification);
+
+            this.certificateOfApproval = certificateOfApproval;
+            return self();
+        }
+
+        public B disposable(boolean disposable) {
+            this.disposable = disposable;
+            return self();
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
     public enum Size {
         EXTRA_SMALL("XS"),
         SMALL("S"),
@@ -35,25 +70,5 @@ public abstract class PPE extends Product {
         UNIVERSAL("U");
 
         private final String code;
-
-        Size(String code) {
-            this.code = code;
-        }
-
-        public String getCode() {
-            return code;
-        }
-    }
-
-    public Size getSize() {
-        return size;
-    }
-
-    public String getCertificateOfApproval() {
-        return certificateOfApproval;
-    }
-
-    public boolean isDisposable() {
-        return isDisposable;
     }
 }

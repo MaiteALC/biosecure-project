@@ -1,32 +1,66 @@
 package br.com.biosecure.model;
 
-import java.util.ArrayList;
-import br.com.biosecure.utils.NotificationContext;
-import java.time.LocalDate;
+import br.com.biosecure.utils.ErrorAggregator;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+import java.util.ArrayList;
+
+@Getter
 public abstract class SampleContainer extends  Product {
+    protected final Material materialType;
     private final ClosingMethod closingMethod;
     private final SterilizationMethod sterilizationMethod;
-    private final Material material;
 
-    public SampleContainer(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, int quantityPerPackage, SterilizationMethod sterilizationMethod, ClosingMethod closingMethod, Material materialType) {
-        
-        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, MeasureUnit.U, quantityPerPackage);
+    protected SampleContainer(SampleContainerBuilder<?, ?> builder) {
+        super(builder);
 
-        NotificationContext notification = new NotificationContext();
+        validateContainerBioSafetyRules(builder.materialType, builder.sterilizationMethod);
 
-        if (notification.hasErrors()) {
-            throw new InvalidProductAttributeException(notification.getErrors());
-        }
-
-        validateBioSafetyRules(materialType, sterilizationMethod);
-
-        this.sterilizationMethod = sterilizationMethod;
-        this.closingMethod = closingMethod;
-        this.material = materialType;
+        this.materialType = builder.materialType;
+        this.closingMethod = builder.closingMethod;
+        this.sterilizationMethod = builder.sterilizationMethod;
     }
 
-    private void validateBioSafetyRules(Material material, SterilizationMethod sterilization) {
+    public static abstract class SampleContainerBuilder<P extends SampleContainer, B extends SampleContainerBuilder<P, B>> extends ProductBuilder<P, B> {
+        { super.measureUnit = MeasureUnit.U; }
+
+        protected Material materialType;
+        protected ClosingMethod closingMethod;
+        protected SterilizationMethod sterilizationMethod;
+
+        @Override
+        protected abstract B self();
+
+        @Override
+        @Deprecated
+        public B measureUnit(MeasureUnit measureUnit) {
+            throw new UnsupportedOperationException("Measure unit for all sample containers is standardized as 'unit' internally");
+        }
+
+        public B materialType(Material materialType) {
+            ErrorAggregator.verifyNull(materialType, "Material type", productNotification);
+
+            this.materialType = materialType;
+            return self();
+        }
+
+        public B closingMethod(ClosingMethod closingMethod) {
+            ErrorAggregator.verifyNull(closingMethod, "Closing method", productNotification);
+
+            this.closingMethod = closingMethod;
+            return self();
+        }
+
+        public B sterilizationMethod(SterilizationMethod sterilizationMethod) {
+            ErrorAggregator.verifyNull(sterilizationMethod, "Sterilization method", productNotification);
+
+            this.sterilizationMethod = sterilizationMethod;
+            return self();
+        }
+    }
+
+    protected static void validateContainerBioSafetyRules(Material material, SterilizationMethod sterilization) {
         if (!material.isSupportsAutoclave() && sterilization == SterilizationMethod.AUTOCLAVE) {
             ArrayList<String> invalids = new ArrayList<>();
 
@@ -39,6 +73,8 @@ public abstract class SampleContainer extends  Product {
         }
     }
 
+    @Getter
+    @AllArgsConstructor
     public enum Material {
         PP("Polypropylene", true, "PP"),
         PS("Polystyrene", false, "PS"),
@@ -50,26 +86,10 @@ public abstract class SampleContainer extends  Product {
         private final String commercialName;
         private final boolean supportsAutoclave;
         private final String code;
-
-        Material(String commercialName, boolean supportsAutoclave, String code) {
-            this.commercialName = commercialName;
-            this.supportsAutoclave = supportsAutoclave;
-            this.code = code;
-        }
-
-        public String getCommercialName() {
-            return commercialName;
-        }
-
-        public boolean isSupportsAutoclave() {
-            return supportsAutoclave;
-        }
-
-        public String getCode() {
-            return code;
-        }
     }
 
+    @Getter
+    @AllArgsConstructor
     public enum ClosingMethod {
         SCREW_CAP_SIMPLE(true),
         SCREW_WITH_FILTER(false),
@@ -83,14 +103,6 @@ public abstract class SampleContainer extends  Product {
         LID_OVERLAY(false);
 
         private final boolean hermetic;
-
-        ClosingMethod(boolean isHermetic) {
-            this.hermetic = isHermetic;
-        }
-
-        public boolean isHermetic() {
-            return hermetic;
-        }
     }
 
     public enum SterilizationMethod {
@@ -99,18 +111,6 @@ public abstract class SampleContainer extends  Product {
         AUTOCLAVE,
         ETHYLENE_OXIDE,
         NO_STERILE
-    }
-
-    public SterilizationMethod getSterilizationMethod() {
-        return sterilizationMethod;
-    }
-
-    public ClosingMethod getClosingMethod() {
-        return closingMethod;
-    }
-
-    public Material getMaterial() {
-        return material;
     }
 
     public boolean isSterile() {

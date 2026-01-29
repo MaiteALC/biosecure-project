@@ -1,15 +1,5 @@
 package br.com.biosecure.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.util.List;
-import java.util.OptionalDouble;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.TestInstance.Lifecycle;
 import br.com.biosecure.builders.*;
 import br.com.biosecure.model.CultureMedia.Presentation;
 import br.com.biosecure.model.CultureMedia.QuantificationUnit;
@@ -25,6 +15,16 @@ import br.com.biosecure.model.SampleContainer.Material;
 import br.com.biosecure.model.SampleContainer.SterilizationMethod;
 import br.com.biosecure.model.Sanitizer.PhysicalForm;
 import br.com.biosecure.model.TestTube.BottomType;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.TestInstance.Lifecycle;
+import java.util.List;
+import java.util.OptionalDouble;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @TestInstance(Lifecycle.PER_CLASS)
 public class SkuTest {
@@ -33,21 +33,21 @@ public class SkuTest {
     @BeforeAll
     public void shouldThrowException_WhenProductIsInvalid() {
         SkuGenerationException skuException = assertThrows(SkuGenerationException.class, () -> {
-            ProductBuilder.aProduct().build().getSku();
+            DummyProduct.builder().build().getSku();
         });
 
         NullPointerException skuExceptionForNull = assertThrows(NullPointerException.class, () -> {
             new SKU(null);
         });
 
-        assertEquals("Unknow product type. Generation of SKU code is unavailable for this subclass.\n Unknow type provided: ProductDummy", skuException.getMessage());
+        assertEquals("Unknow product type. Generation of SKU code is unavailable for this subclass.\n Unknow type provided: DummyProduct", skuException.getMessage());
 
         assertEquals("The product mustn't be null.", skuExceptionForNull.getMessage());
     }
     
     @Test
     public void shouldGenerateSkuCorrectly_WhenProductIsASanitizer() {
-        Sanitizer sanitizerAmmonium = SanitizerBuilder.aSanitizer()
+        Sanitizer sanitizerAmmonium = SanitizerTestBuilder.aSanitizer()
             .withQuantityPerPackage(5)
             .withMeasureUnit(MeasureUnit.L)
             .withPackagingType(PackagingType.GALLON)
@@ -61,11 +61,11 @@ public class SkuTest {
         
         assertEquals("SAN-G5L-QA-LQNF", sanitizerAmmonium.getSku().getSkuCode());
 
-        Sanitizer sanitizerAlcohol = SanitizerBuilder.aSanitizer()
+        Sanitizer sanitizerAlcohol = SanitizerTestBuilder.aSanitizer()
             .withQuantityPerPackage(1)
             .withMeasureUnit(MeasureUnit.L)
             .withPackagingType(PackagingType.BOTTLE)
-            .withActiveIngredient(List.of(IngredientBuilder.anActiveIngredient().build())) // Alcohol isopropyl is the default build of IngredientBuilder
+            .withActiveIngredient(List.of(IngredientTestBuilder.anActiveIngredient().build())) // Alcohol isopropyl is the default build of IngredientBuilder
             .withFlammable(true)
             .withForm(PhysicalForm.LIQUID)
             .withMainChemicalFamily(Ingredient.ChemicalFamily.ALCOHOL)
@@ -76,7 +76,7 @@ public class SkuTest {
     
     @Test
     public void shouldGenerateSkuCorrectly_WhenProductIsACultureMedia() {
-        CultureMedia cultureMedia = CultureMediaBuilder.aCultureMediaBuilder()
+        CultureMedia cultureMedia = CultureMediaTestBuilder.aCultureMediaBuilder()
             .withPackagingType(PackagingType.BOX)
             .withQuantityPerPackage(50)
             .withQuantificationUnit(QuantificationUnit.ML)
@@ -89,7 +89,7 @@ public class SkuTest {
         
         assertEquals("CTM-BX50-7ML-FREF", cultureMedia.getSku().getSkuCode());
 
-        CultureMedia cultureMedia2 = CultureMediaBuilder.aCultureMediaBuilder()
+        CultureMedia cultureMedia2 = CultureMediaTestBuilder.aCultureMediaBuilder()
             .withQuantificationUnit(QuantificationUnit.MG)
             .withQuantityPerUnit(5)
             .withPreparationGramsPerLiter(OptionalDouble.of(2.5))
@@ -107,7 +107,7 @@ public class SkuTest {
         
         @Test
         public void shouldGenerateSkuCorrectly_WhenProductIsAGlove() {
-            Glove glove = GloveBuilder.aGlove()
+            Glove glove = GloveTestBuilder.aGlove()
                 .withMaterial(GloveMaterial.NITRILE)
                 .withLongBarrel(false)
                 .withThicknessMils(6)
@@ -115,7 +115,7 @@ public class SkuTest {
                 
             assertEquals("GLV-P20-6NT-SU", glove.getSku().getSkuCode());
 
-            Glove glove2 = GloveBuilder.aGlove()
+            Glove glove2 = GloveTestBuilder.aGlove()
                 .withMaterial(GloveMaterial.LATEX)
                 .withThicknessMils(4)
                 .withLongBarrel(true)
@@ -126,7 +126,7 @@ public class SkuTest {
 
         @Test
         public void shouldGenerateSkuCorrectly_WhenProductIsAFaceProtection() {
-            FaceProtection goggles = FaceProtectionBuilder.aFaceProtection()
+            FaceProtection goggles = FaceProtectionTestBuilder.aFaceProtection()
                 .withAntiFog(false)
                 .withType(ProtectionType.GOGGLES)
                 .withSize(Size.MEDIUM)
@@ -134,7 +134,7 @@ public class SkuTest {
                 
             assertEquals("FPT-P20-GG-CM", goggles.getSku().getSkuCode());
 
-            FaceProtection maskRespirator = FaceProtectionBuilder.aFaceProtection()
+            FaceProtection maskRespirator = FaceProtectionTestBuilder.aFaceProtection()
                 .withAntiFog(true)
                 .withSize(Size.LARGE)
                 .withType(ProtectionType.MASK_RESPIRATOR)
@@ -142,7 +142,7 @@ public class SkuTest {
 
             assertEquals("FPT-P20-MR-AFL", maskRespirator.getSku().getSkuCode());
             
-            FaceProtection faceShield = FaceProtectionBuilder.aFaceProtection()
+            FaceProtection faceShield = FaceProtectionTestBuilder.aFaceProtection()
                 .withType(ProtectionType.FACE_SHIELD)
                 .withAntiFog(false)
                 .withPackagingType(PackagingType.INDIVIDUAL)
@@ -153,14 +153,14 @@ public class SkuTest {
         
         @Test
         public void shouldGenerateSkuCorrectly_WhenProductIsALabCoat() {
-            LabCoat labCoat = LabCoatBuilder.aLabCoat()
+            LabCoat labCoat = LabCoatTestBuilder.aLabCoat()
                 .withGrammage(40)
                 .withFabricType(FabricType.POLYPROPYLENE)
                 .build();
 
             assertEquals("COAT-P20-PP40-U", labCoat.getSku().getSkuCode());
 
-            LabCoat labCoat2 = LabCoatBuilder.aLabCoat()
+            LabCoat labCoat2 = LabCoatTestBuilder.aLabCoat()
                 .withGrammage(160)
                 .withFabricType(FabricType.COTTON_100)
                 .build();
@@ -172,10 +172,10 @@ public class SkuTest {
         @BeforeAll
         public void shouldThrowException_WhenProductIsAUnknowSubclass() {
             SkuGenerationException skuException = assertThrows(SkuGenerationException.class, () -> {
-                PpeBuilder.aPPE().build().getSku();
+                DummyPpe.builder().build().getSku();
             });
 
-            assertEquals("Product with unknow type of 'Personal Protective Equipment' (PPE). Generation of SKU code is unavailable for this subclass.\n Unknow type provided: PpeDummy", skuException.getMessage());
+            assertEquals("Product with unknow type of 'Personal Protective Equipment' (PPE). Generation of SKU code is unavailable for this subclass.\n Unknow type provided: DummyPpe", skuException.getMessage());
         }
     }
     
@@ -185,7 +185,7 @@ public class SkuTest {
         
         @Test
         public void shouldGenerateSkuCorrectly_WhenProductIsASampleBag() {
-            SampleBag sampleBag = SampleBagBuilder.aSampleBag()
+            SampleBag sampleBag = SampleBagTestBuilder.aSampleBag()
                 .withCapacityMilliLiters(200)
                 .withFilter(FilterType.FULL_PAGE)
                 .withStandUp(true)
@@ -194,7 +194,7 @@ public class SkuTest {
                 
             assertEquals("BAG-P20-F200-IDU", sampleBag.getSku().getSkuCode());
 
-            SampleBag sampleBag2 = SampleBagBuilder.aSampleBag()
+            SampleBag sampleBag2 = SampleBagTestBuilder.aSampleBag()
                 .withCapacityMilliLiters(125)
                 .withPackagingType(PackagingType.BOX)
                 .withQuantityPerPackage(70)
@@ -208,7 +208,7 @@ public class SkuTest {
         
         @Test
         public void shouldGenerateSkuCorrectly_WhenProductIsAPetriDish() {
-            PetriDish petriDish = PetriDishBuilder.aPetriDish()
+            PetriDish petriDish = PetriDishTestBuilder.aPetriDish()
                 .withDiameterMm(90)
                 .withHeightMm(15)
                 .withMaterial(Material.BOROSILICATE_GLASS)
@@ -216,7 +216,7 @@ public class SkuTest {
             
             assertEquals("PTD-P20-90x15-BG", petriDish.getSku().getSkuCode());
 
-                PetriDish petriDish2 = PetriDishBuilder.aPetriDish()
+                PetriDish petriDish2 = PetriDishTestBuilder.aPetriDish()
                 .withDiameterMm(60)
                 .withHeightMm(15)
                 .withMaterial(Material.PP)
@@ -227,7 +227,7 @@ public class SkuTest {
         
         @Test
         public void shouldGenerateSkuCorrectly_WhenProductIsATestTube() {
-            TestTube testTube = TestTubeBuilder.aTestTube()
+            TestTube testTube = TestTubeTestBuilder.aTestTube()
                 .withMaterial(Material.PC)
                 .withBottomType(BottomType.ROUND)
                 .withHeightMm(100)
@@ -236,7 +236,7 @@ public class SkuTest {
             
             assertEquals("TUB-P20-PC100x12-SR", testTube.getSku().getSkuCode());
             
-            TestTube testTube2 = TestTubeBuilder.aTestTube()
+            TestTube testTube2 = TestTubeTestBuilder.aTestTube()
                 .withMaterial(Material.GLASS)
                 .withBottomType(BottomType.CONICAL)
                 .withSterilizationMethod(SterilizationMethod.NO_STERILE)
@@ -251,10 +251,10 @@ public class SkuTest {
         @BeforeAll
         public void shouldThrowException_WhenProductIsAUnknowSubclass() {
             SkuGenerationException skuException = assertThrows(SkuGenerationException.class, () -> {
-                SampleContainerBuilder.aSampleContainer().build().getSku();
+                DummySampleContainer.builder().build().getSku();
             });
 
-            assertEquals("Product with unknow type of 'Sample Container'. Generation of SKU code is unavailable for this subclass.\n Unknow type provided: SampleContainerDummy", skuException.getMessage());
+            assertEquals("Product with unknow type of 'Sample Container'. Generation of SKU code is unavailable for this subclass.\n Unknow type provided: DummySampleContainer", skuException.getMessage());
         }
     }
 }

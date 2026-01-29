@@ -7,13 +7,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 import br.com.biosecure.model.SampleContainer.ClosingMethod;
 import br.com.biosecure.model.SampleContainer.Material;
-import br.com.biosecure.builders.PetriDishBuilder;
+import br.com.biosecure.builders.PetriDishTestBuilder;
 
 public class PetriDishTest {
     
     @Test
     public void shouldBuildValidPetriDish() {
-        PetriDish aPetriDish = PetriDishBuilder.aPetriDish()
+        PetriDish aPetriDish = PetriDishTestBuilder.aPetriDish()
             .withClosingMethod(ClosingMethod.SCREW_CAP_RING)
             .withDiameterMm(75)
             .withHeightMm(12)
@@ -28,13 +28,13 @@ public class PetriDishTest {
     @Test
     public void shouldThrowException_WhenDivNumberIsInvalid() {
         InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> {
-            PetriDishBuilder.aPetriDish().withDivNum(0).build();
+            PetriDishTestBuilder.aPetriDish().withDivNum(0).build();
         });
 
         assertEquals("divisions number", exception.getInvalidAttribute());
         
         InvalidProductAttributeException exception2 = assertThrows(InvalidProductAttributeException.class, () -> {
-            PetriDishBuilder.aPetriDish().withDivNum(5).build();
+            PetriDishTestBuilder.aPetriDish().withDivNum(5).build();
         });
 
         assertEquals("divisions number", exception2.getInvalidAttribute());
@@ -43,13 +43,13 @@ public class PetriDishTest {
     @Test
     public void shouldThrowException_WhenPhysicalDimensionsIsInvalid() {
         InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> {
-            PetriDishBuilder.aPetriDish().withDiameterMm(0).withHeightMm(0).build();
+            PetriDishTestBuilder.aPetriDish().withDiameterMm(0).withHeightMm(0).build();
         });
 
         assertEquals("[height (mm), width (mm)]", exception.getInvalidAttribute());
         
         InvalidProductAttributeException exception2 = assertThrows(InvalidProductAttributeException.class, () -> {
-            PetriDishBuilder.aPetriDish().withDiameterMm(1000).withHeightMm(1000).build();
+            PetriDishTestBuilder.aPetriDish().withDiameterMm(1000).withHeightMm(1000).build();
         });
 
         assertEquals("[height (mm), width (mm)]", exception2.getInvalidAttribute());
@@ -57,14 +57,14 @@ public class PetriDishTest {
 
     @Test
     public void shouldCalculateNominalCapacityCorrectly() {
-        PetriDish aPetri = PetriDishBuilder.aPetriDish()
+        PetriDish aPetri = PetriDishTestBuilder.aPetriDish()
             .withDiameterMm(100)
             .withHeightMm(10)
             .build();
 
-        assertEquals(39.27, PetriDish.calculateNominalCapacity(aPetri.getDiameter(), aPetri.getHeight()));
+        assertEquals(39.27, PetriDish.calculateNominalCapacity(aPetri.getDiameterMm(), aPetri.getHeightMm()));
         
-        PetriDish anotherPetri = PetriDishBuilder.aPetriDish()
+        PetriDish anotherPetri = PetriDishTestBuilder.aPetriDish()
             .withDiameterMm(90.0)
             .withHeightMm(15.0)
             .build();
@@ -77,28 +77,28 @@ public class PetriDishTest {
         double delta = 0.01;
         String message = "The calculated area should be in margin of error (0.01)";
 
-        PetriDish aPetri = PetriDishBuilder.aPetriDish()
+        PetriDish aPetri = PetriDishTestBuilder.aPetriDish()
             .withDiameterMm(75)
             .withDivNum(1)
             .build();
 
-        assertEquals(4417.86, PetriDish.calculateSurfaceAreaPerDiv(aPetri.getDiameter(), aPetri.getDivisionsNumber()), delta, message);
+        assertEquals(4417.86, PetriDish.calculateSurfaceAreaPerDiv(aPetri.getDiameterMm(), aPetri.getDivisionsNumber()), delta, message);
 
-        PetriDish anotherPetri = PetriDishBuilder.aPetriDish()
+        PetriDish anotherPetri = PetriDishTestBuilder.aPetriDish()
             .withDiameterMm(100)
             .withDivNum(2) 
             .build();
 
         assertEquals(3926.99, anotherPetri.getSurfaceAreaPerDivision(), delta, message);
         
-        PetriDish anotherPetri2 = PetriDishBuilder.aPetriDish()
+        PetriDish anotherPetri2 = PetriDishTestBuilder.aPetriDish()
             .withDiameterMm(90.0)
             .withDivNum(3)
             .build();
                     
         assertEquals(2120.57, anotherPetri2.getSurfaceAreaPerDivision(), delta, message);
         
-        PetriDish anotherPetri3 = PetriDishBuilder.aPetriDish()
+        PetriDish anotherPetri3 = PetriDishTestBuilder.aPetriDish()
             .withDiameterMm(120.0)
             .withDivNum(4)
             .build();

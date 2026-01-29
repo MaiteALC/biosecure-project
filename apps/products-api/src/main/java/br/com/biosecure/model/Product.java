@@ -1,10 +1,14 @@
 package br.com.biosecure.model;
 
-import java.time.LocalDate;
 import br.com.biosecure.utils.NotificationContext;
 import br.com.biosecure.utils.NumberUtils;
 import br.com.biosecure.utils.StringUtils;
+import br.com.biosecure.utils.ErrorAggregator;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import java.time.LocalDate;
 
+@Getter
 public abstract class Product {
     private final String name;
     private double price;
@@ -18,38 +22,93 @@ public abstract class Product {
 
     protected static final int MIN_NAMES_LENGTH = 2;
     protected static final int MAX_NAMES_LENGTH = 70;
-
     protected static final double MAX_PRICE = 99999.99;
     protected static final double MAX_QUANTITY = 99999;
 
-    public Product(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, MeasureUnit measureUnit, double quantityPerPackage) {
-        
-        NotificationContext productNotification = new NotificationContext();
-        
-        StringUtils.validateString(name, MIN_NAMES_LENGTH, "name", MAX_NAMES_LENGTH, true, productNotification);
-        StringUtils.validateString(manufacturer, MIN_NAMES_LENGTH, "manufacturer", MAX_NAMES_LENGTH, true, productNotification);
-        StringUtils.validateString(batchNumber, "batch number", true, productNotification);
+    protected Product(ProductBuilder<?, ?> builder) {
+        this.name = builder.name;
+        this.price = builder.price;
+        this.manufacturer = builder.manufacturer;
+        this.batchNumber = builder.batchNumber;
+        this.expirationDate = builder.expirationDate;
+        this.packagingType = builder.packagingType;
+        this.measureUnit = packagingType == PackagingType.INDIVIDUAL ? MeasureUnit.U : builder.measureUnit;
+        this.quantityPerPackage = builder.packagingType == PackagingType.INDIVIDUAL ? 1 : builder.quantityPerPackage;
+    }
 
-        NumberUtils.validateNumericalAttribute(price, 0.01, "price", MAX_PRICE, productNotification);
-        NumberUtils.validateNumericalAttribute(quantityPerPackage, 1, "quantity per package", MAX_QUANTITY, productNotification);
-        NumberUtils.validateExpirationDate(expirationDate, "expiration date", productNotification);
-        
-        if (packagingType == PackagingType.INDIVIDUAL && measureUnit != MeasureUnit.U) {
-            productNotification.addError("measure unit", "The measure unit and packaging type are incoherent.");
-        }
-        
-        if (productNotification.hasErrors()) {
-            throw new InvalidProductAttributeException(productNotification.getErrors());
+    public static abstract class ProductBuilder<P extends Product, B extends ProductBuilder<P, B>> {
+        protected String name;
+        protected double price;
+        protected String manufacturer;
+        protected String batchNumber;
+        protected LocalDate expirationDate;
+        protected PackagingType packagingType;
+        protected MeasureUnit measureUnit;
+        protected double quantityPerPackage;
+
+        protected final NotificationContext productNotification = new NotificationContext();
+
+        protected abstract B self();
+
+        public abstract P build();
+
+        public B name(String name) {
+            StringUtils.validateString(name, MIN_NAMES_LENGTH, "name", MAX_NAMES_LENGTH, true, productNotification);
+
+            this.name = name;
+            return self();
         }
 
-        this.name = name;
-        this.price = price;
-        this.manufacturer = manufacturer;
-        this.batchNumber = batchNumber;
-        this.expirationDate = expirationDate;
-        this.packagingType = packagingType;
-        this.measureUnit = measureUnit;
-        this.quantityPerPackage = packagingType == PackagingType.INDIVIDUAL ? 1 : quantityPerPackage;
+        public B price(double price) {
+            NumberUtils.validateNumericalAttribute(price, 0.01, "price", MAX_PRICE, productNotification);
+
+            this.price = price;
+            return self();
+        }
+
+        public B manufacturer(String manufacturer) {
+            StringUtils.validateString(manufacturer, MIN_NAMES_LENGTH, "manufacturer", MAX_NAMES_LENGTH, true, productNotification);
+
+            this.manufacturer = manufacturer;
+            return self();
+        }
+
+        public B batchNumber(String batchNumber) {
+            StringUtils.validateString(batchNumber, "batch number", true, productNotification);
+
+            this.batchNumber = batchNumber;
+            return self();
+        }
+
+        public B expirationDate(LocalDate expirationDate) {
+            NumberUtils.validateExpirationDate(expirationDate, "expiration date", productNotification);
+
+            this.expirationDate = expirationDate;
+            return self();
+        }
+
+        public B packagingType(PackagingType packagingType) {
+            ErrorAggregator.verifyNull(packagingType, "packaging type", productNotification);
+
+            this.packagingType = packagingType;
+            return self();
+        }
+
+        public B measureUnit(MeasureUnit measureUnit) {
+            if (measureUnit == null) {
+                productNotification.addError("measure unit", "measure unit mustn't be null");
+            }
+
+            this.measureUnit = measureUnit;
+            return self();
+        }
+
+        public B quantityPerPackage(double quantityPerPackage) {
+            NumberUtils.validateNumericalAttribute(quantityPerPackage, 1, "quantity per package", MAX_QUANTITY, productNotification);
+
+            this.quantityPerPackage = quantityPerPackage;
+            return self();
+        }
     }
 
     public enum MeasureUnit {
@@ -62,6 +121,8 @@ public abstract class Product {
         MM
     }
 
+    @Getter
+    @AllArgsConstructor
     public enum PackagingType {
         BOX("BX"),
         PACKAGE("P"),
@@ -70,58 +131,16 @@ public abstract class Product {
         INDIVIDUAL("INDV");
 
         private final String code;
-
-        PackagingType(String code) {
-            this.code = code;
-        }
-
-        public String getCode() {
-            return code;
-        }
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public String getManufacturer() {
-        return manufacturer;
-    }
-
-    public String getBatchNumber() {
-        return batchNumber;
-    }
-
-    public LocalDate getExpirationDate() {
-        return expirationDate;
-    }
-
-    public PackagingType getPackagingType() {
-        return packagingType;
-    }
-
-    public MeasureUnit getMeasureUnit() {
-        return measureUnit;
-    }
-
-    public double getQuantityPerPackage() {
-        return quantityPerPackage;
     }
 
     public SKU getSku() {
-        // Lazy initialization of SKU
         if (this.sku == null) {
-            this.sku = new SKU(this);
+            this.sku = new SKU(this);  // Lazy initialization of SKU
         }
-
         return sku;
     }
 
-    public void setPrice(double newPrice) {
+    public void changePrice(double newPrice) {
         NotificationContext productNotification = new NotificationContext();
 
         NumberUtils.validateNumericalAttribute(price, 0.01, "price", MAX_PRICE, productNotification);

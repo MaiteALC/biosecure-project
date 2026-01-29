@@ -1,13 +1,17 @@
 package br.com.biosecure.model;
 
-import java.util.ArrayList;
-
 import br.com.biosecure.utils.NotificationContext;
 import br.com.biosecure.utils.NumberUtils;
+import br.com.biosecure.utils.ErrorAggregator;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
+@Getter
 public class TestTube extends SampleContainer {
     private final int maxRCF;
     private final BottomType bottomType;
@@ -15,30 +19,91 @@ public class TestTube extends SampleContainer {
     private final CapColor capColor;
     private final double diameterMm;
     private final double heightMm;
+    private final double capacityMilliLiters;
 
-    public TestTube(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, int quantityPerPackage, SterilizationMethod sterilizationMethod, ClosingMethod closingMethod, Material materialType, int maxRCF, BottomType bottomType, boolean isGraduated, CapColor capColor, double diameterMm, double heightMm) {
-       
-        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, quantityPerPackage, sterilizationMethod,closingMethod, materialType);
+    public TestTube(TestTubeBuilder builder) {
+        super(builder);
 
-        NotificationContext notification = new NotificationContext();
-        
-        NumberUtils.validateNumericalAttribute(heightMm, 1, "height (mm)", 999, notification);
-        NumberUtils.validateNumericalAttribute(diameterMm, 1, "diameter (mm)", 999, notification);
-        
-        NumberUtils.validateNumericalAttribute(maxRCF, 1, "maximum RCF", 500000, notification);
+        validateTestTubeBioSafetRules(super.getMaterialType(), builder.bottomType, builder.maxRCF);
 
-        if (notification.hasErrors()) {
-            throw new InvalidProductAttributeException(notification.getErrors());
+        this.maxRCF = builder.maxRCF;
+        this.bottomType = builder.bottomType;
+        this.graduated = builder.graduated;
+        this.capColor = builder.capColor;
+        this.diameterMm = builder.diameterMm;
+        this.heightMm = builder.heightMm;
+        this.capacityMilliLiters = calculateNominalCapacity(builder.diameterMm, builder.heightMm);
+    }
+
+    public static TestTubeBuilder builder() {
+        return new TestTubeBuilder();
+    }
+
+    public static final class TestTubeBuilder extends SampleContainerBuilder<TestTube, TestTubeBuilder> {
+        private int maxRCF;
+        private BottomType bottomType;
+        private boolean graduated;
+        private CapColor capColor;
+        private double diameterMm;
+        private double heightMm;
+
+        @Override
+        protected TestTubeBuilder self() {
+            return this;
         }
 
-        validateBioSafetRules(materialType, bottomType, maxRCF);
+        public TestTubeBuilder maxRCF(int maxRCF) {
+            this.maxRCF = maxRCF;
+            return this;
+        }
 
-        this.maxRCF = maxRCF;
-        this.bottomType = bottomType;
-        this.graduated = isGraduated;
-        this.capColor = capColor;
-        this.diameterMm = diameterMm;
-        this.heightMm = heightMm;
+        public TestTubeBuilder bottomType(BottomType bottomType) {
+            this.bottomType = bottomType;
+            return this;
+        }
+
+        public TestTubeBuilder graduated(boolean graduated) {
+            this.graduated = graduated;
+            return this;
+        }
+
+        public TestTubeBuilder capColor(CapColor capColor) {
+            this.capColor = capColor;
+            return this;
+        }
+
+        public TestTubeBuilder diameterMm(double diameterMm) {
+            this.diameterMm = diameterMm;
+            return this;
+        }
+
+        public TestTubeBuilder heightMm(double heightMm) {
+            this.heightMm = heightMm;
+            return this;
+        }
+
+        @Override
+        public TestTube build() {
+            ErrorAggregator.aggregateValidationExceptions(
+                    List.of(
+                            ErrorAggregator.verifyNull(capColor, "cap color"),
+                            ErrorAggregator.verifyNull(bottomType, "bottom type")
+                    ),
+                    productNotification
+            );
+
+            NumberUtils.validateNumericalAttribute(heightMm, 1, "height (mm)", 999, productNotification);
+
+            NumberUtils.validateNumericalAttribute(diameterMm, 1, "diameter (mm)", 999, productNotification);
+
+            NumberUtils.validateNumericalAttribute(maxRCF, 1, "maximum RCF", 500000, productNotification);
+
+            if (productNotification.hasErrors()) {
+                throw new InvalidProductAttributeException(productNotification.getErrors());
+            }
+
+            return new TestTube(this);
+        }
     }
 
     public enum BottomType {
@@ -48,6 +113,8 @@ public class TestTube extends SampleContainer {
         SKIRTED
     }
 
+    @Getter
+    @AllArgsConstructor
     public enum CapColor {
         BLUE("Sodium citrate"),
         GRAY("Potassium fluoride and EDTA"),
@@ -58,17 +125,9 @@ public class TestTube extends SampleContainer {
         YELLOW("Clot activator and separator gel");
 
         private final String chemicalAdditive;
-
-        CapColor(String chemicalAdditive) {
-            this.chemicalAdditive = chemicalAdditive;
-        }
-
-        public String getChemicalAdditive() {
-            return chemicalAdditive;
-        }
     }
 
-    private void validateBioSafetRules(Material material, BottomType bottomType, int maxRCF) {
+    private static void validateTestTubeBioSafetRules(Material material, BottomType bottomType, int maxRCF) {
         ArrayList<String> invalids = new ArrayList<>();
 
         invalids.add("Maximum RCF");
@@ -88,30 +147,6 @@ public class TestTube extends SampleContainer {
                 "Flat bottoms concentrate the tension. RCF greater than 10.000g is uncommon for flat bottoms. Verify the specifications", invalids
             );
         }
-    }
-
-    public int getMaxRCF() {
-        return maxRCF;
-    }
-
-    public BottomType getBottomType() {
-        return bottomType;
-    }
-
-    public boolean isGraduated() {
-        return graduated;
-    }
-
-    public double getHeightMm() {
-        return heightMm;
-    }
-
-    public double getDiameterMm() {
-        return diameterMm;
-    }
-
-    public CapColor getCapColor() {
-        return capColor;
     }
 
     /**
@@ -142,9 +177,5 @@ public class TestTube extends SampleContainer {
         BigDecimal volumeML =  BigDecimal.valueOf(volumeCubicMm / 1000).setScale(2, RoundingMode.HALF_UP); 
 
         return  volumeML.doubleValue();
-    }
-
-    public double getCapacityMilliLiters() {
-        return calculateNominalCapacity(this.diameterMm, this.heightMm);
     }
 }

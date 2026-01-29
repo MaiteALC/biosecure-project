@@ -7,13 +7,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 import br.com.biosecure.model.SampleContainer.*;
 import br.com.biosecure.model.TestTube.*;
-import br.com.biosecure.builders.TestTubeBuilder;
+import br.com.biosecure.builders.TestTubeTestBuilder;
 
 public class TestTubeTest {
     
     @Test
     public void shouldBuildValidTestTube() {
-        TestTube aTube = TestTubeBuilder.aTestTube()
+        TestTube aTube = TestTubeTestBuilder.aTestTube()
             .withBottomType(BottomType.ROUND)
             .withCapColor(CapColor.PURPLE)
             .withMaterial(Material.PP)
@@ -24,7 +24,7 @@ public class TestTubeTest {
 
         assertNotNull(aTube);
 
-        TestTube anotherTube = TestTubeBuilder.aTestTube()
+        TestTube anotherTube = TestTubeTestBuilder.aTestTube()
             .withBottomType(BottomType.FLAT)
             .withMaterial(Material.PS)
             .withMaxRCF(4000)
@@ -37,13 +37,13 @@ public class TestTubeTest {
     @Test
     public void shouldThrowException_WhenPhysicalDimensionsIsInvalid() {
         InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> {
-            TestTubeBuilder.aTestTube().withDiameterMm(0).withHeightMm(0).build();
+            TestTubeTestBuilder.aTestTube().withDiameterMm(0).withHeightMm(0).build();
         });
 
         assertEquals("[height (mm), diameter (mm)]", exception.getInvalidAttribute());
         
         InvalidProductAttributeException exception2 = assertThrows(InvalidProductAttributeException.class, () -> {
-            TestTubeBuilder.aTestTube().withDiameterMm(1000).withHeightMm(1000).build();
+            TestTubeTestBuilder.aTestTube().withDiameterMm(1000).withHeightMm(1000).build();
         });
 
         assertEquals("[height (mm), diameter (mm)]", exception2.getInvalidAttribute());
@@ -56,14 +56,14 @@ public class TestTubeTest {
         String expectedMessage2 = "SECURITY WARNING: Flat bottoms concentrate the tension. RCF greater than 10.000g is uncommon for flat bottoms. Verify the specifications";
 
         BioSecurityException exception = assertThrows(BioSecurityException.class, () -> {
-            TestTubeBuilder.aTestTube()
+            TestTubeTestBuilder.aTestTube()
                 .withMaterial(Material.BOROSILICATE_GLASS)
                 .withMaxRCF(5001)
                 .build();
         });
         
         BioSecurityException exception2 = assertThrows(BioSecurityException.class, () -> {
-            TestTubeBuilder.aTestTube()
+            TestTubeTestBuilder.aTestTube()
                 .withMaterial(Material.PC)
                 .withBottomType(BottomType.FLAT)
                 .withMaxRCF(10001)

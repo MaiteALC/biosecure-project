@@ -1,27 +1,24 @@
 package br.com.biosecure.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import org.junit.jupiter.api.Test;
-import br.com.biosecure.builders.LabCoatBuilder;
+import br.com.biosecure.builders.LabCoatTestBuilder;
 import br.com.biosecure.model.LabCoat.CollarType;
 import br.com.biosecure.model.LabCoat.FabricType;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class LabCoatTest {
     
     @Test
     public void shouldBuildValidLabCoat() {
-        LabCoat labCoat = LabCoatBuilder.aLabCoat()
+        LabCoat labCoat = LabCoatTestBuilder.aLabCoat()
             .withCollarType(CollarType.HIGH_NECK)
             .withGrammage(30)
+            .withDisposable(true)
             .withFabricType(FabricType.POLYPROPYLENE)
             .build();
 
-        LabCoat defaultLabCoat = LabCoatBuilder.aLabCoat().build();
+        LabCoat defaultLabCoat = LabCoatTestBuilder.aLabCoat().build();
 
         assertNotNull(labCoat);
         assertNotNull(defaultLabCoat);
@@ -33,11 +30,11 @@ public class LabCoatTest {
     @Test
     public void shouldThrowException_WhenGrammageIsInvalid() {
         InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> {
-            LabCoatBuilder.aLabCoat().withGrammage(19).build();
+            LabCoatTestBuilder.aLabCoat().withGrammage(19).build();
         });
 
         InvalidProductAttributeException exception2 = assertThrows(InvalidProductAttributeException.class, () -> {
-            LabCoatBuilder.aLabCoat().withGrammage(351).build();
+            LabCoatTestBuilder.aLabCoat().withGrammage(351).build();
         });
 
         assertEquals(exception.getInvalidAttribute(), exception2.getInvalidAttribute());

@@ -1,10 +1,11 @@
 package br.com.biosecure.model;
 
-import java.util.ArrayList;
-import br.com.biosecure.utils.NotificationContext;
 import br.com.biosecure.utils.NumberUtils;
-import java.time.LocalDate;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import java.util.ArrayList;
 
+@Getter
 public class SampleBag extends SampleContainer {
     private final FilterType filter;
     private final boolean identificationTag;
@@ -14,87 +15,113 @@ public class SampleBag extends SampleContainer {
     private final double heightMm;
     private final double capacityMilliLiters;
 
-    public SampleBag(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, int quantityPerPackage, SterilizationMethod sterilizationMethod, ClosingMethod closingMethod, Material materialType, FilterType filter, boolean hasIdentificationTag, boolean isStandUp, double thicknessMm, double capacityMilliLiters, double widthMm, double heightMm) {
-        
-        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, quantityPerPackage, sterilizationMethod, closingMethod, materialType);
+    protected SampleBag(SampleBagBuilder builder) {
+        super(builder);
 
-        NotificationContext notification = new NotificationContext();
-        
-        NumberUtils.validateNumericalAttribute(heightMm, 1, "height (mm)", 999, notification);
-        NumberUtils.validateNumericalAttribute(widthMm, 1, "width (mm)", 999, notification);
-        
-        NumberUtils.validateNumericalAttribute(thicknessMm, 1, "thickness (mm)", 99, notification);
+        validateSampleBagBioSafetyRules(super.getMaterialType());
 
-        NumberUtils.validateNumericalAttribute(capacityMilliLiters, 1, "capacity (mL)", 9999, notification);
+        this.filter = builder.filter;
+        this.identificationTag = builder.identificationTag;
+        this.standUp = builder.standUp;
+        this.thicknessMm = builder.thicknessMm;
+        this.widthMm = builder.widthMm;
+        this.heightMm = builder.heightMm;
+        this.capacityMilliLiters = builder.capacityMilliLiters;
+    }
 
-        if (notification.hasErrors()) {
-            throw new InvalidProductAttributeException(notification.getErrors());
+    public static SampleBagBuilder builder() {
+        return new SampleBagBuilder();
+    }
+
+    public static final class SampleBagBuilder extends SampleContainerBuilder<SampleBag, SampleBagBuilder> {
+        private FilterType filter;
+        private boolean identificationTag;
+        private boolean standUp;
+        private double thicknessMm;
+        private double widthMm;
+        private double heightMm;
+        private double capacityMilliLiters;
+
+        @Override
+        protected SampleBagBuilder self() {
+            return this;
         }
 
-        validateBioSafetyRules(materialType);
+        public SampleBagBuilder filter(FilterType filter) {
+            this.filter = filter;
+            return this;
+        }
 
-        this.filter = filter;
-        this.identificationTag = hasIdentificationTag;
-        this.standUp = isStandUp;
-        this.thicknessMm = thicknessMm;
-        this.widthMm = widthMm;
-        this.heightMm = heightMm;
-        this.capacityMilliLiters = capacityMilliLiters;
+        public SampleBagBuilder identificationTag(boolean identificationTag) {
+            this.identificationTag = identificationTag;
+            return this;
+        }
+
+        public SampleBagBuilder standUp(boolean standUp) {
+            this.standUp = standUp;
+            return this;
+        }
+
+        public SampleBagBuilder thicknessMm(double thicknessMm) {
+            this.thicknessMm = thicknessMm;
+            return this;
+        }
+
+        public SampleBagBuilder widthMm(double widthMm) {
+            this.widthMm = widthMm;
+            return this;
+        }
+
+        public SampleBagBuilder heightMm(double heightMm) {
+            this.heightMm = heightMm;
+            return this;
+        }
+
+        public SampleBagBuilder capacityMilliLiters(double capacityMilliLiters) {
+            this.capacityMilliLiters = capacityMilliLiters;
+            return this;
+        }
+
+        @Override
+        public SampleBag build() {
+            if (filter == null) {
+                productNotification.addError("filter type", "filter type mustn't be null");
+            }
+
+            NumberUtils.validateNumericalAttribute(heightMm, 1, "height (mm)", 999, productNotification);
+            NumberUtils.validateNumericalAttribute(widthMm, 1, "width (mm)", 999, productNotification);
+
+            NumberUtils.validateNumericalAttribute(thicknessMm, 1, "thickness (mm)", 99, productNotification);
+
+            NumberUtils.validateNumericalAttribute(capacityMilliLiters, 1, "capacity (mL)", 9999, productNotification);
+
+            if (productNotification.hasErrors()) {
+                throw new InvalidProductAttributeException(productNotification.getErrors());
+            }
+
+            return new SampleBag(this);
+        }
     }
     
-    private void validateBioSafetyRules(Material material) {
+    private void validateSampleBagBioSafetyRules(Material material) {
         if (material != Material.PE && material != Material.PP) {
             ArrayList<String> invalids = new ArrayList<>();
             
             invalids.add("Material");
             
             throw new BioSecurityException(
-                "Sample bags must be of flexible material (PE, PP). " + getMaterial().getCommercialName() + " is rigid.", invalids
+                "Sample bags must be of flexible material (PE, PP). " + getMaterialType().getCommercialName() + " is rigid.", invalids
             );
         }
     }
-    
+
+    @Getter
+    @AllArgsConstructor
     public enum FilterType {
         NONE("N"),
         FULL_PAGE("F"),
         LATERAL("L");
 
         private final String code;
-
-        FilterType(String code) {
-            this.code = code;
-        }
-
-        public String getCode() {
-            return code;
-        }
-    }
-
-    public FilterType getFilter() {
-        return filter;
-    }
-
-    public boolean isStandUp() {
-        return standUp;
-    }
-
-    public boolean hasIdentificationTag() {
-        return identificationTag;
-    }
-
-    public double getThicknessMm() {
-        return thicknessMm;
-    }
-
-    public double getHeightMm() {
-        return heightMm;
-    }
-
-    public double getWidthMm() {
-        return widthMm;
-    }
-
-    public double getCapacityMilliLiters() {
-        return capacityMilliLiters;
     }
 }

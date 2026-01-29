@@ -3,7 +3,7 @@ package br.com.biosecure.builders;
 import br.com.biosecure.model.SampleContainer;
 import br.com.biosecure.model.SampleContainer.*;
 
-abstract class BaseSampleContainerBuilder<T extends BaseSampleContainerBuilder<T, P>, P extends SampleContainer> extends BaseProductBuilder<T, P> {
+abstract class BaseSampleContainerTestBuilder<T extends BaseSampleContainerTestBuilder<T, P>, P extends SampleContainer> extends BaseProductTestBuilder<T, P> {
     // Specific attributes of Sample Container
     protected ClosingMethod closingMethod = ClosingMethod.CELLULOSE_STOPPER;
     protected SterilizationMethod sterilizationMethod = SterilizationMethod.ETHYLENE_OXIDE;
@@ -11,19 +11,16 @@ abstract class BaseSampleContainerBuilder<T extends BaseSampleContainerBuilder<T
 
     public T withClosingMethod(ClosingMethod closingMethod) {
         this.closingMethod = closingMethod;
-
         return self();
     }
 
     public T withSterilizationMethod(SterilizationMethod sterilizationMethod) {
         this.sterilizationMethod = sterilizationMethod;
-
         return self();
     }
 
     public T withMaterial(Material material) {
         this.material = material;
-
         return self();
     }
 }

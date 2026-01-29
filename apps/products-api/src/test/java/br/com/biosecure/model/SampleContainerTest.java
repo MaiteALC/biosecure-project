@@ -1,33 +1,32 @@
 package br.com.biosecure.model;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.util.ArrayList;
-import org.junit.jupiter.api.Test;
+import br.com.biosecure.builders.DummySampleContainer;
 import br.com.biosecure.model.Product.MeasureUnit;
-import br.com.biosecure.model.SampleContainer.*;
-import br.com.biosecure.builders.SampleContainerBuilder;
+import br.com.biosecure.model.SampleContainer.ClosingMethod;
+import br.com.biosecure.model.SampleContainer.Material;
+import br.com.biosecure.model.SampleContainer.SterilizationMethod;
+import org.junit.jupiter.api.Test;
+import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SampleContainerTest {
     
     @Test
     public void shouldCreateValidSampleContainer() {
-        SampleContainer aSampleContainer = SampleContainerBuilder.aSampleContainer()
-            .withSterilizationMethod(SterilizationMethod.E_BEAM)
-            .withClosingMethod(ClosingMethod.HEAT_SEALABLE)
-            .withMaterial(Material.PP)
+        SampleContainer aSampleContainer = DummySampleContainer.builder()
+            .sterilizationMethod(SterilizationMethod.E_BEAM)
+            .closingMethod(ClosingMethod.HEAT_SEALABLE)
+            .materialType(Material.PP)
             .build();
 
         assertNotNull(aSampleContainer);
         assertEquals(MeasureUnit.U, aSampleContainer.getMeasureUnit());
 
-         SampleContainer anotherSampleContainer = SampleContainerBuilder.aSampleContainer()
-            .withSterilizationMethod(SterilizationMethod.AUTOCLAVE)
-            .withClosingMethod(ClosingMethod.SCREW_CAP_RING)
-            .withMaterial(Material.PP)
+         SampleContainer anotherSampleContainer = DummySampleContainer.builder()
+            .sterilizationMethod(SterilizationMethod.AUTOCLAVE)
+            .closingMethod(ClosingMethod.SCREW_CAP_RING)
+            .materialType(Material.PP)
             .build();
 
         assertNotNull(anotherSampleContainer);
@@ -35,19 +34,15 @@ public class SampleContainerTest {
 
     @Test
     public void shouldThrowException_WhenMaterialAndSterilizationMethodIsIncoherent() {
-        BioSecurityException exception = assertThrows(BioSecurityException.class, () -> {
-            SampleContainerBuilder.aSampleContainer()
-                .withMaterial(Material.PE)
-                .withSterilizationMethod(SterilizationMethod.AUTOCLAVE)
-                .build();
-        });
+        BioSecurityException exception = assertThrows(BioSecurityException.class, () -> DummySampleContainer.builder()
+            .materialType(Material.PE)
+            .sterilizationMethod(SterilizationMethod.AUTOCLAVE)
+            .build());
         
-        BioSecurityException exception2 = assertThrows(BioSecurityException.class, () -> {
-            SampleContainerBuilder.aSampleContainer()
-                .withMaterial(Material.PS)
-                .withSterilizationMethod(SterilizationMethod.AUTOCLAVE)
-                .build();
-        }); 
+        BioSecurityException exception2 = assertThrows(BioSecurityException.class, () -> DummySampleContainer.builder()
+            .materialType(Material.PS)
+            .sterilizationMethod(SterilizationMethod.AUTOCLAVE)
+            .build());
 
         ArrayList<String> expected = new ArrayList<>();
 

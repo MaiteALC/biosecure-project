@@ -1,69 +1,93 @@
 package br.com.biosecure.model;
 
-import java.time.LocalDate;
-import br.com.biosecure.utils.NotificationContext;
 import br.com.biosecure.utils.NumberUtils;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 public class Glove extends PPE {
     private final boolean powderFree;
     private final boolean longBarrel;
     private final GloveMaterial material;
-    private final boolean isTextured;
+    private final boolean textured;
     private final double thicknessMils;
 
-    public Glove(String name, double price, String manufacturer, String batchNumber, LocalDate expirationDate, PackagingType packagingType, int quantityPerPackage, Size size, String certificateOfApproval, boolean isDisposable, boolean isPowderFree, boolean hasLongBarrel, GloveMaterial material, boolean isTextured, double thicknessMils) {
-        
-        super(name, price, manufacturer, batchNumber, expirationDate, packagingType, quantityPerPackage, size, certificateOfApproval, material == GloveMaterial.LATEX || material == GloveMaterial.VINYL ? true : isDisposable);
+    private Glove(GloveBuilder builder) {
+        super(builder);
 
-        NotificationContext notification = new NotificationContext();
-
-        NumberUtils.validateNumericalAttribute(thicknessMils, 3, "thickness (mils)", 10, notification);
-
-        if (notification.hasErrors()) {
-            throw new InvalidProductAttributeException(notification.getErrors());
-        }
-
-        this.powderFree = isPowderFree;
-        this.longBarrel = hasLongBarrel;
-        this.material = material;
-        this.isTextured = isTextured;
-        this.thicknessMils = thicknessMils;
+        this.powderFree = builder.powderFree;
+        this.longBarrel = builder.longBarrel;
+        this.material = builder.material;
+        this.textured = builder.textured;
+        this.thicknessMils = builder.thicknessMils;
     }
 
+    public static GloveBuilder builder() {
+        return new GloveBuilder();
+    }
+
+    public static final class GloveBuilder extends PpeBuilder<Glove, GloveBuilder> {
+        private boolean powderFree;
+        private boolean longBarrel;
+        private GloveMaterial material;
+        private boolean textured;
+        private double thicknessMils;
+
+        @Override
+        protected GloveBuilder self() {
+            return this;
+        }
+
+        public GloveBuilder powderFree(boolean powderFree) {
+            this.powderFree = powderFree;
+            return this;
+        }
+
+        public GloveBuilder longBarrel(boolean longBarrel) {
+            this.longBarrel = longBarrel;
+            return this;
+        }
+
+        public GloveBuilder material(GloveMaterial material) {
+            this.material = material;
+            return this;
+        }
+
+        public GloveBuilder textured(boolean textured) {
+            this.textured = textured;
+            return this;
+        }
+
+        public GloveBuilder thicknessMils(double thicknessMils) {
+            this.thicknessMils = thicknessMils;
+            return this;
+        }
+
+        @Override
+        public Glove build() {
+
+            if (material == null) {
+                productNotification.addError("glove material", "glove material mustn't be null");
+            }
+
+            NumberUtils.validateNumericalAttribute(thicknessMils, 3, "thickness (mils)", 10, productNotification);
+
+            if (productNotification.hasErrors()) {
+                throw new InvalidProductAttributeException(productNotification.getErrors());
+            }
+
+            return new Glove(this);
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
     public enum GloveMaterial {
         LATEX("LA"),
         NITRILE("NT"), // The gold standard for labs
         VINYL("VI"),
         NEOPRENE("NP");
 
-        String code;
-
-        GloveMaterial(String code) {
-            this.code = code;
-        }
-
-        public String getCode() {
-            return code;
-        }
-    }
-
-    public boolean isPowderFree() {
-        return powderFree;
-    }
-
-    public boolean hasLongBarrel() {
-        return longBarrel;
-    }
-
-    public GloveMaterial getMaterial() {
-        return material;
-    }
-
-    public boolean isTextured() {
-        return isTextured;
-    }
-
-    public double getThicknessMils() {
-        return thicknessMils;
+        final String code;
     }
 }
