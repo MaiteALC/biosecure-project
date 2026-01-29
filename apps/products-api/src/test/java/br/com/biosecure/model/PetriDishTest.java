@@ -27,30 +27,22 @@ class PetriDishTest {
 
     @Test
     void shouldThrowException_WhenDivNumberIsInvalid() {
-        InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> {
-            PetriDishTestBuilder.aPetriDish().withDivNum(0).build();
-        });
+        InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> PetriDishTestBuilder.aPetriDish().withDivNum(0).build());
 
         assertEquals("divisions number", exception.getInvalidAttribute());
         
-        InvalidProductAttributeException exception2 = assertThrows(InvalidProductAttributeException.class, () -> {
-            PetriDishTestBuilder.aPetriDish().withDivNum(5).build();
-        });
+        InvalidProductAttributeException exception2 = assertThrows(InvalidProductAttributeException.class, () -> PetriDishTestBuilder.aPetriDish().withDivNum(5).build());
 
         assertEquals("divisions number", exception2.getInvalidAttribute());
     }
 
     @Test
     void shouldThrowException_WhenPhysicalDimensionsIsInvalid() {
-        InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> {
-            PetriDishTestBuilder.aPetriDish().withDiameterMm(0).withHeightMm(0).build();
-        });
+        InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> PetriDishTestBuilder.aPetriDish().withDiameterMm(0).withHeightMm(0).build());
 
         assertEquals("[height (mm), width (mm)]", exception.getInvalidAttribute());
         
-        InvalidProductAttributeException exception2 = assertThrows(InvalidProductAttributeException.class, () -> {
-            PetriDishTestBuilder.aPetriDish().withDiameterMm(1000).withHeightMm(1000).build();
-        });
+        InvalidProductAttributeException exception2 = assertThrows(InvalidProductAttributeException.class, () -> PetriDishTestBuilder.aPetriDish().withDiameterMm(1000).withHeightMm(1000).build());
 
         assertEquals("[height (mm), width (mm)]", exception2.getInvalidAttribute());
     }
@@ -108,24 +100,16 @@ class PetriDishTest {
 
     @Test
     void shouldThrowException_WhenCalculatesSurfaceAreaPerDiv_GivenDiameterOrDivNumIsInvalid() {
-        InvalidProductAttributeException divException = assertThrows(InvalidProductAttributeException.class, () -> {
-            PetriDish.calculateSurfaceAreaPerDiv(100, 0);
-        });
+        InvalidProductAttributeException divException = assertThrows(InvalidProductAttributeException.class, () -> PetriDish.calculateSurfaceAreaPerDiv(100, 0));
         
-        InvalidProductAttributeException divException2 = assertThrows(InvalidProductAttributeException.class, () -> {
-            PetriDish.calculateSurfaceAreaPerDiv(90, 5);
-        });
+        InvalidProductAttributeException divException2 = assertThrows(InvalidProductAttributeException.class, () -> PetriDish.calculateSurfaceAreaPerDiv(90, 5));
 
         assertEquals("divisions number", divException.getInvalidAttribute());
         assertEquals(divException.getInvalidAttribute(), divException2.getInvalidAttribute());
 
-        InvalidProductAttributeException diameterException = assertThrows(InvalidProductAttributeException.class, () -> {
-            PetriDish.calculateSurfaceAreaPerDiv(0, 1);
-        });
+        InvalidProductAttributeException diameterException = assertThrows(InvalidProductAttributeException.class, () -> PetriDish.calculateSurfaceAreaPerDiv(0, 1));
         
-        InvalidProductAttributeException diameterException2 = assertThrows(InvalidProductAttributeException.class, () -> {
-            PetriDish.calculateSurfaceAreaPerDiv(1000, 1);
-        });
+        InvalidProductAttributeException diameterException2 = assertThrows(InvalidProductAttributeException.class, () -> PetriDish.calculateSurfaceAreaPerDiv(1000, 1));
 
         assertEquals("diameter (mm)", diameterException.getInvalidAttribute());
         assertEquals(diameterException.getInvalidAttribute(), diameterException2.getInvalidAttribute());

@@ -12,11 +12,9 @@ class IngredientTest {
     @ParameterizedTest
     @ValueSource(ints =  {0, 101, -1, 1000})
     void shouldThrowException_WhenConcentrationIsInvalid(double concentration) {
-        InvalidProductAttributeException concentrationException = assertThrows(InvalidProductAttributeException.class, () -> {
-            IngredientTestBuilder.anActiveIngredient()
-                    .withConcentrationPercentual(concentration)
-                    .build();
-        });
+        InvalidProductAttributeException concentrationException = assertThrows(InvalidProductAttributeException.class, () -> IngredientTestBuilder.anActiveIngredient()
+                .withConcentrationPercentual(concentration)
+                .build());
 
         assertEquals("concentration quantity", concentrationException.getInvalidAttribute());
     }
@@ -25,11 +23,9 @@ class IngredientTest {
     @NullAndEmptySource
     @ValueSource(strings = {"    ", "\t", "\n", "c", "1", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"})
     void shouldThrowException_WhenNameIsInvalid(String name) {
-        InvalidProductAttributeException nameException = assertThrows(InvalidProductAttributeException.class, () -> {
-            IngredientTestBuilder.anActiveIngredient()
-                    .withName(name)
-                    .build();
-        });
+        InvalidProductAttributeException nameException = assertThrows(InvalidProductAttributeException.class, () -> IngredientTestBuilder.anActiveIngredient()
+                .withName(name)
+                .build());
 
         assertEquals("active ingredient name", nameException.getInvalidAttribute());
     }
@@ -38,11 +34,9 @@ class IngredientTest {
     @NullAndEmptySource
     @ValueSource(strings = {"   ", "\t", "\n", "m", "123", "12345678-99-1", "2222-22-0", "ahasdhafas"})
     void shouldThrowException_WhenCasNumberIsInvalid(String casNumber) {
-        InvalidProductAttributeException casNumberException = assertThrows(InvalidProductAttributeException.class, () -> {
-            IngredientTestBuilder.anActiveIngredient()
-                    .withCasNumber(casNumber)
-                    .build();
-        });
+        InvalidProductAttributeException casNumberException = assertThrows(InvalidProductAttributeException.class, () -> IngredientTestBuilder.anActiveIngredient()
+                .withCasNumber(casNumber)
+                .build());
 
         assertEquals("CAS Registry Number", casNumberException.getInvalidAttribute());
     }

@@ -32,13 +32,9 @@ class SkuTest {
     @Test
     @BeforeAll
     void shouldThrowException_WhenProductIsInvalid() {
-        SkuGenerationException skuException = assertThrows(SkuGenerationException.class, () -> {
-            DummyProduct.builder().build().getSku();
-        });
+        SkuGenerationException skuException = assertThrows(SkuGenerationException.class, () -> DummyProduct.builder().build().getSku());
 
-        NullPointerException skuExceptionForNull = assertThrows(NullPointerException.class, () -> {
-            new SKU(null);
-        });
+        NullPointerException skuExceptionForNull = assertThrows(NullPointerException.class, () -> new SKU(null));
 
         assertEquals("Unknow product type. Generation of SKU code is unavailable for this subclass.\n Unknow type provided: DummyProduct", skuException.getMessage());
 
@@ -171,9 +167,7 @@ class SkuTest {
         @Test
         @BeforeAll
         void shouldThrowException_WhenProductIsAUnknowSubclass() {
-            SkuGenerationException skuException = assertThrows(SkuGenerationException.class, () -> {
-                DummyPpe.builder().build().getSku();
-            });
+            SkuGenerationException skuException = assertThrows(SkuGenerationException.class, () -> DummyPpe.builder().build().getSku());
 
             assertEquals("Product with unknow type of 'Personal Protective Equipment' (PPE). Generation of SKU code is unavailable for this subclass.\n Unknow type provided: DummyPpe", skuException.getMessage());
         }
@@ -250,9 +244,7 @@ class SkuTest {
         @Test
         @BeforeAll
         void shouldThrowException_WhenProductIsAUnknowSubclass() {
-            SkuGenerationException skuException = assertThrows(SkuGenerationException.class, () -> {
-                DummySampleContainer.builder().build().getSku();
-            });
+            SkuGenerationException skuException = assertThrows(SkuGenerationException.class, () -> DummySampleContainer.builder().build().getSku());
 
             assertEquals("Product with unknow type of 'Sample Container'. Generation of SKU code is unavailable for this subclass.\n Unknow type provided: DummySampleContainer", skuException.getMessage());
         }

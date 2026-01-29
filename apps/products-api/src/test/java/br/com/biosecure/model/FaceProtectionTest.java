@@ -37,9 +37,7 @@ class FaceProtectionTest {
     @NullAndEmptySource
     @ValueSource(strings = {"   ", "N", "N1234567890123"})
     void shouldThrowException_WhenStandardRatingIsInvalid(String invalidInput) {
-        InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> {
-            FaceProtectionTestBuilder.aFaceProtection().withStandardRating(invalidInput).build();
-        });
+        InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> FaceProtectionTestBuilder.aFaceProtection().withStandardRating(invalidInput).build());
 
         assertEquals("standard rating", exception.getInvalidAttribute());
         assertTrue(exception.getMessage().contains("These attributes are invalids:\n\t - standard rating"));

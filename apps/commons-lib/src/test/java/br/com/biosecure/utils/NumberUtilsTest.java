@@ -48,21 +48,13 @@ class NumberUtilsTest {
 
         NumberUtils.validateNumericalAttribute(null, BigDecimal.valueOf(10000000L), "test", BigDecimal.valueOf(2000000L), new NotificationContext());
 
-        assertThrows(NullPointerException.class, () -> {
-            NumberUtils.validateNumericalAttribute(BigDecimal.TEN, null, "test", 200, new NotificationContext());
-        });
+        assertThrows(NullPointerException.class, () -> NumberUtils.validateNumericalAttribute(BigDecimal.TEN, null, "test", 200, new NotificationContext()));
         
-        assertThrows(NullPointerException.class, () -> {
-            NumberUtils.validateNumericalAttribute(BigDecimal.valueOf(1000.2), Integer.parseInt("50"), null, Integer.parseInt("500"), new NotificationContext());
-        });
+        assertThrows(NullPointerException.class, () -> NumberUtils.validateNumericalAttribute(BigDecimal.valueOf(1000.2), Integer.parseInt("50"), null, Integer.parseInt("500"), new NotificationContext()));
         
-        assertThrows(NullPointerException.class, () -> {
-            NumberUtils.validateNumericalAttribute(BigDecimal.valueOf(100.2), Integer.parseInt("50"), "test", null, new NotificationContext());
-        });
+        assertThrows(NullPointerException.class, () -> NumberUtils.validateNumericalAttribute(BigDecimal.valueOf(100.2), Integer.parseInt("50"), "test", null, new NotificationContext()));
         
-        Exception nullException = assertThrows(NullPointerException.class, () -> {
-            NumberUtils.validateNumericalAttribute(BigDecimal.TWO, Integer.parseInt("50"), "test", 300, null);
-        });
+        Exception nullException = assertThrows(NullPointerException.class, () -> NumberUtils.validateNumericalAttribute(BigDecimal.TWO, Integer.parseInt("50"), "test", 300, null));
 
         assertEquals(expectedMsg, nullException.getMessage());
     }
@@ -71,9 +63,7 @@ class NumberUtilsTest {
     void shouldThrowException_WhenSomeAttributeIsNull_InValidateExpirationDate() {
         String expectedMsgForNull = "Property name and notification object mustn't be null. Verify these parameters.";
 
-        Exception nullException = assertThrows(NullPointerException.class, () -> {
-            NumberUtils.validateExpirationDate(LocalDate.of(2027, 3, 3),null, null);
-        });
+        Exception nullException = assertThrows(NullPointerException.class, () -> NumberUtils.validateExpirationDate(LocalDate.of(2027, 3, 3),null, null));
         
         assertEquals(expectedMsgForNull, nullException.getMessage());
         

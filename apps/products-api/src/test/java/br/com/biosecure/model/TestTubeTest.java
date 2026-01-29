@@ -36,15 +36,11 @@ class TestTubeTest {
 
     @Test
     void shouldThrowException_WhenPhysicalDimensionsIsInvalid() {
-        InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> {
-            TestTubeTestBuilder.aTestTube().withDiameterMm(0).withHeightMm(0).build();
-        });
+        InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> TestTubeTestBuilder.aTestTube().withDiameterMm(0).withHeightMm(0).build());
 
         assertEquals("[height (mm), diameter (mm)]", exception.getInvalidAttribute());
         
-        InvalidProductAttributeException exception2 = assertThrows(InvalidProductAttributeException.class, () -> {
-            TestTubeTestBuilder.aTestTube().withDiameterMm(1000).withHeightMm(1000).build();
-        });
+        InvalidProductAttributeException exception2 = assertThrows(InvalidProductAttributeException.class, () -> TestTubeTestBuilder.aTestTube().withDiameterMm(1000).withHeightMm(1000).build());
 
         assertEquals("[height (mm), diameter (mm)]", exception2.getInvalidAttribute());
     }
@@ -55,20 +51,16 @@ class TestTubeTest {
         
         String expectedMessage2 = "SECURITY WARNING: Flat bottoms concentrate the tension. RCF greater than 10.000g is uncommon for flat bottoms. Verify the specifications";
 
-        BioSecurityException exception = assertThrows(BioSecurityException.class, () -> {
-            TestTubeTestBuilder.aTestTube()
-                .withMaterial(Material.BOROSILICATE_GLASS)
-                .withMaxRCF(5001)
-                .build();
-        });
+        BioSecurityException exception = assertThrows(BioSecurityException.class, () -> TestTubeTestBuilder.aTestTube()
+            .withMaterial(Material.BOROSILICATE_GLASS)
+            .withMaxRCF(5001)
+            .build());
         
-        BioSecurityException exception2 = assertThrows(BioSecurityException.class, () -> {
-            TestTubeTestBuilder.aTestTube()
-                .withMaterial(Material.PC)
-                .withBottomType(BottomType.FLAT)
-                .withMaxRCF(10001)
-                .build();
-        });
+        BioSecurityException exception2 = assertThrows(BioSecurityException.class, () -> TestTubeTestBuilder.aTestTube()
+            .withMaterial(Material.PC)
+            .withBottomType(BottomType.FLAT)
+            .withMaxRCF(10001)
+            .build());
 
         assertEquals(expectedMessage, exception.getMessage());
         assertEquals(expectedMessage2, exception2.getMessage());
@@ -93,13 +85,9 @@ class TestTubeTest {
 
     @Test
     void shouldThrowException_WhenCalculateNominalCapacity_GivenInvalidPhysicalDimensions() {
-        InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> {
-            TestTube.calculateNominalCapacity(0, 0);
-        });
+        InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> TestTube.calculateNominalCapacity(0, 0));
         
-        InvalidProductAttributeException exception2 = assertThrows(InvalidProductAttributeException.class, () -> {
-            TestTube.calculateNominalCapacity(1000, 1000);
-        });
+        InvalidProductAttributeException exception2 = assertThrows(InvalidProductAttributeException.class, () -> TestTube.calculateNominalCapacity(1000, 1000));
 
         assertEquals("[diameter (mm), height (mm)]", exception.getInvalidAttribute());
         assertEquals(exception.getInvalidAttribute(), exception2.getInvalidAttribute());

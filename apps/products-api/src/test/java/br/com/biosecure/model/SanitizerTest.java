@@ -32,17 +32,13 @@ class SanitizerTest {
     @Test
     void shouldThrowException_WhenProductAttributeIsInvalid() {
         
-        InvalidProductAttributeException phException = assertThrows(InvalidProductAttributeException.class, () -> {
-            SanitizerTestBuilder.aSanitizer()
-            .withPhLevel(-1)
-            .build();
-        });
+        InvalidProductAttributeException phException = assertThrows(InvalidProductAttributeException.class, () -> SanitizerTestBuilder.aSanitizer()
+        .withPhLevel(-1)
+        .build());
         
-        InvalidProductAttributeException phException2 = assertThrows(InvalidProductAttributeException.class, () -> {
-            SanitizerTestBuilder.aSanitizer()
-            .withPhLevel(15)
-            .build();
-        });
+        InvalidProductAttributeException phException2 = assertThrows(InvalidProductAttributeException.class, () -> SanitizerTestBuilder.aSanitizer()
+        .withPhLevel(15)
+        .build());
 
         assertEquals("ph level", phException.getInvalidAttribute());
         assertEquals("ph level", phException2.getInvalidAttribute());

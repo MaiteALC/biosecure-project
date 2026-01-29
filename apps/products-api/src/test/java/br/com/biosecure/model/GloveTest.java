@@ -26,13 +26,9 @@ class GloveTest {
 
     @Test
     void shouldThrowException_WhenThicknessIsInvalid() {
-        InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> {
-            GloveTestBuilder.aGlove().withThicknessMils(2).build();
-        });
+        InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> GloveTestBuilder.aGlove().withThicknessMils(2).build());
 
-        InvalidProductAttributeException exception2 = assertThrows(InvalidProductAttributeException.class, () -> {
-            GloveTestBuilder.aGlove().withThicknessMils(11).build();
-        });
+        InvalidProductAttributeException exception2 = assertThrows(InvalidProductAttributeException.class, () -> GloveTestBuilder.aGlove().withThicknessMils(11).build());
 
         assertEquals("thickness (mils)", exception.getInvalidAttribute());
         assertEquals(exception.getInvalidAttribute(), exception2.getInvalidAttribute());

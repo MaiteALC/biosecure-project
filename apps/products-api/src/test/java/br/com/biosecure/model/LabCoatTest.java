@@ -29,13 +29,9 @@ class LabCoatTest {
 
     @Test
     void shouldThrowException_WhenGrammageIsInvalid() {
-        InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> {
-            LabCoatTestBuilder.aLabCoat().withGrammage(19).build();
-        });
+        InvalidProductAttributeException exception = assertThrows(InvalidProductAttributeException.class, () -> LabCoatTestBuilder.aLabCoat().withGrammage(19).build());
 
-        InvalidProductAttributeException exception2 = assertThrows(InvalidProductAttributeException.class, () -> {
-            LabCoatTestBuilder.aLabCoat().withGrammage(351).build();
-        });
+        InvalidProductAttributeException exception2 = assertThrows(InvalidProductAttributeException.class, () -> LabCoatTestBuilder.aLabCoat().withGrammage(351).build());
 
         assertEquals(exception.getInvalidAttribute(), exception2.getInvalidAttribute());
 
