@@ -44,4 +44,11 @@ public class CnaeTest {
         assertTrue(Cnae.isAllowedCnae(new Cnae(valid, "test description").getFormattedCode()));
         assertTrue(Cnae.isAllowedCnae(valid));
     }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {"    ",  "sdchsfhwig", "2372747576747", "12.123.123-0001/00"})
+    public void shouldThrowException_WhenCnaeIsInInvalidFormat(String cnaeNum) {
+        assertThrows(IllegalArgumentException.class, () -> new Cnae(cnaeNum, "test description"));
+    }
 }
