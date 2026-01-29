@@ -10,10 +10,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
-public class NumberUtilsTest {
+class NumberUtilsTest {
     
     @Test
-    public void shouldValidatedCorrectly() {
+    void shouldValidatedCorrectly() {
         NotificationContext notificationContext = new NotificationContext();
 
         NumberUtils.validateNumericalAttribute(20, 2, "test", 25, notificationContext);
@@ -24,7 +24,7 @@ public class NumberUtilsTest {
     }
 
     @Test
-    public void shouldAddErrorsCorrectly() {
+    void shouldAddErrorsCorrectly() {
         NotificationContext notificationContext = new NotificationContext();
 
         NumberUtils.validateNumericalAttribute(0.2, 1.3, "test", 2.5, notificationContext);
@@ -43,7 +43,7 @@ public class NumberUtilsTest {
     }
 
     @Test
-    public void shouldThrowException_WhenSomeAttributeIsNull_InValidateNumericalAttribute() {
+    void shouldThrowException_WhenSomeAttributeIsNull_InValidateNumericalAttribute() {
         String expectedMsg = "Min/max value, property name and notification object mustn't be null! Verify these parameters.";
 
         NumberUtils.validateNumericalAttribute(null, BigDecimal.valueOf(10000000L), "test", BigDecimal.valueOf(2000000L), new NotificationContext());
@@ -68,7 +68,7 @@ public class NumberUtilsTest {
     }
 
     @Test
-    public void shouldThrowException_WhenSomeAttributeIsNull_InValidateExpirationDate() {
+    void shouldThrowException_WhenSomeAttributeIsNull_InValidateExpirationDate() {
         String expectedMsgForNull = "Property name and notification object mustn't be null. Verify these parameters.";
 
         Exception nullException = assertThrows(NullPointerException.class, () -> {

@@ -7,10 +7,10 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ErrorAggregatorTest {
+class ErrorAggregatorTest {
 
     @Test
-    public void shouldVerifyNullsCorrectly() {
+    void shouldVerifyNullsCorrectly() {
         Optional<ValidationException> exception = ErrorAggregator.verifyNull(null, "test");
 
         assertTrue(exception.isPresent());
@@ -22,7 +22,7 @@ public class ErrorAggregatorTest {
     }
 
     @Test
-    public void shouldProcessNullsCorrectly() {
+    void shouldProcessNullsCorrectly() {
         NotificationContext notificationContext = new NotificationContext();
 
         ErrorAggregator.aggregateValidationExceptions(

@@ -8,12 +8,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-public class StringUtilsTest {
+class StringUtilsTest {
     
     @ParameterizedTest
     @NullAndEmptySource
     @ValueSource(strings = {" ", "\t", "\n", "   "})
-    public void shouldRejectInvalidStrings(String invalidInput) {
+    void shouldRejectInvalidStrings(String invalidInput) {
         NotificationContext notification = new NotificationContext();
         
         StringUtils.validateString(invalidInput, "Test", true, notification);
@@ -24,7 +24,7 @@ public class StringUtilsTest {
     
     @ParameterizedTest
     @ValueSource(strings = {"Camily", "A", "Valid String", "123"})
-    public void shouldAcceptValidStrings(String validInput) {
+    void shouldAcceptValidStrings(String validInput) {
         NotificationContext notification = new NotificationContext();
         
         StringUtils.validateString(validInput, "Test", true, notification);
@@ -34,7 +34,7 @@ public class StringUtilsTest {
     
     @ParameterizedTest
     @ValueSource(strings = {"Camily", "AB", "String", "123"})
-    public void shouldAcceptValidStrings_WhenLengthIsDelimited(String validInput) {
+    void shouldAcceptValidStrings_WhenLengthIsDelimited(String validInput) {
         NotificationContext notification = new NotificationContext();
         
         StringUtils.validateString(validInput, "Test (only max length)", 10, true, notification);
@@ -53,7 +53,7 @@ public class StringUtilsTest {
     @ParameterizedTest
     @NullAndEmptySource
     @ValueSource(strings = {"Ana Laura", "LMNOPQ", "String", "123456"})
-    public void shouldRejectInvalidStrings_WhenLengthIsDelimited(String invalidInput) {
+    void shouldRejectInvalidStrings_WhenLengthIsDelimited(String invalidInput) {
         NotificationContext notification = new NotificationContext();
         NotificationContext notification2 = new NotificationContext();
         
@@ -71,7 +71,7 @@ public class StringUtilsTest {
     @ParameterizedTest
     @NullAndEmptySource
     @ValueSource(strings = {"test1@gmail.com", "test2@yahoo.com", "test3@hotmail.com", "test5@outlook.com", "test6@live.com", "not an email", "@p"} )
-    public void shouldRejectInvalidEmails(String invalidEmail) {
+    void shouldRejectInvalidEmails(String invalidEmail) {
         NotificationContext notification = new NotificationContext();
 
         StringUtils.validateCorporateEmail(invalidEmail, notification);
@@ -82,7 +82,7 @@ public class StringUtilsTest {
     
     @ParameterizedTest
     @ValueSource(strings = {"test1@oracle.com", "test2@biosecure.com.br", "test3@microsoft.net"} )
-    public void shouldAcceptValidEmails(String validEmail) {
+    void shouldAcceptValidEmails(String validEmail) {
         NotificationContext notification = new NotificationContext();
 
         StringUtils.validateCorporateEmail(validEmail, notification);
