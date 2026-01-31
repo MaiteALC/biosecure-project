@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 @Getter
 public abstract class SampleContainer extends  Product {
-    protected final Material materialType;
+    private final Material materialType;
     private final ClosingMethod closingMethod;
     private final SterilizationMethod sterilizationMethod;
 
