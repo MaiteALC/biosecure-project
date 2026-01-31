@@ -3,22 +3,27 @@ package br.com.biosecure.model;
 import br.com.biosecure.utils.ErrorAggregator;
 import br.com.biosecure.utils.NumberUtils;
 import br.com.biosecure.utils.StringUtils;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.util.List;
 
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Sanitizer extends Product {
-    private final List<Ingredient> composition;
-    private final PhysicalForm physicalForm;
-    private final String registryNumber;
-    private final String useIndications;
-    private final double phLevel;
-    private final boolean requiresDilution;
-    private final double densityGramsPerMilliLiter;
-    private final boolean flammable;
-    private final Ingredient.ChemicalFamily mainChemicalFamily;
+    @OneToMany(mappedBy = "sanitizer", cascade = CascadeType.ALL)
+    private List<Ingredient> composition;
+    @Enumerated(EnumType.STRING)
+    private PhysicalForm physicalForm;
+    private String registryNumber;
+    private String useIndications;
+    private double phLevel;
+    private boolean requiresDilution;
+    private double densityGramsPerMilliLiter;
+    private boolean flammable;
+    @Enumerated(EnumType.STRING)
+    private Ingredient.ChemicalFamily mainChemicalFamily;
 
     private Sanitizer(SanitizerBuilder builder) {
         super(builder);

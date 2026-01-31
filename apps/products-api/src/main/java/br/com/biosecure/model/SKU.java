@@ -1,10 +1,17 @@
 package br.com.biosecure.model;
 
+import jakarta.persistence.Embeddable;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Embeddable
+@Getter
+@NoArgsConstructor
 public class SKU {
-    private final String code;
+    private String skuCode;
 
     public SKU(Product product) {
-        this.code = generateFor(product);
+        this.skuCode = generateFor(product);
     }
 
     private String generateFor(Product product) {
@@ -165,10 +172,6 @@ public class SKU {
 
         SKU otherSku = (SKU) obj;
 
-        return code.equals(otherSku.code);
-    }
-
-    public String getSkuCode() {
-        return code;
+        return skuCode.equals(otherSku.skuCode);
     }
 }

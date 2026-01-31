@@ -3,19 +3,32 @@ package br.com.biosecure.model;
 import br.com.biosecure.utils.NumberUtils;
 import br.com.biosecure.utils.StringUtils;
 import br.com.biosecure.utils.NotificationContext;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import java.util.regex.Pattern;
 
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Ingredient {
-    private final String name;
-    private final String casNumber;
-    private final ChemicalFamily chemicalFamily;
-    private final double concentrationPercentual;
-    private final IngredientType type;
+    private String name;
+    private String casNumber;
+    @Enumerated(EnumType.STRING)
+    private ChemicalFamily chemicalFamily;
+    private double concentrationPercentual;
+    @Enumerated(EnumType.STRING)
+    private IngredientType type;
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
 
     private static final Pattern CAS_REGEX = Pattern.compile("^[0-9]{2,7}-[0-9]{2}-[0-9]$");
+
+    @ManyToOne
+    @JoinColumn(name = "sanitizer_id")
+    private Sanitizer sanitizer;
 
     public Ingredient(String name, String casNumber, ChemicalFamily chemicalFamily, double concentrationPercentual, IngredientType type) {
         NotificationContext notification = new NotificationContext();

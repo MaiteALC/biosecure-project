@@ -1,24 +1,33 @@
 package br.com.biosecure.model;
 
 import br.com.biosecure.utils.NumberUtils;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import java.util.ArrayList;
 
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class SampleBag extends SampleContainer {
-    private final FilterType filter;
-    private final boolean identificationTag;
-    private final boolean standUp;
-    private final double thicknessMm;
-    private final double widthMm;
-    private final double heightMm;
-    private final double capacityMilliLiters;
+    @Enumerated(EnumType.STRING)
+    private FilterType filter;
+    private boolean identificationTag;
+    private boolean standUp;
+    private double thicknessMm;
+    private double widthMm;
+    private double heightMm;
+    private double capacityMilliLiters;
 
     protected SampleBag(SampleBagBuilder builder) {
         super(builder);
 
-        validateSampleBagBioSafetyRules(super.getMaterialType());
+        validateSampleBagBioSafetyRules(builder.materialType);
 
         this.filter = builder.filter;
         this.identificationTag = builder.identificationTag;

@@ -1,15 +1,23 @@
 package br.com.biosecure.model;
 
 import br.com.biosecure.utils.StringUtils;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class FaceProtection extends PPE {
-    private final ProtectionType protectionType;
-    private final String standardRating;
-    private final boolean hasValve;
-    private final boolean antiFog;
+    @Enumerated(EnumType.STRING)
+    private ProtectionType protectionType;
+    private String standardRating;
+    private boolean hasValve;
+    private boolean antiFog;
 
     protected FaceProtection(FaceProtectionBuilder builder) {
         super(builder);

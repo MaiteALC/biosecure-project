@@ -2,16 +2,24 @@ package br.com.biosecure.model;
 
 import br.com.biosecure.utils.NumberUtils;
 import br.com.biosecure.utils.ErrorAggregator;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import lombok.*;
+
 import java.util.List;
 
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class LabCoat extends PPE {
-    private final FabricType fabricType;
-    private final int grammage;
-    private final CuffStyle cuffStyle;
-    private final CollarType collarType;
+    @Enumerated(EnumType.STRING)
+    private FabricType fabricType;
+    private int grammage;
+    @Enumerated(EnumType.STRING)
+    private CuffStyle cuffStyle;
+    @Enumerated(EnumType.STRING)
+    private CollarType collarType;
 
     private LabCoat(LabCoatBuilder builder) {
         super(builder);

@@ -1,16 +1,25 @@
 package br.com.biosecure.model;
 
 import br.com.biosecure.utils.ErrorAggregator;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-
+import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public abstract class SampleContainer extends  Product {
-    private final Material materialType;
-    private final ClosingMethod closingMethod;
-    private final SterilizationMethod sterilizationMethod;
+    @Enumerated(EnumType.STRING)
+    private Material materialType;
+    @Enumerated(EnumType.STRING)
+    private ClosingMethod closingMethod;
+    @Enumerated(EnumType.STRING)
+    private SterilizationMethod sterilizationMethod;
 
     protected SampleContainer(SampleContainerBuilder<?, ?> builder) {
         super(builder);

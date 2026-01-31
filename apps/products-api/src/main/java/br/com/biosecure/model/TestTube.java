@@ -3,23 +3,32 @@ package br.com.biosecure.model;
 import br.com.biosecure.utils.NotificationContext;
 import br.com.biosecure.utils.NumberUtils;
 import br.com.biosecure.utils.ErrorAggregator;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class TestTube extends SampleContainer {
-    private final int maxRCF;
-    private final BottomType bottomType;
-    private final boolean graduated;
-    private final CapColor capColor;
-    private final double diameterMm;
-    private final double heightMm;
-    private final double capacityMilliLiters;
+    private int maxRCF;
+    @Enumerated(EnumType.STRING)
+    private BottomType bottomType;
+    private boolean graduated;
+    @Enumerated(EnumType.STRING)
+    private CapColor capColor;
+    private double diameterMm;
+    private double heightMm;
+    private double capacityMilliLiters;
 
     public TestTube(TestTubeBuilder builder) {
         super(builder);

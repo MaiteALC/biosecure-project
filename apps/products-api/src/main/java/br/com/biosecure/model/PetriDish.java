@@ -2,19 +2,24 @@ package br.com.biosecure.model;
 
 import br.com.biosecure.utils.NotificationContext;
 import br.com.biosecure.utils.NumberUtils;
+import jakarta.persistence.Entity;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class PetriDish extends SampleContainer {
-    private final int divisionsNumber;
-    private final boolean grid;
-    private final boolean ventilated;
-    private final double diameterMm;
-    private final double heightMm;
-    private final double capacityMilliLiters;
+    private int divisionsNumber;
+    private boolean grid;
+    private boolean ventilated;
+    private double diameterMm;
+    private double heightMm;
+    private double capacityMilliLiters;
 
     public PetriDish(PetriDishBuilder builder) {
         super(builder);

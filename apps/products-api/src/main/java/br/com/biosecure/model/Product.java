@@ -1,24 +1,35 @@
 package br.com.biosecure.model;
 
-import br.com.biosecure.utils.NotificationContext;
+import br.com.biosecure.utils.*;
 import br.com.biosecure.utils.NumberUtils;
 import br.com.biosecure.utils.StringUtils;
-import br.com.biosecure.utils.ErrorAggregator;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import java.time.LocalDate;
+import java.util.Objects;
 
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public abstract class Product {
-    private final String name;
+    private String name;
     private double price;
+    @Embedded
     private SKU sku;
-    private final String manufacturer;
-    private final String batchNumber;
-    private final LocalDate expirationDate;
-    private final PackagingType packagingType;
-    private final MeasureUnit measureUnit;
-    private final double quantityPerPackage;
+    private String manufacturer;
+    private String batchNumber;
+    private LocalDate expirationDate;
+    @Enumerated(EnumType.STRING)
+    private PackagingType packagingType;
+    @Enumerated(EnumType.STRING)
+    private MeasureUnit measureUnit;
+    private double quantityPerPackage;
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long id;
 
     protected static final int MIN_NAMES_LENGTH = 2;
     protected static final int MAX_NAMES_LENGTH = 70;
@@ -164,6 +175,6 @@ public abstract class Product {
 
         Product obj = (Product) o;
 
-        return this.getSku().equals(obj.getSku()) && manufacturer.equals(obj.manufacturer) && name.equals(obj.name);
+        return Objects.equals(this.id, obj.id);
     }
 }

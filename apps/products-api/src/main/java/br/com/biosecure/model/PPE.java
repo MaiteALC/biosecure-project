@@ -1,14 +1,22 @@
 package br.com.biosecure.model;
 
 import br.com.biosecure.utils.StringUtils;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public abstract class PPE extends Product {
-    private final Size size;
-    private final String certificateOfApproval;
-    private final boolean disposable;
+    @Enumerated(EnumType.STRING)
+    private Size size;
+    private String certificateOfApproval;
+    private boolean disposable;
 
     protected PPE(PpeBuilder<?, ?> builder) {
         super(builder);

@@ -1,16 +1,24 @@
 package br.com.biosecure.model;
 
 import br.com.biosecure.utils.NumberUtils;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Glove extends PPE {
-    private final boolean powderFree;
-    private final boolean longBarrel;
-    private final GloveMaterial material;
-    private final boolean textured;
-    private final double thicknessMils;
+    private boolean powderFree;
+    private boolean longBarrel;
+    @Enumerated(EnumType.STRING)
+    private GloveMaterial material;
+    private boolean textured;
+    private double thicknessMils;
 
     private Glove(GloveBuilder builder) {
         super(builder);

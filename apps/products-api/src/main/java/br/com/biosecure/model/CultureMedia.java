@@ -3,23 +3,34 @@ package br.com.biosecure.model;
 import br.com.biosecure.utils.NotificationContext;
 import br.com.biosecure.utils.NumberUtils;
 import br.com.biosecure.utils.ErrorAggregator;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.OptionalDouble;
 
+@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class CultureMedia extends Product {
-    private final CultureMediaFinality finality;
-    private final StorageConditions storageConditions;
-    private final Presentation presentation;
-    private final boolean protectOfLight;
-    private final OptionalDouble preparationGramsPerLiter;
-    private final double finalPhLevel;
-    private final double quantityPerUnit;
-    private final QuantificationUnit quantificationUnit;
+    @Enumerated(EnumType.STRING)
+    private CultureMediaFinality finality;
+    @Enumerated(EnumType.STRING)
+    private StorageConditions storageConditions;
+    @Enumerated(EnumType.STRING)
+    private Presentation presentation;
+    private boolean protectOfLight;
+    private OptionalDouble preparationGramsPerLiter;
+    private double finalPhLevel;
+    private double quantityPerUnit;
+    @Enumerated(EnumType.STRING)
+    private QuantificationUnit quantificationUnit;
 
     private CultureMedia(CultureMediaBuilder builder) {
         super(builder);
