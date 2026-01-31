@@ -27,8 +27,6 @@ public class SampleBag extends SampleContainer {
     protected SampleBag(SampleBagBuilder builder) {
         super(builder);
 
-        validateSampleBagBioSafetyRules(builder.materialType);
-
         this.filter = builder.filter;
         this.identificationTag = builder.identificationTag;
         this.standUp = builder.standUp;
@@ -108,18 +106,20 @@ public class SampleBag extends SampleContainer {
                 throw new InvalidProductAttributeException(productNotification.getErrors());
             }
 
+            validateSampleBagBioSafetyRules(this.materialType);
+
             return new SampleBag(this);
         }
     }
     
-    private void validateSampleBagBioSafetyRules(Material material) {
+    private static void validateSampleBagBioSafetyRules(Material material) {
         if (material != Material.PE && material != Material.PP) {
             ArrayList<String> invalids = new ArrayList<>();
             
             invalids.add("Material");
             
             throw new BioSecurityException(
-                "Sample bags must be of flexible material (PE, PP). " + getMaterialType().getCommercialName() + " is rigid.", invalids
+                "Sample bags must be of flexible material (PE, PP). " + material.getCommercialName() + " is rigid.", invalids
             );
         }
     }
