@@ -111,6 +111,8 @@ public class TestTube extends SampleContainer {
                 throw new InvalidProductAttributeException(productNotification.getErrors());
             }
 
+            validateTestTubeBioSafetRules(this.materialType, this.bottomType, this.maxRCF);
+
             return new TestTube(this);
         }
     }
