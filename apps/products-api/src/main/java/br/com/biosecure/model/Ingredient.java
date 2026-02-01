@@ -86,13 +86,13 @@ public class Ingredient {
 
         int sum = 0;
         int multiplier = 1;
-        int verifierDigit = Integer.parseInt(String.valueOf(number.charAt(number.length()-1)));
+        int verifierDigit = number.charAt(number.length()-1) - '0';
 
         for (int i = number.length()-2; i >= 0; i--) {
             char c = number.charAt(i);
 
             if (c != '-') {
-                sum += Integer.parseInt(String.valueOf(c)) * multiplier;
+                sum += (c - '0') * multiplier;
                 multiplier++;
             }
         }
