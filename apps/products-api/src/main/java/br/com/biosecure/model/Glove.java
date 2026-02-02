@@ -4,10 +4,12 @@ import br.com.biosecure.utils.NumberUtils;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.Accessors;
 
 @Entity
+@Table(name = "TB_GLOVES")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Glove extends PPE {

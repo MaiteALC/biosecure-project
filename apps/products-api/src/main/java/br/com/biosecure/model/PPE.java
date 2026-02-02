@@ -4,12 +4,14 @@ import br.com.biosecure.utils.StringUtils;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(name = "TB_PPE")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public abstract class PPE extends Product {

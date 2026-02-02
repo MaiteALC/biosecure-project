@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
+@Table(name = "TB_PRODUCTS")
 @Inheritance(strategy = InheritanceType.JOINED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter

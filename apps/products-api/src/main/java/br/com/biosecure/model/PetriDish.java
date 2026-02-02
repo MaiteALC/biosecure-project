@@ -3,6 +3,7 @@ package br.com.biosecure.model;
 import br.com.biosecure.utils.NotificationContext;
 import br.com.biosecure.utils.NumberUtils;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @Entity
+@Table(name = "TB_PETRI_DISHES")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class PetriDish extends SampleContainer {

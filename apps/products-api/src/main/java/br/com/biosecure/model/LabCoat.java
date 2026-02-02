@@ -5,12 +5,14 @@ import br.com.biosecure.utils.ErrorAggregator;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.Accessors;
 
 import java.util.List;
 
 @Entity
+@Table(name = "TB_LAB_COATS")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class LabCoat extends PPE {

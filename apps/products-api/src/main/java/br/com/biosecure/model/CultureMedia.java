@@ -6,6 +6,7 @@ import br.com.biosecure.utils.ErrorAggregator;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.OptionalDouble;
 
 @Entity
+@Table(name = "TB_CULTURE_MEDIAS")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class CultureMedia extends Product {

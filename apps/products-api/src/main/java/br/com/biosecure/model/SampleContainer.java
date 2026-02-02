@@ -4,6 +4,7 @@ import br.com.biosecure.utils.ErrorAggregator;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 
 @Entity
+@Table(name = "TB_SAMPLE_CONTAINERS")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public abstract class SampleContainer extends  Product {

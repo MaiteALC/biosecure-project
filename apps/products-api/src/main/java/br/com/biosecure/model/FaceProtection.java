@@ -4,10 +4,12 @@ import br.com.biosecure.utils.StringUtils;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.Accessors;
 
 @Entity
+@Table(name = "TB_FACE_PROTECTIONS")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class FaceProtection extends PPE {

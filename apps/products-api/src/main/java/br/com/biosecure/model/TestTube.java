@@ -6,6 +6,7 @@ import br.com.biosecure.utils.ErrorAggregator;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "TB_TEST_TUBES")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class TestTube extends SampleContainer {
