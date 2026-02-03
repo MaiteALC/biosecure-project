@@ -2,14 +2,19 @@ package br.com.biosecure.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Transient;
 import lombok.Getter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+@Embeddable
 @Getter
 public class Cnae {
-     private final String unformattedCode;
+    @Transient
+    private final String unformattedCode;
+    @Transient
     private String description;
     private final String formattedCode;
 
