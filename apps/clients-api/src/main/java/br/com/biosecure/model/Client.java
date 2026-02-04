@@ -27,7 +27,7 @@ public class  Client {
     private Cnpj cnpj;
     @ElementCollection
     @CollectionTable(
-            name = "CLIENTS_ADDRESSES",
+            name = "CLIENT_ADDRESSES",
             joinColumns = @JoinColumn(name = "client_id")
     )
     private Set<Address> addresses;
