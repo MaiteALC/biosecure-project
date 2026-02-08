@@ -24,7 +24,7 @@ public class Address {
     boolean deliveryAddress;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "client-id")
+    @JoinColumn(name = "client_id")
     @Setter
     private Client client;
 
