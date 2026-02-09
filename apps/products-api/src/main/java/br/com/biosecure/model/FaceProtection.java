@@ -9,7 +9,7 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 @Entity
-@Table(name = "TB_FACE_PROTECTIONS")
+@Table(name = "face_protections")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class FaceProtection extends PPE {

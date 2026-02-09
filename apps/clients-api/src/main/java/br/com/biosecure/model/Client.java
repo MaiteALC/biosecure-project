@@ -16,7 +16,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "TB_CLIENTS")
+@Table(name = "clients")
 @NoArgsConstructor
 @Getter
 public class Client {
@@ -29,7 +29,7 @@ public class Client {
     private Cnpj cnpj;
     @ElementCollection
     @CollectionTable(
-            name = "CLIENT_ADDRESSES",
+            name = "client_addresses",
             joinColumns = @JoinColumn(name = "client_id")
     )
     private Set<Address> addresses;

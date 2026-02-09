@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 import java.util.ArrayList;
 
 @Entity
-@Table(name = "TB_SAMPLE_BAGS")
+@Table(name = "sample_bags")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class SampleBag extends SampleContainer {

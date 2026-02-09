@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.OptionalDouble;
 
 @Entity
-@Table(name = "TB_CULTURE_MEDIAS")
+@Table(name = "culture_medias")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class CultureMedia extends Product {

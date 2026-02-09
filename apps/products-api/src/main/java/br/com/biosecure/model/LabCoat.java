@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 import java.util.List;
 
 @Entity
-@Table(name = "TB_LAB_COATS")
+@Table(name = "lab_coats")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class LabCoat extends PPE {

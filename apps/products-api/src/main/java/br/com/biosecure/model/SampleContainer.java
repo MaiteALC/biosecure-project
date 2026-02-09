@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 import java.util.ArrayList;
 
 @Entity
-@Table(name = "TB_SAMPLE_CONTAINERS")
+@Table(name = "sample_containers")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public abstract class SampleContainer extends  Product {

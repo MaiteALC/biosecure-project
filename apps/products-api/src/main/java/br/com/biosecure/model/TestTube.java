@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "TB_TEST_TUBES")
+@Table(name = "test_tubes")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class TestTube extends SampleContainer {

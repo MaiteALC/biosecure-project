@@ -9,7 +9,7 @@ import lombok.*;
 import java.util.regex.Pattern;
 
 @Entity
-@Table(name = "TB_INGREDIENTS")
+@Table(name = "ingredients")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Ingredient {

@@ -9,7 +9,7 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 @Entity
-@Table(name = "TB_GLOVES")
+@Table(name = "gloves")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Glove extends PPE {

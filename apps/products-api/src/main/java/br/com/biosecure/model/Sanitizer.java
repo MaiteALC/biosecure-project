@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 import java.util.List;
 
 @Entity
-@Table(name = "TB_SANITIZERS")
+@Table(name = "sanitizers")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class Sanitizer extends Product {

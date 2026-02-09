@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 @Entity
-@Table(name = "TB_PETRI_DISHES")
+@Table(name = "petri_dishes")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class PetriDish extends SampleContainer {

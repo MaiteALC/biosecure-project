@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class FinancialDataBuilder {
-    private LocalDate startDateActivities = LocalDate.of(2020, 1, 1);
+    private LocalDate activitiesStartDate = LocalDate.of(2020, 1, 1);
     private Cnae cnae = new Cnae("7120-1/00", "Technical tests and analyses");
     private BigDecimal shareCapital = BigDecimal.valueOf(6_000_000);
     private BigDecimal totalCredit;
@@ -15,8 +15,8 @@ public class FinancialDataBuilder {
     private Cnpj cnpj = new Cnpj("06.990.590/0001-23");
     private String registrationStatus = "ATIVA";
 
-    public FinancialDataBuilder withStartDateActivities(LocalDate startDateActivities) {
-        this.startDateActivities = startDateActivities;
+    public FinancialDataBuilder withActivitiesStartDate(LocalDate activitiesStartDate) {
+        this.activitiesStartDate = activitiesStartDate;
         return this;
     }
 
@@ -55,7 +55,7 @@ public class FinancialDataBuilder {
     }
 
     public FinancialData build() {
-         FinancialData fd = new FinancialData(startDateActivities, cnae, cnpj, registrationStatus, shareCapital);
+         FinancialData fd = new FinancialData(activitiesStartDate, cnae, cnpj, registrationStatus, shareCapital);
 
          if (totalCredit != null) {
             fd.updateTotalCredit(totalCredit);

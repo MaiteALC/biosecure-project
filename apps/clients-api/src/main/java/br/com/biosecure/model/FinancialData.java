@@ -12,11 +12,11 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "TB_CLIENT_FINANCIAL_DATA")
+@Table(name = "financial_data")
 @NoArgsConstructor
 @Getter
 public class FinancialData {
-    private LocalDate startDateActivities;
+    private LocalDate activitiesStartDate;
     @Embedded
     @AttributeOverride(name = "formattedCode", column = @Column(name = "cnae_number"))
     private Cnae cnae;
@@ -33,10 +33,10 @@ public class FinancialData {
     @MapsId
     private Client client;
 
-    public FinancialData(LocalDate startDateActivities, Cnae cnae, Cnpj cnpj, String registrationStatus, BigDecimal shareCapital) {
-        validateInstantiationRules(shareCapital, cnpj, cnae, startDateActivities, registrationStatus);
+    public FinancialData(LocalDate activitiesStartDate, Cnae cnae, Cnpj cnpj, String registrationStatus, BigDecimal shareCapital) {
+        validateInstantiationRules(shareCapital, cnpj, cnae, activitiesStartDate, registrationStatus);
 
-        this.startDateActivities = startDateActivities;
+        this.activitiesStartDate = activitiesStartDate;
         this.cnae = cnae;
         this.cnpj = cnpj;
         this.shareCapital = shareCapital;
@@ -72,7 +72,7 @@ public class FinancialData {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Financial Data = ");
-        return sb.append("[start date activity=").append(startDateActivities)
+        return sb.append("[start date activity=").append(activitiesStartDate)
                 .append(", economic activity code (CNAE)=").append(cnae)
                 .append(", social capital=R$").append(shareCapital.toString())
                 .append(", total credit=R$").append(totalCredit.toString())

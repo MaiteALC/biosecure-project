@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "TB_PPE")
+@Table(name = "ppes")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public abstract class PPE extends Product {
