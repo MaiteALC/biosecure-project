@@ -2,6 +2,7 @@ package br.com.biosecure.dto;
 
 import br.com.biosecure.model.Cnae;
 import br.com.biosecure.model.Cnpj;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
@@ -18,5 +19,8 @@ public record FinancialDataInputDto(
         Cnpj cnpj,
 
         @NotNull(message = "Share capital is required")
-        BigDecimal shareCapital
+        BigDecimal shareCapital,
+
+        @NotBlank(message = "Registration status is required")
+        String registrationStatus
 ) {}
