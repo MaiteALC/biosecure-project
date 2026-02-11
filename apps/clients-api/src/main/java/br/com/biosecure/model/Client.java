@@ -21,7 +21,7 @@ import java.util.UUID;
 @Getter
 public class Client {
 
-    @Column(name = "corporate_name", nullable = false, length = 150)
+    @Column(name = "corporate_name", nullable = false, length = 100)
     private String corporateName;
 
     @Id @GeneratedValue
@@ -43,7 +43,7 @@ public class Client {
     )
     private Set<Address> addresses;
 
-    @Column(nullable = false, length = 100)
+    @Column(nullable = false, length = 60)
     private String email;
 
     @OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
@@ -52,7 +52,7 @@ public class Client {
     private LocalDate registrationDate;
 
     private static final  int MIN_NAME_LENGTH = 2;
-    private static final int MAX_NAME_LENGTH = 150;
+    private static final int MAX_NAME_LENGTH = 100;
 
     private Client(String corporateName, Cnpj cnpj, Set<Address> addresses, String email, FinancialData financialData) {
         this.corporateName = corporateName;

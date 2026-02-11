@@ -27,7 +27,7 @@ class ClientTest {
 
     @ParameterizedTest
     @NullAndEmptySource
-    @ValueSource(strings = {"     ", "A", "1", "loooooooooooooooooooooooooooooooooooooooooooooooooong name"})
+    @ValueSource(strings = {"     ", "A", "1", "looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong name"})
     void shouldThrowException_WhenNameIsInvalid(String invalidName) {
         InvalidClientAttributeException exception = assertThrows(InvalidClientAttributeException.class,
             () -> ClientBuilder.aClient().withCorporateName(invalidName).build()
