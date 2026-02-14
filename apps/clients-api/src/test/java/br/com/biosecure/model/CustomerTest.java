@@ -3,7 +3,7 @@ package br.com.biosecure.model;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import br.com.biosecure.builders.ClientBuilder;
+import br.com.biosecure.builders.CustomerBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -12,14 +12,14 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.util.HashSet;
 import java.util.Set;
 
-class ClientTest {
+class CustomerTest {
 
     @ParameterizedTest
     @NullAndEmptySource
     @ValueSource(strings = {"    ", "test2@gmail.com", "test2@hotmail.com", "test3@outlook.com", "test4@live.com", "test5@yahoo.com", "random text"})
     void shouldThrowException_WhenEmailIsInvalid(String invalidEmail) {
-        InvalidClientAttributeException exception = assertThrows(InvalidClientAttributeException.class,
-            () -> ClientBuilder.aClient().withEmail(invalidEmail).build()
+        InvalidCustomerAttributeException exception = assertThrows(InvalidCustomerAttributeException.class,
+            () -> CustomerBuilder.aCustomer().withEmail(invalidEmail).build()
         );
 
         assertEquals("email", exception.getInvalidAttribute());
@@ -29,8 +29,8 @@ class ClientTest {
     @NullAndEmptySource
     @ValueSource(strings = {"     ", "A", "1", "looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong name"})
     void shouldThrowException_WhenNameIsInvalid(String invalidName) {
-        InvalidClientAttributeException exception = assertThrows(InvalidClientAttributeException.class,
-            () -> ClientBuilder.aClient().withCorporateName(invalidName).build()
+        InvalidCustomerAttributeException exception = assertThrows(InvalidCustomerAttributeException.class,
+            () -> CustomerBuilder.aCustomer().withCorporateName(invalidName).build()
         );
 
         assertEquals("name", exception.getInvalidAttribute());
@@ -40,7 +40,7 @@ class ClientTest {
     void shouldThrowException_WhenAddressIsInvalid() {
         Set<Address> addresses = new HashSet<>();
 
-        InvalidClientAttributeException exception = assertThrows(InvalidClientAttributeException.class, () -> ClientBuilder.aClient()
+        InvalidCustomerAttributeException exception = assertThrows(InvalidCustomerAttributeException.class, () -> CustomerBuilder.aCustomer()
                 .withAddress(addresses)
                 .build()
         );

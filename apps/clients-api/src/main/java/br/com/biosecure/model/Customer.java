@@ -16,10 +16,10 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-@Table(name = "clients", schema = "sales")
+@Table(name = "customers", schema = "sales")
 @NoArgsConstructor
 @Getter
-public class Client {
+public class Customer {
 
     @Column(name = "corporate_name", nullable = false, length = 100)
     private String corporateName;
@@ -37,16 +37,16 @@ public class Client {
 
     @ElementCollection
     @CollectionTable(
-            name = "client_addresses",
+            name = "customer_addresses",
             schema = "sales",
-            joinColumns = @JoinColumn(name = "client_id")
+            joinColumns = @JoinColumn(name = "customer_id")
     )
     private Set<Address> addresses;
 
     @Column(nullable = false, length = 60)
     private String email;
 
-    @OneToOne(mappedBy = "client", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     private FinancialData financialData;
 
     private LocalDate registrationDate;
@@ -54,7 +54,7 @@ public class Client {
     private static final  int MIN_NAME_LENGTH = 2;
     private static final int MAX_NAME_LENGTH = 100;
 
-    private Client(String corporateName, Cnpj cnpj, Set<Address> addresses, String email, FinancialData financialData) {
+    private Customer(String corporateName, Cnpj cnpj, Set<Address> addresses, String email, FinancialData financialData) {
         this.corporateName = corporateName;
         this.cnpj = cnpj;
         this.addresses = addresses;
@@ -63,20 +63,20 @@ public class Client {
         this.registrationDate = LocalDate.now();
     }
 
-    public static ClientBuilder builder() {
-        return new ClientBuilder();
+    public static CustomerBuilder builder() {
+        return new CustomerBuilder();
     }
 
     @Setter
     @Accessors(chain = true, fluent = true)
-    public static final class ClientBuilder {
+    public static final class CustomerBuilder {
         private String corporateName;
         private Cnpj cnpj;
         private Set<Address> addresses;
         private String email;
         private FinancialData financialData;
 
-        public Client build() {
+        public Customer build() {
             NotificationContext clientNotification = new NotificationContext();
 
             StringUtils.validateString(corporateName, MIN_NAME_LENGTH, "name", MAX_NAME_LENGTH, true, clientNotification);
@@ -91,14 +91,14 @@ public class Client {
             ErrorAggregator.verifyNull(cnpj, "CNPJ", clientNotification);
 
             if (clientNotification.hasErrors()) {
-                throw new InvalidClientAttributeException(clientNotification.getErrors());
+                throw new InvalidCustomerAttributeException(clientNotification.getErrors());
             }
 
-            Client client = new Client(corporateName, cnpj, addresses, email, financialData);
+            Customer customer = new Customer(corporateName, cnpj, addresses, email, financialData);
 
-            client.getFinancialData().setClient(client);
+            customer.getFinancialData().setCustomer(customer);
 
-            return client;
+            return customer;
         }
     }
 
@@ -111,14 +111,14 @@ public class Client {
             return false;
         }
     
-        Client other = (Client) obj;
+        Customer other = (Customer) obj;
 
         return id.equals(other.id) && cnpj.equals(other.cnpj);
     }
 
     @Override
     public String toString() {
-        return new StringBuilder("Client = ")
+        return new StringBuilder("Customer = ")
                 .append("[corporate name=").append(corporateName)
                 .append("uuid=").append(id)
                 .append(", CNPJ=").append(cnpj)
@@ -135,7 +135,7 @@ public class Client {
         StringUtils.validateString(newName, MIN_NAME_LENGTH, "corporate name", MAX_NAME_LENGTH, true, notification);
 
         if (notification.hasErrors()) {
-            throw new InvalidClientAttributeException(notification.getErrors());
+            throw new InvalidCustomerAttributeException(notification.getErrors());
         }
 
         this.corporateName = newName;
@@ -147,7 +147,7 @@ public class Client {
         StringUtils.validateCorporateEmail(newEmail, notificationContext);
 
         if (notificationContext.hasErrors()) {
-            throw new InvalidClientAttributeException(notificationContext.getErrors());
+            throw new InvalidCustomerAttributeException(notificationContext.getErrors());
         }
 
         this.email = newEmail;

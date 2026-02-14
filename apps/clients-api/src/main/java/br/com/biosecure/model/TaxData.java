@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
-@Table(name = "client_tax_data", schema = "sales")
+@Table(name = "customer_tax_data", schema = "sales")
 public class TaxData {
 
     @Column(name = "last_search_date", nullable = false)
@@ -37,10 +37,10 @@ public class TaxData {
     private Cnae cnae;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "customer_id")
     @MapsId
     @Setter
-    private Client client;
+    private Customer customer;
 
     @Id
     private UUID clientId;

@@ -1,21 +1,27 @@
 package br.com.biosecure.dto;
 
 import br.com.biosecure.model.Cnpj;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDate;
+import java.util.Set;
 
-public record ClientSummaryDto (
+public record CustomerInputDto(
         @NotBlank(message = "Corporate name is required")
         String corporateName,
-
-        @NotBlank(message = "Email is required")
-        String email,
 
         @NotNull(message = "CNPJ number is required")
         Cnpj cnpj,
 
-        @NotNull(message = "Registration date is required")
-        LocalDate registrationDate
+        @NotBlank(message = "Email is required")
+        String email,
+
+        @Valid
+        @NotNull
+        Set<AddressInputDto> addresses,
+
+        @Valid
+        @NotNull
+        FinancialDataInputDto financialData
 ) {}

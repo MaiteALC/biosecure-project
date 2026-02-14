@@ -12,7 +12,7 @@ import java.math.RoundingMode;
 import java.util.UUID;
 
 @Entity
-@Table(name = "client_financial_data", schema = "sales")
+@Table(name = "customer_financial_data", schema = "sales")
 @NoArgsConstructor
 @Getter
 public class FinancialData {
@@ -34,13 +34,13 @@ public class FinancialData {
     private BigDecimal utilizedCredit = BigDecimal.ZERO;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "client_id")
+    @JoinColumn(name = "customer_id")
     @Setter
     @MapsId
-    private Client client;
+    private Customer customer;
 
     @Id
-    private UUID clientId;
+    private UUID customerId;
 
     public FinancialData(Cnpj cnpj, BigDecimal shareCapital) {
         validateInstantiationRules(shareCapital, cnpj);
