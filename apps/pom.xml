@@ -56,7 +56,7 @@
 
 	<modules>
         <module>commons-lib</module>
-        <module>clients-api</module>
+        <module>customers-api</module>
         <module>products-api</module>
     </modules>
 

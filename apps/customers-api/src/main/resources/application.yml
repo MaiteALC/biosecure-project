@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: BioSecure - Clients API
+    name: BioSecure - Customers API
 
   datasource:
     driver-class-name: org.postgresql.Driver
