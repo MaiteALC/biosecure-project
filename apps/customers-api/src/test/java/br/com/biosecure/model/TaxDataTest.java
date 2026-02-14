@@ -29,21 +29,24 @@ class TaxDataTest {
     @ParameterizedTest
     @ValueSource(strings = {"9602-5/01", "47.81-4/00", "73.19002", "4399-101", "45307/03"})
     void shouldThrowException_WhenCnaeNumberIsUnallowed(String cnaeNum) {
-        assertThrows(InvalidTaxDataException.class, () -> TaxDataTestBuilder.aFiscalData().withCnae(new Cnae(cnaeNum, "test description")).build());
+        assertThrows(InvalidTaxDataException.class, () -> TaxDataTestBuilder.aTaxData().withCnae(new Cnae(cnaeNum, "test description")).build());
     }
 
 
     @Test
     void shouldThrowException_WhenDateIsInvalid() {
-        InvalidTaxDataException exception = assertThrows(InvalidTaxDataException.class, () -> TaxData.builder()
-                .activitiesStartDate(LocalDate.of(1790, 5, 20))
+        InvalidTaxDataException exception = assertThrows(InvalidTaxDataException.class, () -> TaxDataTestBuilder
+                .aTaxData()
+                .withActivitiesStartDate(LocalDate.of(1790, 5, 20))
                 .build());
 
-        InvalidTaxDataException exception2 = assertThrows(InvalidTaxDataException.class, () -> TaxData.builder()
-                .activitiesStartDate(LocalDate.now().plusDays(1))
+        InvalidTaxDataException exception2 = assertThrows(InvalidTaxDataException.class, () -> TaxDataTestBuilder
+                .aTaxData()
+                .withActivitiesStartDate(LocalDate.now().plusDays(1))
                 .build());
 
-        assertTrue(exception.getMessage().contains("the entered date is invalid"));
-        assertTrue(exception2.getMessage().contains("the entered date is invalid"));
+        assertEquals("These attributes are invalids:\n\t - activities start date | the entered date is invalid\n", exception.getMessage());
+
+        assertEquals("These attributes are invalids:\n\t - activities start date | the entered date is invalid\n", exception2.getMessage());
     }
 }

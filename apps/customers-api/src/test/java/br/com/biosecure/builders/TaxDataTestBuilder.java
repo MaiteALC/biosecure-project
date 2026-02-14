@@ -39,7 +39,7 @@ public class TaxDataTestBuilder {
         return this;
     }
 
-    public static TaxDataTestBuilder aFiscalData() {
+    public static TaxDataTestBuilder aTaxData() {
         return new TaxDataTestBuilder();
     }
 
